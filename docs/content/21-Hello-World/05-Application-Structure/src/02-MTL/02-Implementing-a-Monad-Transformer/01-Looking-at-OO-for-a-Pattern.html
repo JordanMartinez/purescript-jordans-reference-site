@@ -204,7 +204,7 @@ y == 2
 z == 3
 </code></pre>
 <p>At this point, we could do state manipulation using a recursive function...</p>
-<pre><code class="language-purescript">runNTimes :: forall a. Int -&gt; (a -&gt; a) -&gt; a
+<pre><code class="language-haskell">runNTimes :: forall a. Int -&gt; (a -&gt; a) -&gt; a
 runNTimes 0 _ output = output
 runNTimes count func arg = runNTimes (count - 1) func (func arg)
 </code></pre>
@@ -241,7 +241,7 @@ y = nextInt(random2);
 (Tuple y random3) = nextInt(random2);
 </code></pre>
 <p>where <code>Tuple a b</code> is just a box that holds two values of the same/different types:</p>
-<pre><code class="language-purescript">data Tuple a b = Tuple a b
+<pre><code class="language-haskell">data Tuple a b = Tuple a b
 </code></pre>
 <h2><a class="header" href="#popping-stacks" id="popping-stacks">Popping Stacks</a></h2>
 <p>We'll explain this idea once more using a different context: Stacks. In OO, we can write the following code:</p>
@@ -294,7 +294,7 @@ y = pop(originalStack_withoutX);
 (Tuple value_N, value_N_plus_1) = stateManipulation(valueN);
 </code></pre>
 <p>Turning this into Purescript syntax, we get:</p>
-<pre><code class="language-purescript">state_manipulation_function :: forall state value. (state -&gt; Tuple value state)
+<pre><code class="language-haskell">state_manipulation_function :: forall state value. (state -&gt; Tuple value state)
 </code></pre>
 
                     </main>

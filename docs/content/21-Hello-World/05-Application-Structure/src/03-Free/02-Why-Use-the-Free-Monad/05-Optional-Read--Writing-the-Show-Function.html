@@ -174,7 +174,7 @@
 </ul>
 <hr>
 <p>We still have one more function to define: <code>show2</code> (which is just <code>show</code> but which prevents the name conflict from <code>Prelude</code>). In our original file, <code>show2</code> was defined like this:</p>
-<pre><code class="language-purescript">show2 :: Expression -&gt; String
+<pre><code class="language-haskell">show2 :: Expression -&gt; String
 show2 (Value i) = show i
 show2 (Add x y) = &quot;(&quot; &lt;&gt; show2 x &lt;&gt; &quot; + &quot; &lt;&gt; show2 y &lt;&gt; &quot;)&quot;
 </code></pre>
@@ -183,12 +183,12 @@ show2 (Add x y) = &quot;(&quot; &lt;&gt; show2 x &lt;&gt; &quot; + &quot; &lt;&g
 <li>The types for <code>x</code> and <code>y</code> in <code>Add x y</code> should not be an <code>Int</code>. Rather, it should keep the spirit of the original <code>show2</code> function and be other expression types on which we can recursively call <code>show2</code> to get a full expression.</li>
 </ul>
 <p><code>Expression</code> in our original <code>show2</code> function meant both <code>Value</code> and <code>Add</code>. To do the same thing in our new code, where these types are composed via <code>Either</code>, we would need to change the signature to <code>f (Expression f)</code>:</p>
-<pre><code class="language-purescript">class (Functor f) &lt;= Show2 f where                                {-
+<pre><code class="language-haskell">class (Functor f) &lt;= Show2 f where                                {-
   show2 :: AllExpressionTypes -&gt; String                                   -}
   show2 :: f (Expression f)   -&gt; String
 </code></pre>
 <p>With that being our expression type, what would values for <code>Value</code>, <code>Add</code>, and <code>Multiply</code> look like that fit that signature?</p>
-<pre><code class="language-purescript">-- Value
+<pre><code class="language-haskell">-- Value
 (Value 5)
 
 -- Value does not use the `In` value here
@@ -213,7 +213,7 @@ Multiply
   ))))
 </code></pre>
 <p><code>Add</code> and <code>Multiply</code> both have an <code>In</code> value and an <code>Either</code> value separating the next expression. We can remove the <code>In</code> value using a function. However, removing the <code>Either</code> value would be best left to an instance of our own type class that just delegates it to the underlying expression.</p>
-<pre><code class="language-purescript">removeInAndShow :: Show2 f =&gt; Expression f -&gt; String
+<pre><code class="language-haskell">removeInAndShow :: Show2 f =&gt; Expression f -&gt; String
 removeInAndShow (In t) = show2 t
 
 instance es :: (Show2 f, Show2 g) =&gt; Show2 (Either f g) where
@@ -231,7 +231,7 @@ instance ms :: Show2 Multiply where
 </code></pre>
 <h2><a class="header" href="#all-code-so-far-and-show2" id="all-code-so-far-and-show2">All Code So Far and Show2</a></h2>
 <p>Again, <strong>I have not checked whether this code works, but it will serve to give you an idea for how it works.</strong></p>
-<pre><code class="language-purescript">-- File 1
+<pre><code class="language-haskell">-- File 1
 data Value e = Value Int
 data Add e = Add e e
 

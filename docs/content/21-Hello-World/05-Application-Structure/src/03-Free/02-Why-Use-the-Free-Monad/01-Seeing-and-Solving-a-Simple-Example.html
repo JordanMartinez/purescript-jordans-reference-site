@@ -175,7 +175,7 @@
 </blockquote>
 <h2><a class="header" href="#a-very-simple-example-of-the-problem" id="a-very-simple-example-of-the-problem">A Very Simple Example of The Problem</a></h2>
 <p>Given this code</p>
-<pre><code class="language-purescript">data Fruit
+<pre><code class="language-haskell">data Fruit
   = Apple
   | Banana
 
@@ -184,13 +184,13 @@ showFruit Apple = &quot;apple&quot;
 showFruit Banana = &quot;banana&quot;
 </code></pre>
 <p>We can easily add a new function to our code without needing to recompile our existing code</p>
-<pre><code class="language-purescript">-- in another file...
+<pre><code class="language-haskell">-- in another file...
 intFruit :: Fruit -&gt; Int
 intFruit Apple = 0
 intFruit Banana = 1
 </code></pre>
 <p>However, if we want to add another data constructor to <code>Fruit</code>, we can only do so by updating <code>Fruit</code> to include <code>Orange</code> <strong>and then</strong> updating all of our functions to include <code>Orange</code> as well:</p>
-<pre><code class="language-purescript">data Fruit
+<pre><code class="language-haskell">data Fruit
   = Apple
   | Banana
   | Orange
@@ -203,7 +203,7 @@ showFruit Orange = &quot;orange&quot;
 <p>Since <code>Fruit</code> has already been compiled, we will need to recompile our code with the updated version of <code>Fruit</code>. Moreover, if we do not update <code>showFruit</code>/<code>intFruit</code>, then we no longer have an exhaustive pattern match. Thus, these functions are no longer pure but are now partial functions.</p>
 <h2><a class="header" href="#the-solution" id="the-solution">The Solution</a></h2>
 <p>The solution, then, is to be able to define data types in such a way that they &quot;compose&quot;. The best way to compose data types is to group two types into one type via a type wrapper:</p>
-<pre><code class="language-purescript">-- original file
+<pre><code class="language-haskell">-- original file
 data Fruit
   = Apple
   | Banana
@@ -221,12 +221,12 @@ data FruitGrouper = -- ???
 <li>FruitGrouper Orange</li>
 </ol>
 <p>We can define it using this approach:</p>
-<pre><code class="language-purescript">data FruitGrouper
+<pre><code class="language-haskell">data FruitGrouper
   = Fruit_  Fruit
   | Fruit2_ Fruit2
 </code></pre>
 <p>This approach will enable <code>showFruit</code> and <code>intFruit</code> to continue to work as expected. If we wanted to define a new function that uses both, we would pass in <code>FruitGrouper</code> instead:</p>
-<pre><code class="language-purescript">-- original file. This cannot change once written!
+<pre><code class="language-haskell">-- original file. This cannot change once written!
 data Fruit
   = Apple
   | Banana

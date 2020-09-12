@@ -168,7 +168,7 @@
 <p>Monad = Sequential Computation (<code>Bind</code>) + Lift a Value/Function into Box-like Type (<code>Applicative</code>)</p>
 <h2><a class="header" href="#definition" id="definition">Definition</a></h2>
 <p>See its docs: <a href="https://pursuit.purescript.org/packages/purescript-prelude/4.1.1/docs/Control.Monad">Monad</a></p>
-<pre><code class="language-purescript">class (Applicative m, Bind m) &lt;= Monad m
+<pre><code class="language-haskell">class (Applicative m, Bind m) &lt;= Monad m
 
 data Box a = Box a
 
@@ -193,7 +193,7 @@ instance monad :: Monad Box
 <h2><a class="header" href="#laws" id="laws">Laws</a></h2>
 <h3><a class="header" href="#unofficial" id="unofficial">Unofficial</a></h3>
 <p>Taken from <a href="https://youtu.be/EoJ9xnzG76M?t=7m9s">this slide in this YouTube video</a>, here's an &quot;unofficial&quot; but clearer way to understand the laws for Monad by comparing them to a Function:</p>
-<pre><code class="language-purescript">-- Recall: `identity a == (\x -&gt; x) a`
+<pre><code class="language-haskell">-- Recall: `identity a == (\x -&gt; x) a`
 
 -- Given a function whose type signature is...
 (&gt;=&gt;) :: Monad m =&gt; (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c
@@ -215,7 +215,7 @@ f &gt;=&gt; (g &gt;=&gt; h) == (f &gt;=&gt; g) &gt;=&gt; h
 <h3><a class="header" href="#official" id="official">Official</a></h3>
 <h4><a class="header" href="#identity" id="identity">Identity</a></h4>
 <p>Definition (left) : <code>pure x &gt;&gt;= f = f x</code></p>
-<pre><code class="language-purescript">-- start
+<pre><code class="language-haskell">-- start
 pure x  &gt;&gt;= f
 -- replace call signature with body
 (Box x) &gt;&gt;= f

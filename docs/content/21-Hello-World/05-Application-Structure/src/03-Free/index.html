@@ -174,7 +174,7 @@
 </ul>
 <p>The below summary and the rest of this folder's contents are quickly explained by Nate in his overview of <code>Free</code> and <code>CoFree</code>: <a href="https://www.youtube.com/watch?v=eKkxmVFcd74&amp;t=18">Unrolling Free &amp; Cofree (stop at 1:19:23)</a> (Actual YouTube video name is &quot;PS Unscripted - Free from Tree &amp; Halogen VDOM&quot;)</p>
 <p>The <code>Free</code> approach deals with the &quot;<code>bind</code> forces us to return the same monad type it receives&quot; restriction by using only one monad. Rather than building a large function that is composed of smaller functions that runs once the initial arguments are given to it (i.e. <code>MTL</code>), the <code>Free</code> approach will create an Abstract Sytax Tree (AST) that describes the desired computation in a pure way. This tree is later &quot;interpreted&quot; via a <code>NaturalTransformation</code> into a base monad (i.e. <code>Effect</code>) that runs those computations in an inpure way. In other words, something akin to</p>
-<pre><code class="language-purescript">type DSL = DomainSpecificLanguage
+<pre><code class="language-haskell">type DSL = DomainSpecificLanguage
 type AbstractSyntaxTree output = Free DSL output
 
 defineProgram :: AbstractSyntaxTree

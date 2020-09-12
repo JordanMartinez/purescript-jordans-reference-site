@@ -198,13 +198,13 @@
 <h3><a class="header" href="#reload" id="reload">Reload</a></h3>
 <h4><a class="header" href="#the-problem" id="the-problem">The Problem</a></h4>
 <p>You can only define a binding once. Defining it again with a different expression will output an error</p>
-<pre><code class="language-purescript">x = 5 -- first time
+<pre><code class="language-haskell">x = 5 -- first time
 x = 6 -- second time raises error
 -- REPL's outputs error: &quot;Multiple value declarations exist for x.&quot;
 </code></pre>
 <p>You need to clear the <code>x</code> binding name to be able to reuse it for other bindings.</p>
 <p>For example, let's say you wrote two functions and the second uses the first. However, you wrote the wrong implementation for the second and need to rewrite it:</p>
-<pre><code class="language-purescript">add1 = (\x -&gt; x + 1)
+<pre><code class="language-haskell">add1 = (\x -&gt; x + 1)
 times2 = (\x -&gt; x * 3) -- &quot;3&quot; should be &quot;2&quot;
 </code></pre>
 <h4><a class="header" href="#the-solutions" id="the-solutions">The Solutions</a></h4>
@@ -213,7 +213,7 @@ times2 = (\x -&gt; x * 3) -- &quot;3&quot; should be &quot;2&quot;
 <li>use the <code>:reload</code> command to clear out both functions' bindings, redefine the first one, and then define the second one with the correct implementation</li>
 <li>define a new binding for the correct implementation:</li>
 </ol>
-<pre><code class="language-purescript">-- 1st option
+<pre><code class="language-haskell">-- 1st option
 add1 = (\x -&gt; x + 1)
 times2 = (\x -&gt; x * 3) -- Whoops! &quot;3&quot; should be &quot;2&quot;
 :reload
@@ -229,7 +229,7 @@ times2_fix = (\x -&gt; x * 2) -- define new function with correct implementation
 <li>define your code in a file (as a module) and import that module into your REPL session. Any edits made to this file are picked-up upon a REPL reload.</li>
 </ol>
 <p>Create a file containing your REPL script:</p>
-<pre><code class="language-purescript">-- MyModule.file
+<pre><code class="language-haskell">-- MyModule.file
 module MyModule where
 
 import Prelude

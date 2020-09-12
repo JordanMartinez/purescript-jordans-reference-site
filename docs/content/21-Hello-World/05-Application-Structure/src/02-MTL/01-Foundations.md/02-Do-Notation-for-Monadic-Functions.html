@@ -167,7 +167,7 @@
 <p>This file will help you learn how to read a monadic function's &quot;do notation.&quot; We'll take some very simple examples and do a graph reduction on them to show how a series of <code>bind</code>/<code>&gt;&gt;=</code> calls are evaluated into a final value.</p>
 <h2><a class="header" href="#function-implementations" id="function-implementations">Function Implementations</a></h2>
 <p>To help us evaluate these examples manually, we'll include our verbose &quot;not cleaned up&quot; solutions from the previous file here (except for the <code>Applicative</code> one):</p>
-<pre><code class="language-purescript">class Functor (Function inputType) where
+<pre><code class="language-haskell">class Functor (Function inputType) where
   map :: forall originalOutputType newOutputType.
          (originalOutputType -&gt; newOutputType) -&gt;
          Function inputType originalOutputType -&gt;
@@ -206,32 +206,32 @@ class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
 </code></pre>
 <h2><a class="header" href="#example-1-pure" id="example-1-pure">Example 1: <code>pure</code></a></h2>
 <p>Let's say I have the following code using &quot;do notation&quot;</p>
-<pre><code class="language-purescript">someComputation = do
+<pre><code class="language-haskell">someComputation = do
   pure 1
 </code></pre>
 <p>Let's break it down:</p>
-<pre><code class="language-purescript">pure 1
+<pre><code class="language-haskell">pure 1
 
 -- replace `pure` with implementation
 (\_ -&gt; 1)
 </code></pre>
 <p>This reveals the first issue with learning how to read &quot;do notation&quot; for monadic functions: the entire thing is one massive function. <code>someComputation</code> is not a value; it's a function that expects an input.</p>
 <p>To actually use it, we'd need to write something like this:</p>
-<pre><code class="language-purescript">produceAValue = someComputation &quot;example input&quot;
+<pre><code class="language-haskell">produceAValue = someComputation &quot;example input&quot;
   where
   someComputation = do
     pure 1
 </code></pre>
 <h2><a class="header" href="#example-2-single-bind" id="example-2-single-bind">Example 2: single <code>bind</code></a></h2>
 <p>Let's say I have the following code using &quot;do notation&quot;</p>
-<pre><code class="language-purescript">produceValue = someComputation 4
+<pre><code class="language-haskell">produceValue = someComputation 4
   where
   someComputation = do
     value &lt;- \four -&gt; 1 + four
     pure (value + 5)
 </code></pre>
 <p>Let's break it down:</p>
-<pre><code class="language-purescript">produceValue = someComputation 4
+<pre><code class="language-haskell">produceValue = someComputation 4
   where
   someComputation = do
     value &lt;- \four -&gt; 1 + four
@@ -359,7 +359,7 @@ produceValue = 10
 </code></pre>
 <h2><a class="header" href="#example-3-multiple-bind" id="example-3-multiple-bind">Example 3: multiple <code>bind</code></a></h2>
 <p>I'll leave this up to the reader to reduce, but the syntax should make it clear how it works (4 is always the initial input in each function below):</p>
-<pre><code class="language-purescript">produceValue = someComputation 4
+<pre><code class="language-haskell">produceValue = someComputation 4
   where
   someComputation = do
     five &lt;- (\four -&gt; 1 + four)

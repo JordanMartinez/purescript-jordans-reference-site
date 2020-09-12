@@ -166,13 +166,13 @@
                         <h1><a class="header" href="#records-use-type-data-or-newtype" id="records-use-type-data-or-newtype">Records: Use Type, Data, or Newtype?</a></h1>
 <p>Short answer: use <code>type</code></p>
 <p><strong>Type:</strong> ideal, but defining typeclass instances on it requires defining it for all records, which is usually not what you want.</p>
-<pre><code class="language-purescript">type TypedRecord = { anInt :: Int }
+<pre><code class="language-haskell">type TypedRecord = { anInt :: Int }
 </code></pre>
 <p><strong>Newtype:</strong> use if you need a type class instance and you only need to wrap a single record</p>
-<pre><code class="language-purescript">newtype NewtypedRecord = NR { anInt :: Int }
+<pre><code class="language-haskell">newtype NewtypedRecord = NR { anInt :: Int }
 </code></pre>
 <p><strong>Data:</strong> use if you need a type class instance and you need to wrap a record AND something else. Unfortunately, this will perform unboxing during runtime.</p>
-<pre><code class="language-purescript">data DataRecord = DR { anInt :: Int } { aString :: String }
+<pre><code class="language-haskell">data DataRecord = DR { anInt :: Int } { aString :: String }
 </code></pre>
 
                     </main>

@@ -170,7 +170,7 @@
 <h2><a class="header" href="#tricks-for-implementing-a-type-class-instance" id="tricks-for-implementing-a-type-class-instance">Tricks for Implementing a Type Class Instance</a></h2>
 <p>Keep in mind that when implementing a type class, one does not always need to implement its function with a specific implementation for a given type. There are two situations in which this can occur:</p>
 <p>First, this situation can arise when a type class defines two or more functions. Sometimes, a function in a type class can be defined using another function from that same type class. Take, for example, the <code>Eq</code> type class:</p>
-<pre><code class="language-purescript">class Eq a where
+<pre><code class="language-haskell">class Eq a where
   eq :: a -&gt; a -&gt; Boolean
 
   notEq :: a -&gt; a -&gt; Boolean
@@ -181,7 +181,7 @@
 <li>We could implement only <code>notEq</code> and implement <code>eq</code> by inverting <code>notEq</code>'s result</li>
 </ol>
 <p>Second, sometimes, a function in a type class can be defined using a function from a required type class. Take, for example, the <code>Ord</code> type class:</p>
-<pre><code class="language-purescript">data Ordering
+<pre><code class="language-haskell">data Ordering
   = LT
   | EQ
   | GT
@@ -190,7 +190,7 @@ class (Eq a) &lt;= Ord a where
   compare :: a -&gt; a -&gt; Ordering
 </code></pre>
 <p>If we implement <code>compare</code>, we can also implement <code>eq</code>:</p>
-<pre><code class="language-purescript">data ColoredBox
+<pre><code class="language-haskell">data ColoredBox
   = RedBox
   | GreenBox
 

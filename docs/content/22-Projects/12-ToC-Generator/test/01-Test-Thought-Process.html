@@ -265,7 +265,7 @@ runTest generatedData =
 <p>Second, our test monad, <code>TestM</code>, will be a state monad (to store the final output of the program) that is further augmented by the <code>ReaderT</code> monad transformer (since our program requires the <code>MonadAsk</code> type class). Whereas the production program augmented the <code>Env</code> type with <code>ProductionRows</code>, our test program will augment the <code>Env</code> type with <code>TestRows</code>.</p>
 <p>Since the parser and renderer functions will not change between test runs, we'll implement them directly in <code>TestM</code>'s instance for their corresponding type classes rather than providing them via the <code>TestEnv</code> type and <code>ask</code>.</p>
 <p>In code:</p>
-<pre><code class="language-purescript">type TestRows = ( {- Undefined for now, but these will include other things -}
+<pre><code class="language-haskell">type TestRows = ( {- Undefined for now, but these will include other things -}
                 )
 type TestEnv = Env TestRows
 newtype TestM a = TestM (ReaderT TestEnv (State String) a)
@@ -277,7 +277,7 @@ newtype TestM a = TestM (ReaderT TestEnv (State String) a)
 <li>verifying that a &quot;link&quot; works</li>
 </ul>
 <p>Most of the above capabilities can be defined by looking up their value that's stored in our reader monad. The below code communicates the general idea:</p>
-<pre><code class="language-purescript">-- covers `readDir`, `readPathType`, `verifyLink`
+<pre><code class="language-haskell">-- covers `readDir`, `readPathType`, `verifyLink`
 mostFunctions :: FilePath -&gt; m resultType
 mostFunctions fullFilePath = do
     fileSystem &lt;- asks \env -&gt; env.fileSystem
@@ -300,7 +300,7 @@ mostFunctions fullFilePath = do
           -- path was a file. Do something with it.
 </code></pre>
 <p>We'll handle the &quot;write output to file&quot; part using the state monad:</p>
-<pre><code class="language-purescript">writeToFile :: String -&gt; m Unit
+<pre><code class="language-haskell">writeToFile :: String -&gt; m Unit
 writeToFile content = do
   put content
 </code></pre>
@@ -312,7 +312,7 @@ writeToFile content = do
 Do the files/directories always appear in the correct order? (i.e. the ReadMe.md file always appear before all other directories and files)?</p>
 </blockquote>
 <p>... using the below quick check test:</p>
-<pre><code class="language-purescript">quickCheckTest :: ToCTestData -&gt; Boolean
+<pre><code class="language-haskell">quickCheckTest :: ToCTestData -&gt; Boolean
 quickCheckTest (ToCTestData generatedData) =
     -- check whether the contents of the two renderings are the same
     outputtedFile == generatedData.expectedOutput
@@ -323,13 +323,13 @@ quickCheckTest (ToCTestData generatedData) =
 <h3><a class="header" href="#generating-data-for-the-main-tests" id="generating-data-for-the-main-tests">Generating Data for the Main Tests</a></h3>
 <p>Most of the data we'll need to generate is the fake file system, which has a tree-like structure. However, the <code>Tree</code> we've used for storing headers isn't the best type to use for this situation. When storing headers, the branch and leaf types are the same. In a file system, the branch types are always directories and the leaves are always file types.</p>
 <p>Ideally, we'd want a tree type whose definition looks like this:</p>
-<pre><code class="language-purescript">data Tree branch leaf
+<pre><code class="language-haskell">data Tree branch leaf
   = Leaf leaf
   | Branch branch (Tree branch leaf)
 </code></pre>
 <p>AFAIK, there isn't a library written in PureScript with this definition that also includes a Zipper (i.e. <code>Tree</code>'s <code>Loc</code> type). I'm not going to write one for this task because I can workaround <code>Tree</code>'s design to make it work for here.</p>
 <p>We'll need to store different data depending on whether the path is a directory or file. Since we're using <code>Tree</code>, we'll merge both file and directory types into one. While we may not use all of the data, the following should be future-proof:</p>
-<pre><code class="language-purescript">-- whether this path should be included or not
+<pre><code class="language-haskell">-- whether this path should be included or not
 type IncludedOrNot = Boolean
 
 -- whether the url for this path will return an HTTP OK code or not

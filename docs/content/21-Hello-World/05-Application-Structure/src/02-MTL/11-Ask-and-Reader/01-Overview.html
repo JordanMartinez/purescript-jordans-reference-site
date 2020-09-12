@@ -166,7 +166,7 @@
                         <h1><a class="header" href="#overview" id="overview">Overview</a></h1>
 <h2><a class="header" href="#monad-reader" id="monad-reader">Monad Reader</a></h2>
 <p><code>MonadAsk</code> is used to expose a read-only value to a monadic context. It's default implmentation is <code>ReaderT</code>:</p>
-<pre><code class="language-purescript">             -- r        m     a
+<pre><code class="language-haskell">             -- r        m     a
 newtype ReaderT readOnly monad finalOutput =
   ReaderT (\readOnly -&gt; monad finalOutput)
 
@@ -177,7 +177,7 @@ class (Monad m) &lt;= MonadAsk r (ReaderT r m) where
 </code></pre>
 <h2><a class="header" href="#do-notation" id="do-notation">Do Notation</a></h2>
 <p>When writing <code>StateT</code>'s do notation, we have a function called <code>get</code> that does not take any argument but still returns a value:</p>
-<pre><code class="language-purescript">stateManipulation :: State Int Int
+<pre><code class="language-haskell">stateManipulation :: State Int Int
 stateManipulation =
   get
 -- which reduces to
@@ -195,7 +195,7 @@ stateManipulation =
   Tuple 0 0
 </code></pre>
 <p><code>MonadAsk</code>'s function works similarly:</p>
-<pre><code class="language-purescript">type Settings = { editable :: Boolean, fontSize :: Int }
+<pre><code class="language-haskell">type Settings = { editable :: Boolean, fontSize :: Int }
 useSettings :: Reader Settings Settings
 useSettings = ask
 -- which reduces to...
@@ -212,7 +212,7 @@ useSettings = ask
 </code></pre>
 <h2><a class="header" href="#monadreader" id="monadreader">MonadReader</a></h2>
 <p><code>MonadReader</code> extends <code>MonadAsk</code> by allowing the read-only value to be modified first before being used in one computation.</p>
-<pre><code class="language-purescript">class MonadAsk r m &lt;= MonadReader r m | m -&gt; r where
+<pre><code class="language-haskell">class MonadAsk r m &lt;= MonadReader r m | m -&gt; r where
   local :: forall a. (r -&gt; r) -&gt; m a -&gt; m a
 </code></pre>
 <h2><a class="header" href="#derived-functions" id="derived-functions">Derived Functions</a></h2>

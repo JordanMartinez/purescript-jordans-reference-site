@@ -165,7 +165,7 @@
                     <main>
                         <h1><a class="header" href="#monadcont" id="monadcont">MonadCont</a></h1>
 <p><code>MonadCont</code>, the Continuation Monad, is used to handle callback hell among other things.</p>
-<pre><code class="language-purescript">           -- r      m     a
+<pre><code class="language-haskell">           -- r      m     a
 newtype ContT return monad input =
   ContT ((input -&gt; monad return) -&gt; monad return)
 

@@ -167,11 +167,11 @@
 <p>This is the same as <code>Unfoldable</code> except the returned <code>t</code> value must always have at least 1 <code>a</code> value. As a result, it's actually harder to find a data type that can <strong>only</strong> implement <code>Unfoldable1</code> but can't implement <code>Unfoldable</code>.</p>
 <h2><a class="header" href="#definition" id="definition">Definition</a></h2>
 <h3><a class="header" href="#code-definition" id="code-definition">Code Definition</a></h3>
-<pre><code class="language-purescript">class Unfoldable1 t where
+<pre><code class="language-haskell">class Unfoldable1 t where
   unfoldr1 :: forall a b. (b -&gt; Tuple a (Maybe b)) -&gt; b -&gt; t a
 </code></pre>
 <p>The only difference between <code>Unfoldable</code> and <code>Unfoldable1</code> is the type signature for <code>f</code>. In both cases, the <code>b</code> value is inside of a <code>Maybe</code>:</p>
-<pre><code class="language-purescript">-- Unfoldable
+<pre><code class="language-haskell">-- Unfoldable
 f :: forall a b. b -&gt; Maybe (Tuple a b)
 
 -- Unfoldable1

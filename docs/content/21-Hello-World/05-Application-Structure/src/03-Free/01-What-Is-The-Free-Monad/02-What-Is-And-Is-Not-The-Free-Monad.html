@@ -165,7 +165,7 @@
                     <main>
                         <h1><a class="header" href="#what-is-and-is-not-the-free-monad" id="what-is-and-is-not-the-free-monad">What Is and Is Not The Free Monad</a></h1>
 <p>Since <code>List</code> was the free monoid type, what would be the free monad type?</p>
-<pre><code class="language-purescript">-- monad class fully expanded...
+<pre><code class="language-haskell">-- monad class fully expanded...
 class Monad f where
   map   :: forall a. (a -&gt; b) -&gt; f a -&gt; f b
   apply :: forall a. f (a -&gt; b) -&gt; f a -&gt; f b
@@ -187,7 +187,7 @@ class Monad f where
 </ol>
 </blockquote>
 <p>We'll start with the simplest function, <code>pure</code>:</p>
-<pre><code class="language-purescript">data FreeMonad a
+<pre><code class="language-haskell">data FreeMonad a
   = Pure a
 
 instance applicative :: Applicative FreeMonad where
@@ -203,7 +203,7 @@ instance bind :: Bind FreeMonad where
   bind (Pure a) f = f a
 </code></pre>
 <p>Well, that was easy... Wasn't this the same implementation as <code>Identity</code> from before? You are correct.</p>
-<pre><code class="language-purescript">data Identity a = Identity a
+<pre><code class="language-haskell">data Identity a = Identity a
 
 instance applicative :: Applicative Identity where
   pure a = Identity a

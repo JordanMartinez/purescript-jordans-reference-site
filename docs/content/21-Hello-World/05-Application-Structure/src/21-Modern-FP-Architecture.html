@@ -171,12 +171,12 @@
 <h3><a class="header" href="#extensible" id="extensible">Extensible</a></h3>
 <p>While the above effects (e.g. <code>MonadState</code>) are pretty obvious, we might one day wish to define a new effect for handling authentication, <code>MonadAuthenticate</code>. If a function that uses state-manipulation effects via <code>MonadState</code> now needs to add the &quot;authenticate&quot; effect, it should be easy to add that and not require us to refactor a whole lot of code.</p>
 <p>In other words, going from this function ...</p>
-<pre><code class="language-purescript">f :: forall m.
+<pre><code class="language-haskell">f :: forall m.
      MonadState m =&gt;
      InitialState -&gt; m OutputtedState
 </code></pre>
 <p>... to this function...</p>
-<pre><code class="language-purescript">f' :: forall m.
+<pre><code class="language-haskell">f' :: forall m.
       MonadState m =&gt;
       MonadAuthenticate m =&gt;
       InitialState -&gt;

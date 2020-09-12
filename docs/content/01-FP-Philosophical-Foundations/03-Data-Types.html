@@ -171,7 +171,7 @@
 <li>Persistent - Rather than creating the entire structure again when updating, an update should create a new 'version' of a data structure that includes the update</li>
 </ol>
 <p>For example...</p>
-<pre><code class="language-purescript">{-
+<pre><code class="language-haskell">{-
 Given a linked-list type where
   &quot;Nil&quot; is a placeholder representing the end of the list
   &quot;←&quot; in &quot;left ← right&quot; is a pointer that points from the
@@ -189,7 +189,7 @@ Nil ← 1 ← 2 ← 3 = x
 </code></pre>
 <p>Using a more visual diagram:</p>
 <p><img src="./assets/Immutable-Persistent-via-List.svg" alt="Immutable-Persistent-Via-List" /></p>
-<pre><code class="language-purescript">-- At the end of the computation, these are true:
+<pre><code class="language-haskell">-- At the end of the computation, these are true:
 x == x
 x /= y
 

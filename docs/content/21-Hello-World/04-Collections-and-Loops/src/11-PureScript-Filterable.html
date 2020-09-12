@@ -167,13 +167,13 @@
 <p>The following type classes come from <a href="https://pursuit.purescript.org/packages/purescript-filterable"><code>purescript-filterable</code></a>.</p>
 <h2><a class="header" href="#compactable" id="compactable">Compactable</a></h2>
 <p><a href="https://pursuit.purescript.org/packages/purescript-filterable/docs/Data.Compactable#t:Compactable"><code>Compactable</code></a></p>
-<pre><code class="language-purescript">class Compactable f where
+<pre><code class="language-haskell">class Compactable f where
   compact :: forall a.    f (Maybe a)    -&gt;           f a
 
   separate :: forall l r. f (Either l r) -&gt; { left :: f l, right :: f r }
 </code></pre>
 <p><a href="https://pursuit.purescript.org/packages/purescript-arrays/docs/Data.Array#v:catMaybes"><code>catMaybes</code></a> is a function that removes all <code>Nothing</code>s in an <code>Array</code>. <code>compact</code> and <code>separate</code> generalize this idea to work across more <code>f</code> types and works for both <code>Maybe</code> and <code>Either</code>:</p>
-<pre><code class="language-purescript">catMaybes [Just 1, Nothing] == [1]
+<pre><code class="language-haskell">catMaybes [Just 1, Nothing] == [1]
 
 compact [Just 1, Nothing] == [1]
 compact (Just 1 : Just 2 : Nothing : Nil) == 1 : 2 : Nil
@@ -182,7 +182,7 @@ separate [Left 1, Left 2, Right 3, Right 4] == { left: [1, 2], right: [3, 4] }
 </code></pre>
 <h2><a class="header" href="#filterable" id="filterable">Filterable</a></h2>
 <p><a href="https://pursuit.purescript.org/packages/purescript-filterable/docs/Data.Filterable#t:Filterable"><code>Filterable</code></a> generalizes the concept of <a href="https://pursuit.purescript.org/packages/purescript-arrays/docs/Data.Array#v:filter"><code>Array.filter</code></a> and <a href="https://pursuit.purescript.org/packages/purescript-arrays/docs/Data.Array#v:partition"><code>Array.partition</code></a> to work arcross more <code>f</code> types.</p>
-<pre><code class="language-purescript">class (Compactable f, Functor f) &lt;= Filterable f where
+<pre><code class="language-haskell">class (Compactable f, Functor f) &lt;= Filterable f where
   filter :: forall a.
     (a -&gt; Boolean)    -&gt; f a -&gt;         f a
 
@@ -197,7 +197,7 @@ separate [Left 1, Left 2, Right 3, Right 4] == { left: [1, 2], right: [3, 4] }
 </code></pre>
 <h2><a class="header" href="#witherable" id="witherable">Witherable</a></h2>
 <p><a href="https://pursuit.purescript.org/packages/purescript-filterable/docs/Data.Witherable"><code>Witherable</code></a> is the same as <code>Traversable</code>'s <code>traverse</code> but either removes the resulting <code>Nothing</code>s like <code>compact</code> or distinguishes the <code>Left</code>s and the <code>Rights</code> like <code>separate</code>.</p>
-<pre><code class="language-purescript">-- traverse :: forall a b m. Applicative m =&gt;
+<pre><code class="language-haskell">-- traverse :: forall a b m. Applicative m =&gt;
 --  (a -&gt; m b           ) -&gt; t a -&gt; m          (t b)
 
 class (Filterable t, Traversable t) &lt;= Witherable t where
@@ -208,7 +208,7 @@ class (Filterable t, Traversable t) &lt;= Witherable t where
     (a -&gt; m (Either l r)) -&gt; t a -&gt; m { left :: t l, right :: t r }
 </code></pre>
 <p>Its derived functions, <code>wilted</code> and <code>withered</code>, use <code>sequence</code> instead of <code>traverse</code>.</p>
-<pre><code class="language-purescript">-- sequence :: forall a m. Applicative m =&gt;
+<pre><code class="language-haskell">-- sequence :: forall a m. Applicative m =&gt;
 --  t (m a           ) -&gt; m          (t a)
 
 withered :: forall t m x. Witherable t =&gt; Applicative m =&gt;

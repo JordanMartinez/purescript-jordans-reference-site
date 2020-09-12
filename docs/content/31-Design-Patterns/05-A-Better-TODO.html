@@ -165,12 +165,12 @@
                     <main>
                         <h1><a class="header" href="#a-better-todo" id="a-better-todo">A Better TODO</a></h1>
 <p>Many times, when we are modeling an application's domain, we are focusing on the type signatures for the function's we'll need instead of how we'll implement them. Thus, we might end up writing something like this:</p>
-<pre><code class="language-purescript">-- TODO: implement this later
+<pre><code class="language-haskell">-- TODO: implement this later
 someFunctionName :: Int -&gt; Int -&gt; SpecialDomainType
 someFunctionName _ = unsafeCoerce
 </code></pre>
 <p>It might be better to output a compiler warning at the type-level and throw an exception at the value-level:</p>
-<pre><code class="language-purescript">someFunctionName :: Warn (Text &quot;Implement someFunctionName later&quot;) =&gt;
+<pre><code class="language-haskell">someFunctionName :: Warn (Text &quot;Implement someFunctionName later&quot;) =&gt;
                     Int -&gt; Int -&gt; SpecialDomainType
 someFunctionName _ = unsafeThrow &quot;Implement someFunctionName later&quot;
 </code></pre>

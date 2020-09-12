@@ -167,13 +167,13 @@
 <p>Smart constructors are a solution to the problem of how to create a valid value of some type when the type's definition does not allow invalid values.</p>
 <h2><a class="header" href="#the-problem" id="the-problem">The Problem</a></h2>
 <p>For example, one might want to use a type to specify a small integer (0 to 3). A possible solution is wrapping an <code>Int</code> in a newtype:</p>
-<pre><code class="language-purescript">module Example.SmallInt (SmallInt(..)) where
+<pre><code class="language-haskell">module Example.SmallInt (SmallInt(..)) where
 
 newtype SmallInt = SmallInt Int
 </code></pre>
 <p>However, anyone can create a <code>SmallInt</code> using an <code>Int</code> value that is less than 0 or larger than 3: <code>SmallInt 5</code>.</p>
 <p>As another example, consider this code:</p>
-<pre><code class="language-purescript">module FlawedConstructors
+<pre><code class="language-haskell">module FlawedConstructors
   ( TheType(..)
   , example
   ) where
@@ -196,7 +196,7 @@ example (DumbConstructor _)        = error &quot;This should never occur!&quot;
 </code></pre>
 <h2><a class="header" href="#the-solution" id="the-solution">The Solution</a></h2>
 <p>The solution is to not export the types' constructors and instead export &quot;smart constructors,&quot; which are functions that create a correct value of the type. The only way to get a value of the type is to use one of these functions:</p>
-<pre><code class="language-purescript">module Example.SmallInt (SmallInt, zero, one) where
+<pre><code class="language-haskell">module Example.SmallInt (SmallInt, zero, one) where
 
 newtype SmallInt = SmallInt Int
 
@@ -209,7 +209,7 @@ one = SmallInt 1
 -- the same for 'two' and 'three'
 </code></pre>
 <p>In our previous example, we could also write this:</p>
-<pre><code class="language-purescript">module SmartConstructors
+<pre><code class="language-haskell">module SmartConstructors
   ( TheType -- `DumbConstructor` isn't exported
 
   , apple   -- but the functions that wrap the constructor are
@@ -235,7 +235,7 @@ example (DumbConstructor &quot;banana&quot;) = 42
 example (DumbConstructor _) = error &quot;We can guarantee that this will never occur!&quot;
 </code></pre>
 <p>Since <code>DumbConstructor</code> isn't exported, one is forced to use the apple, orange, or banana smart constructors to get a value of <code>TheType</code>. Thus, it prevents one from creating incorrect <code>TheType</code> values.</p>
-<pre><code class="language-purescript">preventBadValues :: Array Int
+<pre><code class="language-haskell">preventBadValues :: Array Int
 preventBadValues =
   [ example apple  -- returns 1
   , example orange -- returns 2

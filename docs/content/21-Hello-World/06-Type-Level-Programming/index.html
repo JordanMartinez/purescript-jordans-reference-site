@@ -174,13 +174,13 @@
 <p>Let's explain a problem that highlights the third point: storing more information about data-structures. Below is one problem that occurs at the runtime that can be fixed with type-level programming.</p>
 <p>An <code>Array</code> is a very fast data structure, but it's problematic because we never know its exact size at compile-time. In other words, we don't get a compiler error if we reference an invalid spot in the array, and we won't know about the bug until it occurs when running the program. In short, this kind of function will always be a partial function.</p>
 <p>Here's an example in code. If the array is empty or has fewer than <code>n - 1</code> elements, the function can only throw an error when we try to reference a non-existent element at index <code>n</code>. If the array has <code>n - 1</code> or more elements, it can return that element.</p>
-<pre><code class="language-purescript">elemAtIndex :: forall a. Partial =&gt; Int -&gt; Array a -&gt; a
+<pre><code class="language-haskell">elemAtIndex :: forall a. Partial =&gt; Int -&gt; Array a -&gt; a
 elemAtIndex idx [] = Partial.crash &quot;cannot get &quot; &lt;&gt; show idx &lt;&gt; &quot;th element of an empty array&quot;
 elemAtIndex index fullArray = unsafePartial $ unsafeIndex fullArray index
 </code></pre>
 <h3><a class="header" href="#a-solution" id="a-solution">A Solution</a></h3>
 <p>What if we could modify the type of <code>Array</code>, so that it included the size of that array at compile-time? Then, the type-checker could ensure that the &quot;elemAtIndex&quot; function described above only receives correct arguments (i.e. specific types) that make the function &quot;total,&quot; meaning the function will always return a valid output and never throw an error. If it receives an invalid argument, it results in a compiler error and we can fix the bug before shipping the code to customers.</p>
-<pre><code class="language-purescript">-- This entire block of code is pseduo syntax and does not actually work!
+<pre><code class="language-haskell">-- This entire block of code is pseduo syntax and does not actually work!
 -- Use it only to get the idea and don't hold onto any of the syntax used here.
 elemAtIndex :: forall a n. HasElemAtIndex n =&gt; n -&gt; IndexedArray n a
 elemAtIndex index array = -- implementation

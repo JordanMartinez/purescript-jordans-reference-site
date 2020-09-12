@@ -165,7 +165,7 @@
                     <main>
                         <h1><a class="header" href="#from-expression-to-free" id="from-expression-to-free">From <code>Expression</code> to <code>Free</code></a></h1>
 <p>We've been defining the function, <code>fold</code>, the same way for a while. However, there's another way to write the function. To help you understand the upcoming code, we'll rewrite it in this new way:</p>
-<pre><code class="language-purescript">fold :: forall f a. Functor f =&gt; (f a -&gt; a) -&gt; Expression f -&gt; a
+<pre><code class="language-haskell">fold :: forall f a. Functor f =&gt; (f a -&gt; a) -&gt; Expression f -&gt; a
 fold f (In t) = f (map (fold f) t)                                          {-
 ... which can be rewritten using infix notation                             -}
 fold f (In t) = f ((fold f) &lt;$&gt; t)                                          {-
@@ -178,7 +178,7 @@ fold f = go where
     In t -&gt; f (go &lt;$&gt; t)
 </code></pre>
 <p>With that out of the way, let's compare <code>Expression</code> to <code>Free</code>. We can see that <code>Expression</code> is really just a variant of the <code>Free</code> monad without the <code>Pure</code> constructor.</p>
-<pre><code class="language-purescript">newtype Expression f
+<pre><code class="language-haskell">newtype Expression f
   -- no pure here...
   = In     (f (Expression f  ))
 
@@ -188,7 +188,7 @@ newtype Free       f a
 </code></pre>
 <p>How would we rewrite our solution from before to use <code>Free</code> instead of <code>Expression</code>? <code>Value</code> is replaced with <code>Pure</code>.</p>
 <p>To see an example of this for just <code>Value</code> and <code>Add</code> (<code>Multiply</code> is excluded) and to understand its code, refer to the below code and table before viewing <a href="https://github.com/xgrommx/purescript-from-adt-to-eadt/blob/master/src/ADT8.purs">ADT8.purs</a>.</p>
-<pre><code class="language-purescript">-- when Value and Add were both `f`
+<pre><code class="language-haskell">-- when Value and Add were both `f`
 fold    f = go where
   go in_t = case in_t of
     In     t -&gt; f (go &lt;$&gt; t)
@@ -210,7 +210,7 @@ fold    f = go where
 <p>Purescript's <code>Free</code> monad is implemented in the &quot;reflection without remorse&quot; style, which adds complexity to the implementation. Thus, rather than redirecting you there, we'll explain the general idea of what the code is doing.</p>
 <h3><a class="header" href="#liftf" id="liftf">LiftF</a></h3>
 <p>The <code>Free</code> monad has its own way of injecting a value into it called <a href="https://pursuit.purescript.org/packages/purescript-free/5.2.0/docs/Control.Monad.Free#v:liftF"><code>liftF</code></a>. It can be understood like this:</p>
-<pre><code class="language-purescript">-- Before
+<pre><code class="language-haskell">-- Before
 someValue :: forall a. a -&gt; Expression SomeFunctor
 someValue a =
   In (SomeFunctor a) -- or `inj (SomFunctor a)`
@@ -221,7 +221,7 @@ liftF = Impure (SomeFunctor a)
 </code></pre>
 <h3><a class="header" href="#wrap" id="wrap">Wrap</a></h3>
 <p><code>LiftF</code> is useful, but it won't let us compile the examples we will show next because it expects the <code>a</code> to be any <code>a</code>. In cases like <code>AddF</code>/<code>MultiplyF</code>, sometimes that <code>a</code> has to be <code>Free AddF</code>/<code>Free MultiplyF</code> instead of just the <code>Int</code> type. In such cases, we can use <a href="https://pursuit.purescript.org/packages/purescript-free/5.2.0/docs/Control.Monad.Free#v:wrap"><code>wrap</code></a>:</p>
-<pre><code class="language-purescript">-- Using `liftF`
+<pre><code class="language-haskell">-- Using `liftF`
 add :: Int -&gt; Int -&gt; Free AddF Int
 add x y = liftF $ AddF x y
 

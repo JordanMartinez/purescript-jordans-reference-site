@@ -166,7 +166,7 @@
                         <h1><a class="header" href="#introducing-monad-transformers-and-capabilities" id="introducing-monad-transformers-and-capabilities">Introducing Monad Transformers and Capabilities</a></h1>
 <h2><a class="header" href="#comparing-function-input-output-to-outputbox-input-output" id="comparing-function-input-output-to-outputbox-input-output">Comparing <code>Function input output</code> to <code>OutputBox input output</code></a></h2>
 <p>When we initially covered the original monadic function, <code>(a -&gt; b)</code>, we discovered that it's &quot;do notation&quot; could be read like this:</p>
-<pre><code class="language-purescript">produceValue = someComputation 4
+<pre><code class="language-haskell">produceValue = someComputation 4
   where
   someComputation = do
     five &lt;- (\four -&gt; 1 + four)
@@ -175,7 +175,7 @@
     (\fourTooMany -&gt; 8 - two + three)
 </code></pre>
 <p>The above computation demonstrates something important: the argument, <code>4</code>, passed to <code>someComputation</code> is always available in its do notation despite the argument, <code>4</code>, never appearing as an argument in <code>someComputation</code>'s definition.</p>
-<pre><code class="language-purescript">-- In other words, we have this...
+<pre><code class="language-haskell">-- In other words, we have this...
 someComputation = do
   -- code...
 
@@ -185,7 +185,7 @@ someComputation argumentThatIsFour = do
 </code></pre>
 <p>The normal <code>(a -&gt; b)</code> function allows us to reference the argument we pass into the function at any point in its do notation. Unfortunately, since the return value of that function is <code>b</code>, we are limited to only writing pure code. In other words, <code>someComputation</code> is a computation that can never interact with the outside world.</p>
 <p>But what happens if we use the <code>OutputMonad</code>/<code>(a -&gt; monad b)</code> function? Since it outputs a monadic data type, what if that monadic data type was <code>Effect</code> or <code>Aff</code>? If so, the resulting code would be very hard to read:</p>
-<pre><code class="language-purescript">produceComputation = runOutputEffect someComputation 4
+<pre><code class="language-haskell">produceComputation = runOutputEffect someComputation 4
   where                                                                     {-
   someComputation :: OutputMonad a   m      b                               -}
   someComputation :: OutputMonad Int Effect String
@@ -196,7 +196,7 @@ someComputation argumentThatIsFour = do
     (\fourTooMany -&gt; log $ show $ 8 - intBetween0And12)
 </code></pre>
 <p>But what if we expressed the same idea using capabilities via type class constraints? This is the same code as above:</p>
-<pre><code class="language-purescript">produceComputation = runOutputMonad someComputation 4
+<pre><code class="language-haskell">produceComputation = runOutputMonad someComputation 4
   where
   someComputation :: forall m. Monad m =&gt;
                      MonadReader Int m =&gt;

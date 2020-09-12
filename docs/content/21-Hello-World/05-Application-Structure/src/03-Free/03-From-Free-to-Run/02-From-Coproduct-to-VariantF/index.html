@@ -165,7 +165,7 @@
                     <main>
                         <h1><a class="header" href="#from-coproduct-to-variantf" id="from-coproduct-to-variantf">From Coproduct to VariantF</a></h1>
 <p>Previously, we explained <code>Coproduct</code></p>
-<pre><code class="language-purescript">data Either l r = Left l | Right r
+<pre><code class="language-haskell">data Either l r = Left l | Right r
 
 newtype Coproduct f g a = Coproduct (Either (f a) (g a))
 
@@ -207,17 +207,17 @@ Coproduct3 Value     Add     Multiply e
 <li>requires the use of <code>Symbol</code> and <code>SProxy</code> to specify which field within the row is being used</li>
 </ul>
 <p><code>VariantF</code> adds the additional requirement of using a proxy called <code>FProxy</code> to wrap a type-level higher-kinded type:</p>
-<pre><code class="language-purescript">data FProxy (f :: Type -&gt; Type) = FProxy
+<pre><code class="language-haskell">data FProxy (f :: Type -&gt; Type) = FProxy
 </code></pre>
 <p>Looking at <code>VariantF</code>, we see the following definition, whose type names I have modified to make it look similar to <code>Coproduct</code>:</p>
-<pre><code class="language-purescript">data    VariantF (f_and_g :: # Type) a
+<pre><code class="language-haskell">data    VariantF (f_and_g :: # Type) a
 
 -- for example
 --      VariantF (f :: FProxy F_Type, g :: FProxy G_Type) a
 newtype Coproduct f g                a  = Coproduct (Either (f a) (g a))
 </code></pre>
 <p>Let's see what the code looks like now:</p>
-<pre><code class="language-purescript">-- Rather than writing this...
+<pre><code class="language-haskell">-- Rather than writing this...
 data Fruit_ConcreteType
   = Apple
   | Banana
@@ -238,7 +238,7 @@ forall v. VariantF (fruit :: FProxy Fruit_HigherKindedType | v) Int
 <h2><a class="header" href="#composing-type-level-types-via-rowapply" id="composing-type-level-types-via-rowapply">Composing Type-Level Types via <code>RowApply</code></a></h2>
 <p>When we wanted to compose two or more data types, we used nested <code>Either</code>s. When we wanted to compose two or more higher-kinded data types, we used nested <code>Coproduct</code>s. What, then, do we write to compose two or more type-level higher-kinded types?</p>
 <p>We use type aliases for rows and <a href="https://pursuit.purescript.org/packages/purescript-typelevel-prelude/3.0.0/docs/Type.Row#t:RowApply"><code>RowApply</code>/<code>+</code></a> from <code>Prelude</code>:</p>
-<pre><code class="language-purescript">import Type.Row (type (+)) -- infix for RowApply
+<pre><code class="language-haskell">import Type.Row (type (+)) -- infix for RowApply
 data ValueF e = ValueF Int
 data AddF e = AddF e e
 
@@ -258,7 +258,7 @@ VariantF (ValueAdd + ()) e
 </code></pre>
 <h2><a class="header" href="#defining-composable-algebras-for-data-types" id="defining-composable-algebras-for-data-types">Defining Composable Algebras for Data Types</a></h2>
 <p>To evaluate an expression, we will write this:</p>
-<pre><code class="language-purescript">fold (
+<pre><code class="language-haskell">fold (
   case_
     -- valueAlgebra
     # on valueSymbol (\(ValueF x) -&gt; x)                               {-
@@ -266,7 +266,7 @@ VariantF (ValueAdd + ()) e
   ) expression
 </code></pre>
 <p>Thus, to make one <code>Algebra</code> (i.e. a fancy name for <code>f a -&gt; a</code>) composable with other algebras of future data types that we might declare, we will write things like this:</p>
-<pre><code class="language-purescript">valueAlgebra :: forall r
+<pre><code class="language-haskell">valueAlgebra :: forall r
 
              -- this is the `case_` function
               . (VariantF r Int -&gt; Int)
@@ -276,7 +276,7 @@ valueAlgebra = on valueSymbol \(ValueF x) -&gt; x
 </code></pre>
 <h2><a class="header" href="#running-an-algebra-on-an-expression" id="running-an-algebra-on-an-expression">Running an Algebra on an Expression</a></h2>
 <p>When we are ready to evaluate an expression, we will need the <code>algebra</code> (<code>f a -&gt; a</code>) that can compute a value when given an expression, and the actual expression. To make it work for all output types, we'll use a generic type. Thus, we get something like this:</p>
-<pre><code class="language-purescript">run :: forall f a b output
+<pre><code class="language-haskell">run :: forall f a b output
       . Functor f
      -- |   composed algebra waiting for `case_`     |
      --  |     case_        | # | composed algebra |

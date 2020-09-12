@@ -167,7 +167,7 @@
 <p>The following is not an exact copy of the code, but accurate enough to get the idea across</p>
 <h2><a class="header" href="#void" id="void">Void</a></h2>
 <p>A type with no values that is useful for proving that a type can never exist or a computation path can never occur</p>
-<pre><code class="language-purescript">-- Data.Void (Void, absurd)
+<pre><code class="language-haskell">-- Data.Void (Void, absurd)
 
 newtype Void = Void Void
 
@@ -187,7 +187,7 @@ function Right i = i
 </code></pre>
 <h2><a class="header" href="#unit" id="unit">Unit</a></h2>
 <p>A type with 1 value, Unit, though most will see it used via <code>unit</code>. It usually indicates a &quot;side effect&quot;, mutation, or impure code.</p>
-<pre><code class="language-purescript">-- Data.Unit (Unit, unit)
+<pre><code class="language-haskell">-- Data.Unit (Unit, unit)
 
 data Unit = Unit
 
@@ -195,7 +195,7 @@ unit :: Unit
 unit = Unit
 </code></pre>
 <p>It's also used to indicate a <code>thunk</code>, a computation that we know how to do but have chosen to delay executing/evaluating until later:</p>
-<pre><code class="language-purescript">type ComputationThatReturns a = (Unit -&gt; a)
+<pre><code class="language-haskell">type ComputationThatReturns a = (Unit -&gt; a)
 
 thunk :: forall a. a -&gt; ComputationThatReturns a
 thunk a = (\_ -&gt; a)
@@ -207,7 +207,7 @@ runPendingComputation thunk = thunk unit
 </code></pre>
 <h2><a class="header" href="#natural-transformations" id="natural-transformations">Natural Transformations</a></h2>
 <p>Takes an <code>a</code> out of some <code>Box</code>-like type and puts it into another <code>Box</code>-like type</p>
-<pre><code class="language-purescript">-- Data.NaturalTransformation (NaturalTransformation, (~&gt;))
+<pre><code class="language-haskell">-- Data.NaturalTransformation (NaturalTransformation, (~&gt;))
 
 -- Given this code
 data Box1 a = Box1 a

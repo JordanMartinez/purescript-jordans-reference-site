@@ -167,7 +167,7 @@
 <h2><a class="header" href="#variance-of-functors" id="variance-of-functors">Variance of Functors</a></h2>
 <p>This is a summary of <a href="https://typeclasses.com/contravariance">this post</a> and <a href="https://www.schoolofhaskell.com/user/commercial/content/covariance-contravariance">this post</a>.</p>
 <p>When we look a <code>Function</code>'s definition, we see that it is higher-kinded by two, that is, two types need to be defined before we can have a concrete type:</p>
-<pre><code class="language-purescript">foreign import data Function :: Type -&gt; Type -&gt; Type
+<pre><code class="language-haskell">foreign import data Function :: Type -&gt; Type -&gt; Type
 
 infix ? Function as -&gt;
 
@@ -184,14 +184,14 @@ generic_on_output :: forall b. Input -&gt; b
 generic_on_both :: forall a b. a -&gt; b
 </code></pre>
 <p>A type can be a <code>Functor</code> if it is higher-kinded by one. In the below example, we specify its input type and leave the output type to be defined in <code>map</code>:</p>
-<pre><code class="language-purescript">                   -- (input -&gt;)
+<pre><code class="language-haskell">                   -- (input -&gt;)
 instance a :: Functor (Function input) where
                               -- (input -&gt; a)     -&gt; (input -&gt; b)
   map :: forall a b. (a -&gt; b) -&gt; Function input a -&gt; Function input b
   map aToB inputToA = (\input -&gt; aToB (inputToA input))
 </code></pre>
 <p>However, what if we specified the output type of <code>Function</code> in the instance head and left the input type to be defined in <code>map</code>? If so, it would look like this:</p>
-<pre><code class="language-purescript">type FlippedFunc output input = (input -&gt; output)
+<pre><code class="language-haskell">type FlippedFunc output input = (input -&gt; output)
                    -- (-&gt; output)
 instance a :: Functor (FlippedFunc output) where
                               -- (a -&gt; output)        -&gt; (b -&gt; output)
@@ -199,7 +199,7 @@ instance a :: Functor (FlippedFunc output) where
   map inputA_To_InputB inputA_To_Output = -- this isn't possible to implement!
 </code></pre>
 <p>We cannot define an instance of <code>Functor</code> in this way because the first argument in <code>map</code> changes an <code>a</code> value to a <code>b</code> value. However, if we flipped the direction of the arrow, we could write the function's body:</p>
-<pre><code class="language-purescript">type FlippedFunc output input = (input -&gt; output)
+<pre><code class="language-haskell">type FlippedFunc output input = (input -&gt; output)
 
                          -- (-&gt; output)
 instance a :: SomethingElse (FlippedFunc output) where

@@ -175,7 +175,7 @@
 </li>
 </ul>
 <p>In short, we need to implement the following two functions with these type signatures:</p>
-<pre><code class="language-purescript">class (Monad m) &lt;= MonadState state monad | monad -&gt; state where
+<pre><code class="language-haskell">class (Monad m) &lt;= MonadState state monad | monad -&gt; state where
   state :: forall value. (state -&gt; Tuple value state) -&gt; monad value
 
 runStateFunction :: forall state value.
@@ -197,7 +197,7 @@ runStateFunction stateManipulation initialState =
 <li><code>Function a Int</code>/<code>(a -&gt; Int)</code> has kind <code>Type -&gt; Type</code></li>
 </ul>
 <p>In other words, we need to turn <code>Function</code> into a completely new type (<code>data</code>, <code>type</code>, or <code>newtype</code>) that should only exist at compile time to reduce runtime overhead (e.g. <code>type</code> or <code>newtype</code>) that can also implement type classes (i.e. only <code>newtype</code>). Using a newtyped version of <code>Function</code>, we can specify all the types in the function:</p>
-<pre><code class="language-purescript">newtype TypedFunction input output =
+<pre><code class="language-haskell">newtype TypedFunction input output =
   TypedFunction (input -&gt; output)
 
 specifiesInput :: forall a. TypedFunction Int b -- Kind: Type -&gt; Type
@@ -210,7 +210,7 @@ specifiesOutput :: forall a. TypedFunction a Int  -- Kind: Type -&gt; Type
 <h2><a class="header" href="#monadic-instances" id="monadic-instances">Monadic Instances</a></h2>
 <p>Let's now implement the FAABM type classes by using pattern matching to expose the inner function. The <code>value</code> type will be left undefined (i.e. it's the <code>a</code> in everything), making <code>StateT</code> have the necessary kind, <code>Type -&gt; Type</code>:</p>
 <h3><a class="header" href="#functor" id="functor">Functor</a></h3>
-<pre><code class="language-purescript">newtype StateT state monad value =
+<pre><code class="language-haskell">newtype StateT state monad value =
   StateT (state -&gt; monad (Tuple value state))
 
 -- Let's follow the types. We'll need to return a `StateT` value
@@ -303,7 +303,7 @@ instance functor :: (Monad monad) =&gt; Functor (StateT state monad) where
 </code></pre>
 <h3><a class="header" href="#apply" id="apply">Apply</a></h3>
 <p>Since <code>Apply</code> is very similar to <code>Functor</code> (actually the exact same, but we just unwrap the <code>f</code> now, too), we'll just show the code.</p>
-<pre><code class="language-purescript">instance apply :: (Monad monad) =&gt; Apply (StateT state monad) where
+<pre><code class="language-haskell">instance apply :: (Monad monad) =&gt; Apply (StateT state monad) where
   apply :: forall a b
         -- (state -&gt; Tuple (a -&gt; b) state)
          . StateT state monad (a -&gt; b)
@@ -326,12 +326,12 @@ instance functor :: (Monad monad) =&gt; Functor (StateT state monad) where
 </code></pre>
 <h3><a class="header" href="#applicative" id="applicative">Applicative</a></h3>
 <p>The Applicative instance is actually quite straight forward:</p>
-<pre><code class="language-purescript">instance apctv :: (Monad monad) =&gt; Applicative (StateT state monad) where
+<pre><code class="language-haskell">instance apctv :: (Monad monad) =&gt; Applicative (StateT state monad) where
   pure :: forall a. a -&gt; StateT state monad a
   pure a = StateT (\s -&gt; pure $ Tuple a s)
 </code></pre>
 <h3><a class="header" href="#bind--monad" id="bind--monad">Bind &amp; Monad</a></h3>
-<pre><code class="language-purescript">instance bind :: (Monad monad) =&gt; Bind (StateT state monad) where
+<pre><code class="language-haskell">instance bind :: (Monad monad) =&gt; Bind (StateT state monad) where
   bind :: forall a b
         . StateT state monad a
        -&gt; (a -&gt; StateT state monad b)
@@ -351,13 +351,13 @@ instance functor :: (Monad monad) =&gt; Functor (StateT state monad) where
 instance monad :: (Monad m) =&gt; Monad (StateT state monad)
 </code></pre>
 <h3><a class="header" href="#monadstate" id="monadstate">MonadState</a></h3>
-<pre><code class="language-purescript">instance ms :: (Monad m) =&gt; Monad (StateT state monad) where
+<pre><code class="language-haskell">instance ms :: (Monad m) =&gt; Monad (StateT state monad) where
   state :: forall value. (state -&gt; Tuple value state) -&gt; StateT state monad value
   state f = StateT (\s -&gt; pure $ f s)
 </code></pre>
 <h2><a class="header" href="#faabm-using-bind" id="faabm-using-bind">FAABM Using Bind</a></h2>
 <p>Notice, however, that the above <code>let ... in</code> syntax is really just a verbose way of doing <code>bind</code>/<code>&gt;&gt;=</code>. If we were to rewrite our instances using <code>bind</code>, they now look like this:</p>
-<pre><code class="language-purescript">instance map :: (Monad monad) =&gt; Functor (StateT state monad) where
+<pre><code class="language-haskell">instance map :: (Monad monad) =&gt; Functor (StateT state monad) where
   map :: forall a b
        . (a -&gt; b)
       -&gt; StateT state monad a
@@ -401,7 +401,7 @@ instance monad :: (Monad m) =&gt; Monad (StateT state monad)
 </code></pre>
 <h2><a class="header" href="#reviewing-statets-bind-instance" id="reviewing-statets-bind-instance">Reviewing StateT's Bind Instance</a></h2>
 <p>Let's look in particular at <code>StateT</code>'s <code>bind</code> implmentation as this is crucial to understanding how it enables the syntax we desire:</p>
-<pre><code class="language-purescript">instance bind :: (Monad monad) =&gt; Bind (StateT state monad) where
+<pre><code class="language-haskell">instance bind :: (Monad monad) =&gt; Bind (StateT state monad) where
   bind :: forall a b
         . StateT state monad a
        -&gt; (a -&gt; StateT state monad b)
@@ -418,7 +418,7 @@ instance monad :: (Monad m) =&gt; Monad (StateT state monad)
 </code></pre>
 <p>Behind the scenes, <code>StateT</code> is still using <code>Tuple value state</code> as normal. However, the value that is passed to <code>f</code> is the <code>value</code> type (i.e. <code>a</code>) and not <code>Tuple value state</code>.  This is what enables the syntax we desire.</p>
 <p>In other words, recall that</p>
-<pre><code class="language-purescript">bind (Box 4) (\four -&gt; body)
+<pre><code class="language-haskell">bind (Box 4) (\four -&gt; body)
 -- converts to
 (Box 4) &gt;&gt;= (\four -&gt; body)
 -- which in 'do notation' looks like

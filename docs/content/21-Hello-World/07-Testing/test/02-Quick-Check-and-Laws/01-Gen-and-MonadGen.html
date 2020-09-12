@@ -187,7 +187,7 @@
 </ul>
 <h2><a class="header" href="#the-gen-monad-and-its-monadgen-type-class" id="the-gen-monad-and-its-monadgen-type-class">The <code>Gen</code> Monad and its <code>MonadGen</code> Type Class</a></h2>
 <p>In <a href="https://pursuit.purescript.org/packages/purescript-gen/"><code>purescript-gen</code></a>, <a href="https://pursuit.purescript.org/packages/purescript-gen/docs/Control.Monad.Gen.Class">MonadGen</a> is the type class that has a default implementation via <a href="https://pursuit.purescript.org/packages/purescript-quickcheck/docs/Test.QuickCheck.Gen#t:Gen">Gen</a>. To see all of the definitions of the types used in <code>Gen</code>, look below:</p>
-<pre><code class="language-purescript">-- This Int will always be between 1 and 2147483647,
+<pre><code class="language-haskell">-- This Int will always be between 1 and 2147483647,
 -- which is (2^31 - 1), a Mersenne prime.
 -- It is used in a linear congruential generator.
 newtype Seed = Seed Int -- This will always be a positive integer

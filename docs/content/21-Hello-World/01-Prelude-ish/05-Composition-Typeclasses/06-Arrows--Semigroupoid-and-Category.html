@@ -167,30 +167,30 @@
 <p>We'll explain this idea before <code>Control Flow</code>-related type classes so that you understand a notation we'll use in them.</p>
 <h2><a class="header" href="#cleaner-function-notation" id="cleaner-function-notation">Cleaner Function Notation</a></h2>
 <p>Let's say I have two functions:</p>
-<pre><code class="language-purescript">(\x -&gt; x + 1)
+<pre><code class="language-haskell">(\x -&gt; x + 1)
 (\y -&gt; y * 10)
 </code></pre>
 <p>If we want to apply an argument to the first and pass its output into the second, we would have to write something ugly-looking:</p>
-<pre><code class="language-purescript">(\x -&gt; (\y -&gt; y * 10) (x + 1) )
+<pre><code class="language-haskell">(\x -&gt; (\y -&gt; y * 10) (x + 1) )
 </code></pre>
 <p>What we mean is something like this</p>
-<pre><code class="language-purescript">f = (\x -&gt; x + 1)
+<pre><code class="language-haskell">f = (\x -&gt; x + 1)
 g = (\y -&gt; y * 10)
 
 expression = (\arg -&gt; g (f arg))
 </code></pre>
 <p>We have just defined function composition, which can be written in such a way to reduce &quot;noise:&quot;</p>
-<pre><code class="language-purescript">-- The arrow determines where the output goes
+<pre><code class="language-haskell">-- The arrow determines where the output goes
 (\a -&gt; g (f a)) == (g &lt;&lt;&lt; f)
 (\a -&gt; g (f a)) == (f &gt;&gt;&gt; g)
 </code></pre>
 <p>Moreover, sometimes we want a function that returns the input:</p>
-<pre><code class="language-purescript">(\x -&gt; x)
+<pre><code class="language-haskell">(\x -&gt; x)
 -- so that we can use it like...
 (\x -&gt; x) 4 == 4
 </code></pre>
 <p>We call this function, <code>identity</code>:</p>
-<pre><code class="language-purescript">(\x -&gt; x) == identity
+<pre><code class="language-haskell">(\x -&gt; x) == identity
 -- same thing
 identity 4 == 4
 </code></pre>
@@ -202,7 +202,7 @@ identity 4 == 4
 <tr><td>identity</td><td><code>(\x -&gt; x) a</code></td><td><code>identity a</code></td></tr>
 </tbody></table>
 <p>If we were to turn <code>compose</code> into a function, it would appear with the type signature below:</p>
-<pre><code class="language-purescript">compose :: forall a b c. (b -&gt; c)     -&gt; (a -&gt; b)     -&gt; (a -&gt; c)
+<pre><code class="language-haskell">compose :: forall a b c. (b -&gt; c)     -&gt; (a -&gt; b)     -&gt; (a -&gt; c)
 -- However, &quot;-&gt;&quot; is just sugar syntax for Function:
 compose :: forall a b c. Function b c -&gt; Function a c -&gt; Function a c
 -- Notice that Function appears to be just another data structure.

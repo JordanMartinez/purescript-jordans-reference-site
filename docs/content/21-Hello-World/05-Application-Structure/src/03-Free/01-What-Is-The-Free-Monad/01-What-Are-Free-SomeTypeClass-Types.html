@@ -188,7 +188,7 @@
 </ol>
 <h2><a class="header" href="#a-free-monoid" id="a-free-monoid">A &quot;Free&quot; Monoid</a></h2>
 <p>When we look at <code>Monoid</code>, we see this type class:</p>
-<pre><code class="language-purescript">class Monoid a where                                                    {-
+<pre><code class="language-haskell">class Monoid a where                                                    {-
   append :: a -&gt; a -&gt; a       -- include Semigroup's function           -}
   mempty :: a
 
@@ -197,10 +197,10 @@
 -- mempty  &lt;&gt; &quot;hello&quot; == &quot;hello&quot;
 </code></pre>
 <p>Let's follow the instructions from above: First, we'll translate the type class into a data type that can take any type:</p>
-<pre><code class="language-purescript">data FreeMonoid a
+<pre><code class="language-haskell">data FreeMonoid a
 </code></pre>
 <p>Second and starting with the easier function <code>mempty</code>, we'll translate it into a constructor for <code>FreeMonoid</code>. <code>mempty</code> is easy, since it translates into a placeholder constructor:</p>
-<pre><code class="language-purescript">data FreeMonoid a
+<pre><code class="language-haskell">data FreeMonoid a
   = Mempty
 
 instance s :: Semigroup (FreeMonoid a) where
@@ -211,12 +211,12 @@ instance m :: Monoid (FreeMonoid a) where
   mempty = Mempty
 </code></pre>
 <p><code>append</code> is a bit harder. We need to store a value of type <code>a</code>, so we can try this:</p>
-<pre><code class="language-purescript">data FreeMonoid a
+<pre><code class="language-haskell">data FreeMonoid a
   = Mempty
   | Append a
 </code></pre>
 <p>However, if we try to implement this as <code>(Append a1) &lt;&gt; (Append a2)</code>, we can't combine <code>a1</code> and <code>a2</code>. Rather, we need to store both an <code>a1</code> and an <code>a2</code> in a single <code>Append</code>:</p>
-<pre><code class="language-purescript">data FreeMonoid a
+<pre><code class="language-haskell">data FreeMonoid a
   = Mempty
   --       a1 a2
   | Append a  a
@@ -238,7 +238,7 @@ instance s :: Semigroup (FreeMonoid a) where
 <p>Our previous solution doesn't work either. If the failure case above is just another append, we get something like this:
 <code>((Append a1 Mempty) &lt;&gt; (Append a2 Mempty)) &lt;&gt; (Append a3 Mempty)</code>
 Rather than defining a second <code>a</code> for <code>Append</code>, what if we nested the types together? This approach makes our code finally work:</p>
-<pre><code class="language-purescript">data FreeMonoid a
+<pre><code class="language-haskell">data FreeMonoid a
   = Mempty
   --       a1  Mempty / Append a
   | Append a  (FreeMonoid a     )
@@ -254,7 +254,7 @@ instance m :: Monoid (FreeMonoid a) where
   mempty = Mempty
 </code></pre>
 <p>The above code is the exact same thing as a familiar data type, <code>List</code>:</p>
-<pre><code class="language-purescript">data List a
+<pre><code class="language-haskell">data List a
   = Nil
   | Cons a (List a)
 
@@ -269,7 +269,7 @@ instance m :: Monoid (List a) where
   mempty = Nil
 </code></pre>
 <p>Thus, we say that <code>List</code> is a &quot;free&quot; monoid because by wrapping some type (e.g. <code>Fruit</code>) into a <code>List</code>, we get a monoid instance for <code>Fruit</code> for free:</p>
-<pre><code class="language-purescript">data Fruit
+<pre><code class="language-haskell">data Fruit
   = Apple
   | Orange
   | Banana

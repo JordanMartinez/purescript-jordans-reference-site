@@ -175,14 +175,14 @@
 <p>Moreover, <code>purescript-either</code> only grants us the ability to define 10 total types in a nested manner. Once we go above that number, we need to write our own convenience functions. If we do this in multiple projects, that's more wasted developer time.</p>
 <p>So, what are our options here? We saw previously that we could not define our own special nested <code>Either</code> type without knowing at the type-declaration-time what the next few types are. However, we do know at compile-time what those types will be. We also know at compile-time how many types will exist in a nested <code>Either</code>-like type. This implies that we might want to stop looking at value-level programming for our solutions and instead look at type-level programming. More specifically, we should look at row kinds.</p>
 <p>We can use row kinds specified to type (i.e. <code># Type</code>) to specify n-different types that are known at compile-time. As an example, we can look at <code>Record</code>, which is a nested <code>Tuple</code> that uses row kinds to work:</p>
-<pre><code class="language-purescript">-- first AND second AND third AND fourth AND last
+<pre><code class="language-haskell">-- first AND second AND third AND fourth AND last
 Tuple first (Tuple second (Tuple third (Tuple fourth last)))
 Record (a :: first, b :: second, c :: third, d :: fourth, e :: last)
 -- which is more commonly seen using &quot;{}&quot; syntax
        {a :: first, b :: second, c :: third, d :: fourth, e :: last}
 </code></pre>
 <p>Is it possible to take this same idea and apply it to <code>Either</code>? Yes, which is what <code>purescript-variant</code> does:</p>
-<pre><code class="language-purescript">-- first OR second OR third OR fourth OR last
+<pre><code class="language-haskell">-- first OR second OR third OR fourth OR last
 Either first (Either second (Either third (Either fourth last)))
 Variant (a :: first, b :: second, c :: third, d :: fourth, e :: last)
 -- Unfortunately, there is no equivalent &quot;{}&quot;-like syntax for variants
@@ -195,7 +195,7 @@ Variant (a :: first, b :: second, c :: third, d :: fourth, e :: last)
 <li>Change one type to another: <code>Either String Boolean</code> &lt;=&gt; <code>Either Int Boolean</code></li>
 </ol>
 <p>... we can see that <code>Record</code> meets our requirements because of row polymorphism:</p>
-<pre><code class="language-purescript">-- the function
+<pre><code class="language-haskell">-- the function
 getName :: forall allOtherFields. { name :: String | allOtherFields } -&gt; String
 getName :: { name: theName } = theName
 
@@ -216,11 +216,11 @@ getName { name: &quot;John&quot;, dogName: Spot }
 <p><code>Record</code> has support at the syntax-level in Purescript. So, instead of writing <code>Record (key :: ValueType)</code>, we can write <code>{key :: ValueType}</code>. Unfortunately, <code>Variant</code> is not supported at the syntax-level. Thus, we must be explicit and use type-level programming. The following code shows how to write <code>inject</code> and <code>project</code> via <code>Variant</code> and <code>Symbol</code>s, type-level <code>String</code>s.</p>
 <p><strong>If you haven't already done so, read through the Syntax folder on Type-Level Programming Syntax</strong></p>
 <h3><a class="header" href="#injection" id="injection">Injection</a></h3>
-<pre><code class="language-purescript">injectFruit :: forall v. Fruit -&gt; Variant (fieldName :: Fruit | v)
+<pre><code class="language-haskell">injectFruit :: forall v. Fruit -&gt; Variant (fieldName :: Fruit | v)
 injectFruit fruit = inj (SProxy :: SProxy &quot;fieldName&quot;) fruit
 </code></pre>
 <h3><a class="header" href="#projection" id="projection">Projection</a></h3>
-<pre><code class="language-purescript">projectFruit :: forall v. Variant (fieldName :: Fruit | v) -&gt; Maybe Fruit
+<pre><code class="language-haskell">projectFruit :: forall v. Variant (fieldName :: Fruit | v) -&gt; Maybe Fruit
 projectFruit variant = prj (SProxy :: SProxy &quot;fieldName&quot;) variant
 </code></pre>
 <h3><a class="header" href="#pattern-matching-in-variant" id="pattern-matching-in-variant">Pattern Matching in Variant</a></h3>
@@ -271,7 +271,7 @@ projectFruit variant = prj (SProxy :: SProxy &quot;fieldName&quot;) variant
 <li>Copy and paste each &quot;file&quot; below into the REPL.</li>
 <li>Run the commands at the end of this snippet</li>
 </ol>
-<pre><code class="language-purescript">-- File1's original code: once compiled, it cannot change
+<pre><code class="language-haskell">-- File1's original code: once compiled, it cannot change
 import Data.Maybe
 import Data.Variant
 import Data.Function

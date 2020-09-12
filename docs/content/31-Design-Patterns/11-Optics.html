@@ -179,7 +179,7 @@
 <h2><a class="header" href="#lenses" id="lenses">Lenses</a></h2>
 <p><strong>Note: due to Thomas' above blog post, the below section will be removed in the next major release.</strong></p>
 <p>Since FP data types cannot be subclassed like OO data types, one will often define a shared component and then define its 'subclasses' as having that shared component:</p>
-<pre><code class="language-purescript">type Shape = { fill :: Color }
+<pre><code class="language-haskell">type Shape = { fill :: Color }
 type Square = { width :: Number
               , height :: Number
               , shape :: Shape
@@ -189,7 +189,7 @@ type Circle = { radius :: Number
               }
 </code></pre>
 <p>As a result, when we wish to update the <code>shape</code> part of a Square or Circle, we need to deal with all that nesting:</p>
-<pre><code class="language-purescript">-- for example...
+<pre><code class="language-haskell">-- for example...
 user.config.personal.privacy.email { isPublic = false }
 </code></pre>
 <p>This leads to a lot of boilerplate but the concept is easily abstracted into Lenses.</p>

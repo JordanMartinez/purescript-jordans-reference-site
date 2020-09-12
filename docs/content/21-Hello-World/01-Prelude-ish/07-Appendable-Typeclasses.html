@@ -167,7 +167,7 @@
 <p>This file will only cover the first two type classes in the type class hierarchy. The rest will be covered later.</p>
 <p>These type classes often take two values of a given type and 'append' them into one new value. One could also think of this as 'reducing' two values into one value.</p>
 <h2><a class="header" href="#semigroup" id="semigroup">Semigroup</a></h2>
-<pre><code class="language-purescript">class Semigroup a where
+<pre><code class="language-haskell">class Semigroup a where
   append :: a -&gt; a -&gt; a
 
 infixr 5 append as &lt;&gt;
@@ -186,7 +186,7 @@ infixr 5 append as &lt;&gt;
 </ul>
 <p>A fourth is <code>List</code>. One can take two values of <code>List</code> and combine them together by putting both lists' elements into one new list.</p>
 <h2><a class="header" href="#monoid" id="monoid">Monoid</a></h2>
-<pre><code class="language-purescript">class Semigroup a &lt;= Monoid a where
+<pre><code class="language-haskell">class Semigroup a &lt;= Monoid a where
   mempty :: a
 </code></pre>
 <p><code>mempty</code> is the &quot;identity&quot; value. In other words <code>mempty &lt;&gt; a == a</code> and <code>a &lt;&gt; mempty == a</code>. In some contexts, <code>mempty</code> acts like a &quot;default value.&quot;</p>

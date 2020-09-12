@@ -165,7 +165,7 @@
                     <main>
                         <h1><a class="header" href="#monad-trans" id="monad-trans">Monad Trans</a></h1>
 <p><code>MonadTrans</code> enables one computational monad to run inside another, thereby exposing multiple type class' functions for usage in <code>bind</code>/<code>&gt;&gt;=</code> / do notation in the same function. It enables one to write an entire program via newtyped function monads (or functions with monadic syntax).</p>
-<pre><code class="language-purescript">class MonadTrans t where
+<pre><code class="language-haskell">class MonadTrans t where
   lift :: forall m a. m a -&gt; t m a
 </code></pre>
 <h2><a class="header" href="#laws" id="laws">Laws</a></h2>

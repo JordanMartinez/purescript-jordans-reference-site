@@ -169,7 +169,7 @@
 <h2><a class="header" href="#getting-around-the-non-free-monad-limitation" id="getting-around-the-non-free-monad-limitation">Getting Around The Non-Free-Monad Limitation</a></h2>
 <p>Unfortunately, this <code>Coproduct</code> + <code>Free</code> approach only works on <code>Free</code> monads; it does not work for other non-<code>Free</code> monads. As the paper says, the <code>ListT</code> and <code>StateT</code> monads are not free monads. Why? Let's consider the <code>StateT</code> monad. The issue at hand are its laws. If I call <code>set 4</code> and then later call <code>get</code>, <code>get</code> should return <code>4</code>. By using <code>Free</code> as we have so far, we cannot uphold that law.</p>
 <p>So, how do we get around that limitation? We can define a type that has an instance for <code>Functor</code> and whose values represent terms in a language (similar to our <code>Add</code>, <code>Multiply</code>, <code>Value</code> language) that provides the operations we would expect from such a monad. The paper's example shows how one could create a <code>State</code> monad using this approach. Since it will follow much of what we have already covered before, we'll just show the Purescript version of their code.</p>
-<pre><code class="language-purescript">data Add      theRestOfTheComputation = Add Int theRestOfTheComputation
+<pre><code class="language-haskell">data Add      theRestOfTheComputation = Add Int theRestOfTheComputation
 data GetValue theRestOfTheComputation = GetValue (Int -&gt; theRestOfTheComputation)
 
 -- Why the `a` type is `Pure` will become clear
@@ -240,7 +240,7 @@ run =
 </ul>
 <h2><a class="header" href="#defining-and-interpreting-languages-for-the-free-monad" id="defining-and-interpreting-languages-for-the-free-monad">Defining and Interpreting Languages for the Free Monad</a></h2>
 <p>When we look at how to define a language data type for the <code>Free</code> monad, it follows this pattern (written in meta-language):</p>
-<pre><code class="language-purescript">data Language theRestOfTheComputation
+<pre><code class="language-haskell">data Language theRestOfTheComputation
   -- Statement that tells interpreter to do something but
   -- doesn't pass down any arguments into the interpreter
   -- or receive any values from the interpreter
@@ -259,7 +259,7 @@ run =
   | Function_With_Getter Arg_Passed_to_Interpreter (Value_Provided_By_Interpreter -&gt; theRestOfTheComputation)
 </code></pre>
 <p>So far, we've only defined a data type with one value and composed those data types together. However, what if we treated a data type as a &quot;family&quot; of operations where each value in that data type was an operation? Then our data types might look like this:</p>
-<pre><code class="language-purescript">-- A &quot;language&quot; that supports the capabilities of reading from
+<pre><code class="language-haskell">-- A &quot;language&quot; that supports the capabilities of reading from
 -- a file and writing to a file
 data FileSystem a
   = ReadFromFile FilePath (ContentsOfFile -&gt; a)
@@ -275,7 +275,7 @@ data ConsoleIO a
   | WriteThenRead String (String -&gt; a)
 </code></pre>
 <p>Using these data structure, we can &quot;interpret&quot; these non-runnable pure programs into an equivalent runnable impure program (e.g. <code>Effect</code>). Assuming these functions exist...</p>
-<pre><code class="language-purescript">consoleRead :: Effect String
+<pre><code class="language-haskell">consoleRead :: Effect String
 
 consoleWrite :: String -&gt; Effect Unit
 
@@ -284,7 +284,7 @@ readFromFile :: FilePath -&gt; Effect String
 writeToFile :: FilePath -&gt; String -&gt; Effect Unit
 </code></pre>
 <p>... we could take our pure &quot;description&quot; of computations (e.g. <code>Free ConsoleIO a</code>) and &quot;interpret&quot; it into an impure <code>Effect</code> monad:</p>
-<pre><code class="language-purescript">class Functor f =&gt; Exec f where                                      {-
+<pre><code class="language-haskell">class Functor f =&gt; Exec f where                                      {-
   execAlgebra :: f (Effect a) -&gt; Effect a                            -}
   execAlgebra :: f  Effect    ~&gt; Effect
 
@@ -342,7 +342,7 @@ Now exiting.
 <li>gets current date/time</li>
 </ul>
 <p>That program might look something like this:</p>
-<pre><code class="language-purescript">type Message = String
+<pre><code class="language-haskell">type Message = String
 type Prompt = String
 type UserInput = String
 

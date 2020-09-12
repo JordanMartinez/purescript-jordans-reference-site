@@ -172,12 +172,12 @@
 <pre><code>actualArgument # (\x -&gt; body)
 </code></pre>
 <p>In other words...</p>
-<pre><code class="language-purescript">function      arg == arg # function
+<pre><code class="language-haskell">function      arg == arg # function
 (\x -&gt; x + 1) arg == arg # (\x -&gt; x + 1)
 </code></pre>
 <p>This will help the upcoming examples be much clearer and more understandable.</p>
 <p>Using this type and its instance...</p>
-<pre><code class="language-purescript">data Box a = Box a
+<pre><code class="language-haskell">data Box a = Box a
 
 instance functor :: Functor Box where
   map :: forall a b. (a -&gt; b) -&gt; Box a -&gt; Box  b
@@ -203,7 +203,7 @@ print(five_string); // print the String to the console, which returns nothing
 </code></pre>
 <p>... into its corresponding Purescript &quot;program&quot; (next).</p>
 <p>In the following snippet of code, you will need to scroll to the right, so that the a previous reduction aligns with the next reduction. <strong>Note: Read through this and practice writing it out multiple times until you get sick of it as this is at the heart of FP programming! Failure to understand this == Failure to write FP code.</strong> Here's the code:</p>
-<pre><code class="language-purescript">unsafePerformEffect :: forall a. Box a -&gt; a
+<pre><code class="language-haskell">unsafePerformEffect :: forall a. Box a -&gt; a
 unsafePerformEffect (Box a) = a
 
 -- Compute what the final Box value is in `main`

@@ -166,7 +166,7 @@
                         <h1><a class="header" href="#monad-transformer-stacks" id="monad-transformer-stacks">Monad Transformer Stacks</a></h1>
 <p>You will want to bookmark this page.</p>
 <p>Generalizing the idea we discovered in the previous file into a pattern, we get something like this:</p>
-<pre><code class="language-purescript">program :: forall m
+<pre><code class="language-haskell">program :: forall m
          . MonadState StateType m
         =&gt; MonadWriter NonOutputData m
      -- =&gt; other needed type classes here in any order...

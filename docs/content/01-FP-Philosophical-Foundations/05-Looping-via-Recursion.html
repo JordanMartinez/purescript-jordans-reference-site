@@ -173,7 +173,7 @@ for (var i = 2; i &lt; count; i++) {
     result = result * i
 }
 </code></pre>
-<pre><code class="language-purescript">-- This is a stack-unsafe function (explained and improved next)
+<pre><code class="language-haskell">-- This is a stack-unsafe function (explained and improved next)
 factorial :: Int -&gt; Int
 factorial 1 = 1                       -- base case
 factorial x = x * (factorial (x - 1)) -- recursive case
@@ -191,7 +191,7 @@ factorial 3
 <h3><a class="header" href="#stack-safe" id="stack-safe">Stack-Safe</a></h3>
 <p>The above Purescript example illustrates a problem that comes with writing loops this way: stack overflows. Thus, when one says &quot;this function is <code>stack-safe</code>&quot;, they mean that calling the function will not risk the possibility of a stack overflow runtime error being produced. One usually prevents this risk via tail-call optimization (which usually converts the recursive loop back into an OO loop) or trampolining (when tail-call optimization isn't possible)</p>
 <p>Thus, one will usually write recursive functions in this manner. Rather than using recursion to calculate the value by creating a 'stack' of <code>*</code> operations (as done above), one will pass into the function an additional argument that acts as the accumulated value. The necessary state change / calculation is done and its result is passed in as the new accumulated value in the next iteration of the recursive function call:</p>
-<pre><code class="language-purescript">factorial :: Int -&gt; Int
+<pre><code class="language-haskell">factorial :: Int -&gt; Int
 factorial n = factorial' n 1
 
 factorial' :: StartingInt -&gt; AccumulatedInt -&gt; AccumulatedInt
@@ -228,7 +228,7 @@ var findFirst = (array, condition) =&gt; {
 }
 findFirst([0, 1, 2], (i) =&gt; i == 1);
 </code></pre>
-<pre><code class="language-purescript">-- linked list
+<pre><code class="language-haskell">-- linked list
 data List a
   = Nil             -- end of the list
   | Cons a (List a) -- head of a linked list &amp; rest of list
@@ -259,7 +259,7 @@ Just 1
 <h3><a class="header" href="#short-circuiting" id="short-circuiting">Short-Circuiting</a></h3>
 <p>The above Purescript example illustrates another problem with writing loops this way: <code>short-circuiting</code>. There are times when we wish to break out of a recursion-based loop early, such as when we have found the first element of a collection. In the above example, the function does not short-circuit, so it continues to iterate through the list even after it has found the element, leading to wasted CPU time and work.</p>
 <p>To make the function above short-circuit, we would rewrite the function to this:</p>
-<pre><code class="language-purescript">-- linked list
+<pre><code class="language-haskell">-- linked list
 data List a
   = Nil             -- end of the list
   | Cons a (List a) -- head of a linked list &amp; rest of list
@@ -291,7 +291,7 @@ Just 1
   }
 }
 </code></pre>
-<pre><code class="language-purescript">data Unit = Unit
+<pre><code class="language-haskell">data Unit = Unit
 
 whileLoop :: Boolean -&gt; (Unit -&gt; Boolean) -&gt; (Unit -&gt; Unit) -&gt; Unit
 whileLoop false _ _ = -- body
@@ -307,7 +307,7 @@ for (value in list) {
   count += 1;
 }
 </code></pre>
-<pre><code class="language-purescript">data List a
+<pre><code class="language-haskell">data List a
   = Nil
   | Cons a (List a)
 

@@ -167,7 +167,7 @@
 <h2><a class="header" href="#monadthrow" id="monadthrow">MonadThrow</a></h2>
 <p><code>MonadThrow</code> is used to immediately stop <code>bind</code>'s sequential computation and return a value of its error type because of some unforeseeable error (e.g. error encountered when connecting to a database, file that was supposed to exist did not exist, etc).</p>
 <p>It's default implmentation is <code>ExceptT</code>:</p>
-<pre><code class="language-purescript">             -- e     m     a
+<pre><code class="language-haskell">             -- e     m     a
 newtype ExceptT error monad output =
   ExceptT (monad (Either error output))
 
@@ -178,7 +178,7 @@ class (Monad m) =&gt; MonadThrow e (ExceptT e m) where
 </code></pre>
 <h3><a class="header" href="#exceptt-before-and-after" id="exceptt-before-and-after">ExceptT: Before and After</a></h3>
 <p>Before using <code>ExceptT</code>, we would write this ugly verbose code:</p>
-<pre><code class="language-purescript">getName :: Effect (Either Error String)
+<pre><code class="language-haskell">getName :: Effect (Either Error String)
 getAge :: Effect (Either Error Int)
 
 main :: Effect Unit
@@ -194,7 +194,7 @@ main = do
           log $ &quot;Got name: &quot; &lt;&gt; name &lt;&gt; &quot; and age &quot; &lt;&gt; show age
 </code></pre>
 <p>After using <code>ExceptT</code>, we would write this clear readable code:</p>
-<pre><code class="language-purescript">getName :: Effect (Either Error String)
+<pre><code class="language-haskell">getName :: Effect (Either Error String)
 getAge :: Effect (Either Error Int)
 
 main :: Effect Unit
@@ -210,7 +210,7 @@ main = do
 </code></pre>
 <h2><a class="header" href="#monaderror" id="monaderror">MonadError</a></h2>
 <p><code>MonadError</code> extends <code>MonadThrow</code> by enabling a monad to catch the thrown error, attempt to handle it (by changing the error type to an output type), and then continue <code>bind</code>'s sequential computation. If <code>catchError</code> can't handle the error, <code>bind</code>'s sequential computation will still stop at that point and return the value of the error type.</p>
-<pre><code class="language-purescript">newtype ExceptT e m a = ExceptT (m (Either e a))
+<pre><code class="language-haskell">newtype ExceptT e m a = ExceptT (m (Either e a))
 
 class (Monad m) =&gt; MonadError e (ExceptT e m) where
   catchError :: forall a. ExceptT e m a -&gt; (e -&gt; ExceptT e m a) -&gt; ExceptT e m a
@@ -220,7 +220,7 @@ class (Monad m) =&gt; MonadError e (ExceptT e m) where
       Right a -&gt; pure $ Right a))
 </code></pre>
 <p>For example,</p>
-<pre><code class="language-purescript">getFileContents :: forall m.
+<pre><code class="language-haskell">getFileContents :: forall m.
                    MonadError m =&gt;
                    String -&gt;
                    m String
@@ -241,7 +241,7 @@ getFileContents pathToFile = do
 </ul>
 <h2><a class="header" href="#do-notation" id="do-notation">Do Notation</a></h2>
 <p>Since MonadThrow/MonadError are error-related, we'll show the do notation in meta-language here since it will be harder to do so in the code examples:</p>
-<pre><code class="language-purescript">-- MonadThrow
+<pre><code class="language-haskell">-- MonadThrow
 stopped &lt;- throwError e
 value1 &lt;- otherComputation stopped
 value2 &lt;- otherComputation value1

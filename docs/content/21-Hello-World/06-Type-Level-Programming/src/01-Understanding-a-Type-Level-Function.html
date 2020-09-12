@@ -167,13 +167,13 @@
 <h2><a class="header" href="#tips-on-rows" id="tips-on-rows">Tips on Rows</a></h2>
 <p>Rows in particular are where type-level programming gets interesting and fun.</p>
 <p>First, there is a long and short way to write <code>Record rowType</code>:</p>
-<pre><code class="language-purescript">long :: forall r. Record r
+<pre><code class="language-haskell">long :: forall r. Record r
 
 short :: forall r. { | r }
 </code></pre>
 <p>Since the left part of <code>{ | r}</code> does not contain any rows, this reduces to <code>Record r</code>.</p>
 <p>Second, there is syntax sugar via <a href="https://pursuit.purescript.org/packages/purescript-typelevel-prelude/3.0.0/docs/Type.Row#t:RowApply"><code>RowApply</code></a>/<a href="https://pursuit.purescript.org/packages/purescript-typelevel-prelude/3.0.0/docs/Type.Row#t:type%20(+)"><code>+</code></a> for adding additional rows:</p>
-<pre><code class="language-purescript">type EmptyRow = ()
+<pre><code class="language-haskell">type EmptyRow = ()
 type ClosedRow1 = (a :: Int)
 type OpenRow1 r = (b :: String | r)
 type OpenRow2 r = (OpenRow1 + r)
@@ -186,7 +186,7 @@ type Row3 r = (z :: Int | r)
 type SuperMixedOpenRow r = (a :: Int, b :: Int, c :: Int | Row1 + Row2 + Row3 + r)
 </code></pre>
 <p>Third, we sometimes need to close the &quot;open&quot; row type by using the empty row, <code>()</code>:</p>
-<pre><code class="language-purescript">-- Example 1
+<pre><code class="language-haskell">-- Example 1
 type Row1 r = (a :: Int | r)
 type Row2 r = (b :: Int | r)
 type Row3 r = (c :: Int | r)
@@ -208,7 +208,7 @@ finalEval :: OpenRecord () -&gt; Output
 <li>Look at the <code>IsKind</code> constraints and any <code>Proxy</code> types to see how the function type checks.</li>
 </ol>
 <p>For example, look at <a href="https://pursuit.purescript.org/builtins/docs/Prim.Row">Prim.Row</a> to understand the relationships used below and then use the above guidelines to understand this type-level computation:</p>
-<pre><code class="language-purescript">f :: forall row1 row2 row1And2 row1And2PlusAge nubbedRow1And2PlusAge finalRow.
+<pre><code class="language-haskell">f :: forall row1 row2 row1And2 row1And2PlusAge nubbedRow1And2PlusAge finalRow.
   Union row1 row2 row1And2 =&gt;
   Cons &quot;age&quot; Int row1And2 row1And2PlusAge =&gt;
   Nub row1And2PlusAge nubbedRow1And2PlusAge =&gt;
@@ -233,7 +233,7 @@ f _ _ = RProxy
 </li>
 </ol>
 <p>For example, let's say we were trying to write a simple expression using <code>Symbol</code>. Our goal is to append two symbols together. The following code block demonstrates the process one might go through in writing the function:</p>
-<pre><code class="language-purescript">-- we want to append two symbols together into one
+<pre><code class="language-haskell">-- we want to append two symbols together into one
 -- It's the type-level expression of: &quot;some string&quot; &lt;&gt; &quot;another string&quot;
 
 -- given this type-level relationship:

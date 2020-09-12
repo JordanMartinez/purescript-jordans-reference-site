@@ -168,7 +168,7 @@
 <p><code>MonadTell</code> is used to return additional non-output data that is generated during a computation. It's default implementation is <code>WriterT</code>.</p>
 <p>Since we can only return one object and we want to return something in addition to the output, we'll need to return a <code>Tuple</code> that wraps the output and additional data. In cases where we already have non-output data and need to &quot;store&quot; another alue of non-output data, we'll need to combine the two together, which implies a <code>Semigroup</code>. Lastly, to implement <code>Applicative</code>, we will need an &quot;empty&quot; value of that data, which implies <code>Monoid</code>.</p>
 <p>Putting this into code, we get this:</p>
-<pre><code class="language-purescript">             -- w               m     a
+<pre><code class="language-haskell">             -- w               m     a
 newtype WriterT non_output_data monad output =
   WriterT (monad (Tuple output non_output_data))
 
@@ -179,7 +179,7 @@ class (Monoid w, Monad m) &lt;= MonadTell w (WriterT w m) where
 </code></pre>
 <h2><a class="header" href="#do-notation" id="do-notation">Do Notation</a></h2>
 <p>Since <code>tell</code> returns an <code>m Unit</code>, which will be discarded in do notation, we'll only be writing:</p>
-<pre><code class="language-purescript">useReader :: Reader NonOuputData Output
+<pre><code class="language-haskell">useReader :: Reader NonOuputData Output
 useReader = do                                                          {-
   unit &lt;- tell nonOuputData                                             -}
           tell nonOuputData

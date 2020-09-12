@@ -165,7 +165,7 @@
                     <main>
                         <h1><a class="header" href="#writing-the-evaluate-function" id="writing-the-evaluate-function">Writing the Evaluate Function</a></h1>
 <p>Since we'll be doing graph reductions later that will get somewhat complicated, we will rename <code>Placeholder</code> to <code>In</code> to make it easier to read. <code>In</code> is the same name used in the paper. This should make reading this &quot;commentary&quot; alongside of the paper easier.</p>
-<pre><code class="language-purescript">data Expression f = In (f (Expression f))
+<pre><code class="language-haskell">data Expression f = In (f (Expression f))
 
 -- A full value
 In ( Right ( Left ( Add (
@@ -178,14 +178,14 @@ In ( Right ( Left ( Add (
 </code></pre>
 <h2><a class="header" href="#the-types-functor-instances" id="the-types-functor-instances">The Types' Functor Instances</a></h2>
 <p>Due to how <code>Value</code>, <code>Add</code>, and <code>Multiply</code> are now defined, they are also <code>Functor</code>s. <code>Add</code> and <code>Multiply</code> implement <code>map</code> as one would expect:</p>
-<pre><code class="language-purescript">map :: (e -&gt; z) -&gt; Add e -&gt; Add z
+<pre><code class="language-haskell">map :: (e -&gt; z) -&gt; Add e -&gt; Add z
 map f (Add e1 e2) = Add (f e1) (f e2)
 
 map :: (e -&gt; z) -&gt; Multiply e -&gt; Multiply z
 map f (Multiply e1 e2) = Multiply (f e1) (f e2)
 </code></pre>
 <p>However, <code>Value</code> implements it differently in an important way. Since <code>Value</code>'s generic type, <code>e</code>, is never used in its value and since the <code>Value</code> constructor can only wrap an <code>Int</code> type, one cannot really &quot;map&quot; a <code>Value</code> (i.e. change the inner <code>Int</code> type) to anything else. Rather, they can only change <code>Value</code>'s <code>e</code> type:</p>
-<pre><code class="language-purescript">data Value e = ValueConstructor Int
+<pre><code class="language-haskell">data Value e = ValueConstructor Int
 map :: (e -&gt; z) -&gt; Value e            -&gt;             Value z
 map    _          (ValueConstructor x)             = ValueConstructor x
 --               ((ValueConstructor x) :: Value e) ((ValueConstructor x) :: Value z)
@@ -194,7 +194,7 @@ map    _          (ValueConstructor x)             = ValueConstructor x
 </code></pre>
 <p>Thus, <code>Value</code> is a no-op <code>Functor</code>: using <code>map</code> on it just returns the same value.</p>
 <p>An <code>Either</code> that wraps higher-kinded types implements <code>Functor</code> as we would expect:</p>
-<pre><code class="language-purescript">instance f :: (Functor f, Functor g) =&gt; Functor (Either (f e) (g e)) where
+<pre><code class="language-haskell">instance f :: (Functor f, Functor g) =&gt; Functor (Either (f e) (g e)) where
   map func (Left f)  = Left  (map func f)
   map func (Right g) = Right (map func g)
 
@@ -204,7 +204,7 @@ instance f :: (Functor f, Functor g) =&gt; Functor Coproduct f g e where
 <h2><a class="header" href="#a-simple-evaluation" id="a-simple-evaluation">A Simple Evaluation</a></h2>
 <p>We will soon see why it matters that these types are <code>Functor</code>s.</p>
 <p>Let's write a function that can evaluate the simplest version of our nested data structure. We'll exclude <code>Add</code> and <code>Multiply</code> and only focus on <code>Value</code>. To simulate the <code>Left</code> value in <code>Either (Value e) (SomethingElse e)</code>, we'll use <code>BoxF</code>:</p>
-<pre><code class="language-purescript">data BoxF f a = BoxF (f a)
+<pre><code class="language-haskell">data BoxF f a = BoxF (f a)
 
 instance functor :: Functor f =&gt; Functor (Box f) where
   map function (BoxF f_of_a) = Box (map function f_of_a)
@@ -219,7 +219,7 @@ valueExample = In (BoxF (Value 2))
 <li>We implement a type class that specifies an 'unwrap' function that each implements.</li>
 </ol>
 <p>We'll take the second approach because it adheres to the idea of adding more types later on:</p>
-<pre><code class="language-purescript">class (Functor f) &lt;= Evaluate f where
+<pre><code class="language-haskell">class (Functor f) &lt;= Evaluate f where
   evaluate :: forall a. f a -&gt; Int
 
 instance v :: Evaluate Value where
@@ -236,7 +236,7 @@ evaluate valueExample
 </code></pre>
 <h2><a class="header" href="#including-add-again" id="including-add-again">Including <code>Add</code> again</a></h2>
 <p>This solution works until we make our code more complicatd by composing <code>Add</code> with <code>Value</code> via <code>Either</code> again.</p>
-<pre><code class="language-purescript">addExample :: Expression (Coproduct Value Add e)
+<pre><code class="language-haskell">addExample :: Expression (Coproduct Value Add e)
 addExample =
   In (Right (Add            -- Coproduct's wrapper value
     (In (Left (Value 2)))   -- is excluded for simplicity
@@ -244,7 +244,7 @@ addExample =
   ))
 </code></pre>
 <p>Returning to the <code>Eval</code> type class, how would we implement an instance for <code>Add</code>?</p>
-<pre><code class="language-purescript">class (Functor f) &lt;= Evaluate f where
+<pre><code class="language-haskell">class (Functor f) &lt;= Evaluate f where
   evaluate :: forall a. f a -&gt; Int
 
 instance a :: Evaluate Add where
@@ -263,11 +263,11 @@ instance a :: Evaluate Add where
 <li>convert <code>Add x y</code> to <code>x + y</code></li>
 </ul>
 <p>Starting with an easier problem, we could guarantee that all <code>In</code> values are removed by calling an unwrapping function, <code>removeIn</code>, followed by a <code>map</code> call:</p>
-<pre><code class="language-purescript">removeIn :: Expression f -&gt; f
+<pre><code class="language-haskell">removeIn :: Expression f -&gt; f
 removeIn (In f) = map removeIn f
 </code></pre>
 <p>To see why this works, we'll run this function on <code>addExample</code>:</p>
-<pre><code class="language-purescript">-- Start!
+<pre><code class="language-haskell">-- Start!
 removeIn (
   In (Right (Add
     (In (Left (Value 2)))
@@ -308,7 +308,7 @@ Right (Add
 </code></pre>
 <p>This approach effectively removes all <code>In</code> values. However, we are still left with the same problem above: converting an <code>Add</code> expression into an <code>Int</code> value by defining an <code>Evaluate</code> instance.</p>
 <p>However, the reduction of our graph shows something important. What is the type signature for the result of our reduction? We can see it below:</p>
-<pre><code class="language-purescript">result :: Coproduct Value Add e
+<pre><code class="language-haskell">result :: Coproduct Value Add e
 result =
   Right (Add
     (Left (Value 2))
@@ -316,7 +316,7 @@ result =
   )
 </code></pre>
 <p>Looking at the <code>Evaluate</code> type class definition again, we can see that we don't force <code>a</code> (which corresponds to our <code>e</code> type in <code>result</code>) to be anything. However, what if we changed it to <code>Int</code>? If we do, it solves our dilemma above:</p>
-<pre><code class="language-purescript">class (Functor f) &lt;= Evaluate f where
+<pre><code class="language-haskell">class (Functor f) &lt;= Evaluate f where
   evaluate :: f Int -&gt; Int
 
 instance v :: Evaluate Value where
@@ -331,7 +331,7 @@ instance e :: (Evaluate f, Evaluate g) =&gt; Evaluate (Either f g) where
   evaluate (Right g) = evaluate g
 </code></pre>
 <p>If we call <code>evaluate</code> on the result of our graph reduction above, what do we get?</p>
-<pre><code class="language-purescript">-- Start!
+<pre><code class="language-haskell">-- Start!
 evaluate (Right (Add
   (Left (Value 2))
   (Left (Value 4))
@@ -344,7 +344,7 @@ evaluate (Add
 -- Compiler error! Expected `Add Int` but got `Add (Either (Value e) (Add e))
 </code></pre>
 <p>The problem with this approach is that the nested <code>Value int</code> values were not evaluated before we evaluated the <code>Add</code>. If we could somehow change how our code works, we need something more like this:</p>
-<pre><code class="language-purescript">-- Start!
+<pre><code class="language-haskell">-- Start!
 evaluate (Right (Add
   (evaluate (Left (Value 2)))
   (evaluate (Left (Value 4)))
@@ -371,11 +371,11 @@ evaluate (Add
 6
 </code></pre>
 <p>So, how do we use the <code>removeIn</code> approach to remove the <code>In</code> values and also evaluate <code>Value int</code> before evaluating <code>Add</code>, so that the types are correct by the time it happens? We make just a slight change to <code>removeIn</code>. It will now take an &quot;unwrapping&quot; function that gets applied to the result of our mapping. To make it adhere to the paper, we'll rename it to &quot;fold&quot; and explain that name later:</p>
-<pre><code class="language-purescript">fold :: Functor f =&gt; (f a -&gt; a) -&gt; Expression f -&gt; a
+<pre><code class="language-haskell">fold :: Functor f =&gt; (f a -&gt; a) -&gt; Expression f -&gt; a
 fold function (In f) = function (map (fold function) f)
 </code></pre>
 <p>How should this function be understood? Rather than explain it using words, we'll demonstrate it using a graph reduction. Then, we'll explain the name:</p>
-<pre><code class="language-purescript">-- Start
+<pre><code class="language-haskell">-- Start
 fold evaluate addExample
 -- replace addExample with its definition
 fold evaluate (In (Right (Add
@@ -442,7 +442,7 @@ evaluate (Add 2 3)
 <p>There's a term we did not explain but which appears in the paper: <code>algebra</code>. An <a href="https://pursuit.purescript.org/packages/purescript-matryoshka/0.3.0/docs/Matryoshka.Algebra#t:Algebra"><code>Algebra</code></a> is merely a special name for a function with a specific type signature: <code>(f a -&gt; a)</code>. It's our <code>evaluate</code> function.</p>
 <h2><a class="header" href="#all-code-so-far-and-evaluate" id="all-code-so-far-and-evaluate">All Code So Far and Evaluate</a></h2>
 <p><strong>I have not checked whether this code works, but it will serve to give you an idea for how it works.</strong></p>
-<pre><code class="language-purescript">-- File 1
+<pre><code class="language-haskell">-- File 1
 data Value e = Value Int
 data Add e = Add e e
 

@@ -177,7 +177,7 @@
 <p>Here's the link: <a href="http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html">Functors, Applicatives, and Monads in Pictures</a></p>
 <h3><a class="header" href="#lists-map-function-in-purescript" id="lists-map-function-in-purescript">Lists' Map Function in Purescript</a></h3>
 <p>Here's the <code>map</code> List function implemented in Purescript:</p>
-<pre><code class="language-purescript">data List a = Nil | Cons a (List a)
+<pre><code class="language-haskell">data List a = Nil | Cons a (List a)
 
 instance Functor List where
   map :: forall a b. (a -&gt; b) -&gt; List a -&gt; List b
@@ -194,7 +194,7 @@ instance Functor List where
 <tr><td><a href="https://pursuit.purescript.org/packages/purescript-prelude/4.1.1/docs/Control.Monad">Monad</a></td><td>FP Program</td><td></td><td></td><td><ul><li>Left Identity: <code>pure x &gt;&gt;= f = f x</code></li><li>Right Identity: <code>x &gt;&gt;= pure = x</code></li><li>Applicative Superclass: <code>apply = ap</code></li></ul></td><td>The data structure used to run FP programs by executing code line-by-line, function-by-function, etc.</td></tr>
 </tbody></table>
 <h2><a class="header" href="#simplest-monad-implementation" id="simplest-monad-implementation">Simplest Monad Implementation</a></h2>
-<pre><code class="language-purescript">data Box a = Box a
+<pre><code class="language-haskell">data Box a = Box a
 
 instance f :: Functor Box where
   map        f  (Box a) = Box (f a)
@@ -212,7 +212,7 @@ instance m :: Monad Box
 </code></pre>
 <h2><a class="header" href="#function-reduction" id="function-reduction">Function Reduction</a></h2>
 <p>In these files, we will &quot;evaluate&quot; functions by using graph reductions: replacing the left-hand side (LHS) of the <code>=</code> sign (the function's call signature) with the right-hand side (RHS) of the <code>=</code> sign (the function's implementation / body). In other words...</p>
-<pre><code class="language-purescript">someFunction arg1 arg2 arg3 = bodyOfFunction
+<pre><code class="language-haskell">someFunction arg1 arg2 arg3 = bodyOfFunction
 | call signature (LHS)    | = | body (RHS) |
 </code></pre>
 

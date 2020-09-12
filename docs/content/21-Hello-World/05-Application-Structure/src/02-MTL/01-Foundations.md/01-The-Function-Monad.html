@@ -170,7 +170,7 @@
 <p>However, we never stopped to consider the data type, <code>Function</code>. When we re-examine the <code>Function</code> data type, we'll see that it's naturally a <code>Monad</code>.</p>
 <h2><a class="header" href="#reviewing-function-as-a-data-type" id="reviewing-function-as-a-data-type">Reviewing <code>Function</code> as a Data Type</a></h2>
 <p>Putting it into syntax, <code>Function</code> is defined like this:</p>
-<pre><code class="language-purescript">data Function a b = -- implementation
+<pre><code class="language-haskell">data Function a b = -- implementation
 
 infix ? Function as -&gt;
 
@@ -187,11 +187,11 @@ intToString _ = &quot;a string&quot;
 <h3><a class="header" href="#functor" id="functor">Functor</a></h3>
 <h4><a class="header" href="#initial-problems" id="initial-problems">Initial Problems</a></h4>
 <p>Let's look at <code>Functor</code>. It's type signature looks like this.</p>
-<pre><code class="language-purescript">class Functor f where
+<pre><code class="language-haskell">class Functor f where
   map :: forall a b. (a -&gt; b) -&gt; f a -&gt; f b
 </code></pre>
 <p>This creates the first problem: <code>Functor</code> expects a higher-kinded type, <code>f</code>, that only takes one type. For example, <code>Box a</code> only takes one type. However, <code>Function a b</code> takes two types. So, how can this be resolved? We must assume that <code>Function a b</code> already has its first type. For example...</p>
-<pre><code class="language-purescript">data Function a b = -- implementation
+<pre><code class="language-haskell">data Function a b = -- implementation
 
 noTypesDefined :: forall a b. Function a   b
 noTypesDefined = -- implementation
@@ -203,11 +203,11 @@ allTypesDefined ::            Function Int Int
 allTypesDefined = -- implementation
 </code></pre>
 <p>To make <code>Function</code> higher-kinded by only one type, and not two, we should use something like <code>oneTypeDefined</code> above:</p>
-<pre><code class="language-purescript">class Functor (Function inputType) where
+<pre><code class="language-haskell">class Functor (Function inputType) where
 </code></pre>
 <h4><a class="header" href="#implementing-map" id="implementing-map">Implementing <code>map</code></a></h4>
 <p>Getting back to the problem at hand, here's the type signature for Function's <code>map</code> implementation with very helpful names:</p>
-<pre><code class="language-purescript">class Functor (Function inputType) where
+<pre><code class="language-haskell">class Functor (Function inputType) where
   map :: forall originalOutputType newOutputType.
          (originalOutputType -&gt; newOutputType) -&gt;
          Function inputType originalOutputType -&gt; Function inputType newOutputType
@@ -216,7 +216,7 @@ allTypesDefined = -- implementation
 <ol>
 <li><code>map</code> returns a new function whose input is <code>input</code>. So, let's use an inline function to do that:</li>
 </ol>
-<pre><code class="language-purescript">class Functor (Function inputType) where
+<pre><code class="language-haskell">class Functor (Function inputType) where
   map :: forall originalOutputType newOutputType.
          (originalOutputType -&gt; newOutputType) -&gt;
          Function inputType originalOutputType -&gt; Function inputType newOutputType
@@ -225,7 +225,7 @@ allTypesDefined = -- implementation
 <ol start="2">
 <li>Since <code>f</code> is the only function that can &quot;receive&quot; a value of type, <code>input</code>, we have to pass that value into <code>f</code>. <code>f</code> will produce <code>originalOutput</code>, so let's store that in a let binding:</li>
 </ol>
-<pre><code class="language-purescript">class Functor (Function inputType) where
+<pre><code class="language-haskell">class Functor (Function inputType) where
   map :: forall originalOutputType newOutputType.
          (originalOutputType -&gt; newOutputType) -&gt;
          Function inputType originalOutputType -&gt; Function inputType newOutputType
@@ -236,7 +236,7 @@ allTypesDefined = -- implementation
 <ol start="3">
 <li>Since <code>originalToNew</code> is the only function that can &quot;receive&quot; a value of type, <code>originalOutput</code>, we have to pass the value outputted by <code>f</code> into that function. <code>originalToNew</code> produces a value of the type, <code>newOutput</code>, which gives us the return value of our created function:</li>
 </ol>
-<pre><code class="language-purescript">class Functor (Function inputType) where
+<pre><code class="language-haskell">class Functor (Function inputType) where
   map :: forall originalOutputType newOutputType.
          (originalOutputType -&gt; newOutputType) -&gt;
          Function inputType originalOutputType -&gt; Function inputType newOutputType
@@ -245,7 +245,7 @@ allTypesDefined = -- implementation
     in originalToNew originalOutput)
 </code></pre>
 <p>As we can see, the types guided us on how to implement this function. If we look at this closer, we can see that it's just function composition.</p>
-<pre><code class="language-purescript">class Functor (Function inputType) where
+<pre><code class="language-haskell">class Functor (Function inputType) where
   map :: forall originalOutputType newOutputType.
          (originalOutputType -&gt; newOutputType) -&gt;
          Function inputType originalOutputType -&gt; Function inputType newOutput
@@ -256,7 +256,7 @@ allTypesDefined = -- implementation
   map = (&lt;&lt;&lt;)
 </code></pre>
 <p>In real code, normally we use <code>a</code>, <code>b</code> as type variable. Therefore, the above snippet will be simplfied to</p>
-<pre><code class="language-purescript">class Functor (Function i) where
+<pre><code class="language-haskell">class Functor (Function i) where
   map :: forall a b. (a -&gt; b) -&gt; Function i a -&gt; Function i b
   map = (&lt;&lt;&lt;)
 </code></pre>
@@ -269,11 +269,11 @@ allTypesDefined = -- implementation
 <h3><a class="header" href="#apply" id="apply">Apply</a></h3>
 <h4><a class="header" href="#initial-problems-1" id="initial-problems-1">Initial Problems</a></h4>
 <p>Let's now look at <code>Apply</code>'s <code>apply</code> function. It's type signature looks like this.</p>
-<pre><code class="language-purescript">class (Functor f) &lt;= Apply f where
+<pre><code class="language-haskell">class (Functor f) &lt;= Apply f where
   apply :: forall a b. f (a -&gt; b) -&gt; f a -&gt; f b
 </code></pre>
 <p>Again, let's take this slowly. Notice first the first argument, what should the full type signature of <code>f (a -&gt; b)</code> be if <code>f</code> is <code>Function</code>? Since the <code>f</code> has to be the same for both situations, then <code>f</code> has to be <code>Function input</code>. In other words, the first argument is a function that returns another function:</p>
-<pre><code class="language-purescript">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
+<pre><code class="language-haskell">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
   apply :: forall originalOutputType newOutputType.
            Function inputType (originalOutputType -&gt; newOutputType) -&gt;
            Function inputType  originalOutputType -&gt;
@@ -284,7 +284,7 @@ allTypesDefined = -- implementation
 <ol>
 <li>Since <code>apply</code> returns a new function, let's start creating one using lambda syntax:</li>
 </ol>
-<pre><code class="language-purescript">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
+<pre><code class="language-haskell">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
   apply :: forall originalOutputType newOutputType.
            Function inputType (originalOutputType -&gt; newOutputType) -&gt;
            Function inputType  originalOutputType -&gt;
@@ -294,7 +294,7 @@ allTypesDefined = -- implementation
 <ol start="2">
 <li>At this point, both <code>f</code> and <code>functionInFunction</code> can receive an value of type, <code>input</code>. For right now, let's do what we did last time and only pass it into <code>f</code>. We'll store the output in a let binding:</li>
 </ol>
-<pre><code class="language-purescript">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
+<pre><code class="language-haskell">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
   apply :: forall originalOutputType newOutputType.
            Function inputType (originalOutputType -&gt; newOutputType) -&gt;
            Function inputType  originalOutputType -&gt;
@@ -306,7 +306,7 @@ allTypesDefined = -- implementation
 <ol start="3">
 <li>At this point, the only way to get map <code>originalOutput</code> into <code>newOutput</code> is to pass it into the function that's hidden in <code>functionInFunction</code>. How do we get that out? We can pass <code>input</code> into that function. Again, we'll store that output in a let binding:</li>
 </ol>
-<pre><code class="language-purescript">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
+<pre><code class="language-haskell">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
   apply :: forall originalOutputType newOutputType.
            Function inputType (originalOutputType -&gt; newOutputType) -&gt;
            Function inputType  originalOutputType -&gt;
@@ -320,7 +320,7 @@ allTypesDefined = -- implementation
 <ol start="4">
 <li>We now have all the pieces we need to return <code>newOutput</code>. Let's pass <code>originalOutput</code> into <code>originalTonew</code>:</li>
 </ol>
-<pre><code class="language-purescript">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
+<pre><code class="language-haskell">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
   apply :: forall originalOutputType newOutputType.
            Function inputType (originalOutputType -&gt; newOutputType) -&gt;
            Function inputType  originalOutputType -&gt;
@@ -332,7 +332,7 @@ allTypesDefined = -- implementation
     in originalToNew originalOutput)
 </code></pre>
 <p>Great! Can we clean it up now?</p>
-<pre><code class="language-purescript">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
+<pre><code class="language-haskell">class (Functor (Function inputType)) &lt;= Apply (Function inputType) where
   apply :: forall originalOutputType newOutputType.
            Function inputType (originalOutputType -&gt; newOutputType) -&gt;
            Function inputType  originalOutputType -&gt;
@@ -346,41 +346,41 @@ allTypesDefined = -- implementation
 </ul>
 <h3><a class="header" href="#applicative" id="applicative">Applicative</a></h3>
 <p>Let's now look at <code>Applicative</code>'s <code>pure</code> function. It's type signature looks like this.</p>
-<pre><code class="language-purescript">class (Apply f) &lt;= Applicative f where
+<pre><code class="language-haskell">class (Apply f) &lt;= Applicative f where
   pure :: forall a. a -&gt; f a
 </code></pre>
 <p>Converting <code>f</code> into <code>Function input</code>, we get this type signature:</p>
-<pre><code class="language-purescript">class (Apply (Function inputType)) &lt;= Applicative (Function inputType) where
+<pre><code class="language-haskell">class (Apply (Function inputType)) &lt;= Applicative (Function inputType) where
   pure :: forall outputType. outputType -&gt; Function inputType outputType
 </code></pre>
 <p>Let's see how to implement it.</p>
 <ol>
 <li>Since <code>pure</code> returns a new function, let's start creating one using lambda syntax:</li>
 </ol>
-<pre><code class="language-purescript">class (Apply (Function inputType)) &lt;= Applicative (Function inputType) where
+<pre><code class="language-haskell">class (Apply (Function inputType)) &lt;= Applicative (Function inputType) where
   pure :: forall outputType. outputType -&gt; Function inputType outputType
   pure value = (\input -&gt; {- body of function -})
 </code></pre>
 <ol start="2">
 <li>Since the function must return <code>value</code> as its output, let's ignore the argument and just return that value.</li>
 </ol>
-<pre><code class="language-purescript">class (Apply (Function inputType)) &lt;= Applicative (Function inputType) where
+<pre><code class="language-haskell">class (Apply (Function inputType)) &lt;= Applicative (Function inputType) where
   pure :: forall outputType. outputType -&gt; outputType
   pure value = (\input -&gt; value)
 </code></pre>
 <p>Let's clean this one up:</p>
-<pre><code class="language-purescript">class (Apply (Function inputType)) &lt;= Applicative (Function inputType) where
+<pre><code class="language-haskell">class (Apply (Function inputType)) &lt;= Applicative (Function inputType) where
   pure :: forall outputType. outputType -&gt; Function inputType outputType
   pure value = (\_ -&gt; value)
 </code></pre>
 <h3><a class="header" href="#bind" id="bind">Bind</a></h3>
 <h4><a class="header" href="#implementing-bind" id="implementing-bind">Implementing <code>bind</code></a></h4>
 <p>Let's now look at <code>Bind</code>'s <code>bind</code> function. It's type signature looks like this.</p>
-<pre><code class="language-purescript">class (Functor m) &lt;= Bind m where
+<pre><code class="language-haskell">class (Functor m) &lt;= Bind m where
   bind :: forall a b. (a -&gt; m b) -&gt; m a -&gt; m b
 </code></pre>
 <p>Converting <code>m</code> into <code>Function input</code>, we get this type signature:</p>
-<pre><code class="language-purescript">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
+<pre><code class="language-haskell">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
   bind :: forall originalOutputType newOutputType.
           (originalOutputType -&gt; Function inputType newOutputType) -&gt;
           Function inputType originalOutputType -&gt;
@@ -390,7 +390,7 @@ allTypesDefined = -- implementation
 <ol>
 <li>Since <code>bind</code> returns a new function, let's start creating one using lambda syntax:</li>
 </ol>
-<pre><code class="language-purescript">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
+<pre><code class="language-haskell">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
   bind :: forall originalOutputType newOutputType.
           (originalOutput -&gt; Function inputType newOutputType) -&gt;
           Function inputType originalOutputType -&gt;
@@ -400,7 +400,7 @@ allTypesDefined = -- implementation
 <ol start="2">
 <li>Since <code>f</code> is the only function that can &quot;receive&quot; the <code>input</code> value, let's pass it into <code>f</code> and store the output:</li>
 </ol>
-<pre><code class="language-purescript">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
+<pre><code class="language-haskell">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
   bind :: forall originalOutputType newOutputType.
           (originalOutputType -&gt; Function inputType newOutputType) -&gt;
           Function inputType originalOutputType -&gt;
@@ -412,7 +412,7 @@ allTypesDefined = -- implementation
 <ol start="3">
 <li>Since <code>originalToFunction</code> can &quot;receive&quot; the <code>originalOutput</code> value, let's pass that into <code>originalToFunction</code> and store its result in a let binding:</li>
 </ol>
-<pre><code class="language-purescript">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
+<pre><code class="language-haskell">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
   bind :: forall originalOutputType newOutputType.
           (originalOutputType -&gt; Function inputType newOutputType) -&gt;
           Function inputType originalOutputType -&gt;
@@ -426,7 +426,7 @@ allTypesDefined = -- implementation
 <ol start="4">
 <li>Since <code>inputToNewOutput</code> is the only function that can produce the <code>newOutput</code> value, let's pass <code>input</code> into it to get that value:</li>
 </ol>
-<pre><code class="language-purescript">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
+<pre><code class="language-haskell">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
   bind :: forall originalOutputType newOutputType.
           (originalOutputType -&gt; Function inputType newOutputType) -&gt;
           Function inputType originalOutputType -&gt;
@@ -438,7 +438,7 @@ allTypesDefined = -- implementation
     in inputToNewOutput input)
 </code></pre>
 <p>Let's now clean it up. First we'll get rid of that <code>inputToNewOutput</code> binding:</p>
-<pre><code class="language-purescript">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
+<pre><code class="language-haskell">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
   bind :: forall originalOutputType newOutputType.
           (originalOutputType -&gt; Function inputType newOutputType) -&gt;
           Function inputType originalOutputType -&gt;
@@ -449,7 +449,7 @@ allTypesDefined = -- implementation
     in (originalToFunction originalOutput) input)
 </code></pre>
 <p>Second, we'll get rid of that <code>originalOutput</code> binding:</p>
-<pre><code class="language-purescript">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
+<pre><code class="language-haskell">class (Apply (Function inputType)) &lt;= Bind (Function inputType) where
   bind :: forall originalOutputType newOutputType.
           (originalOutputType -&gt; Function inputType newOutputType) -&gt;
           Function inputType originalOutputType -&gt;
@@ -473,7 +473,7 @@ allTypesDefined = -- implementation
 </ul>
 <h2><a class="header" href="#resugaring-function" id="resugaring-function">Resugaring <code>Function</code></a></h2>
 <p>In our code above, we desugared <code>(a -&gt; b)</code> into <code>Function a b</code>. What would happen if we resugared our type class instances above back into <code>-&gt;</code>? How would we write it then?</p>
-<pre><code class="language-purescript">class Functor ((-&gt;) inputType) where
+<pre><code class="language-haskell">class Functor ((-&gt;) inputType) where
   map :: forall originalOutputType newOutputType.
          (originalOutputType -&gt; newOutputType) -&gt;
          (inputType -&gt; originalOutputType) -&gt; (inputType -&gt; newOutputType)

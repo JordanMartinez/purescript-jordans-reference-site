@@ -166,13 +166,13 @@
                         <h1><a class="header" href="#via-default-values" id="via-default-values">Via Default Values</a></h1>
 <p>Unfortunately, the domain problem of safe division is not an example for how &quot;default value&quot; approach can convert a partial function into a total function.</p>
 <p>So instead, we'll use the example of getting the first element in a linked list. In situations where the list is empty, it will throw an exception:</p>
-<pre><code class="language-purescript">-- partial function
+<pre><code class="language-haskell">-- partial function
 head :: List Int -&gt; Int
 head Nil = -- Exception!
 head (Cons head tail) = head
 </code></pre>
 <p>To make the function total, we can provide a value to return in such cases:</p>
-<pre><code class="language-purescript">-- total function
+<pre><code class="language-haskell">-- total function
 headOrDefault :: List Int -&gt; Int -&gt; Int
 headOrDefault Nil default = default -- no more exceptions!
 headOrDefault (Cons head tail) _ = head

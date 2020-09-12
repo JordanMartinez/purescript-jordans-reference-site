@@ -165,7 +165,7 @@
                     <main>
                         <h1><a class="header" href="#nonempty" id="nonempty">NonEmpty</a></h1>
 <p>To guarantee that a box-like type cannot be empty, we wrap it with a type.</p>
-<pre><code class="language-purescript">data NonEmpty box a = NonEmpty a (box a)
+<pre><code class="language-haskell">data NonEmpty box a = NonEmpty a (box a)
 infixr 5 NonEmpty as :|
 
 -- example

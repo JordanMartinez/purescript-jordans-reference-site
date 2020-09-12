@@ -188,7 +188,7 @@
 <p>In this folder, we'll only cover <code>MTL</code>/<code>ReaderT Design Pattern</code> and <code>Free</code>/<code>Run</code>. The article to which we referred above overviews more ideas, but that is not our current focus. It might be worth returning to it after one has read through the rest of this folder.</p>
 <h3><a class="header" href="#composing-monads" id="composing-monads">Composing Monads</a></h3>
 <p>As we explained previously, <code>bind</code>/<code>&gt;&gt;=</code>'s type signature forces one to only return the same <code>Box</code>-like monad type that is used in bind:</p>
-<pre><code class="language-purescript">bind :: forall a. f   a -&gt; ( a    -&gt; f   b)           -&gt; f    b
+<pre><code class="language-haskell">bind :: forall a. f   a -&gt; ( a    -&gt; f   b)           -&gt; f    b
 bind :: forall a. Box a -&gt; ( a    -&gt; Box b         )  -&gt; Box  b
 bind             (Box 4)   (\four -&gt; Box (show four)) == Box &quot;4&quot;
 </code></pre>

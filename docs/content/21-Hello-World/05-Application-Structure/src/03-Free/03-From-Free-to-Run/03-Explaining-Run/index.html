@@ -169,11 +169,11 @@
 <p>If you recall, <code>xgromxx</code> mentions <a href="https://pursuit.purescript.org/packages/purescript-run/2.0.0"><code>purescript-run</code></a> in <a href="https://github.com/xgrommx/purescript-from-adt-to-eadt/blob/master/src/ADT8.purs#L11">a comment in <code>ADT8.purs</code></a>. (The ReadMe of this library provides an overview of the ideas we've explained here.)</p>
 <p>What is <code>purescript-run</code>? Why would we use that over <code>Free</code>? There are three reasons.</p>
 <p>First, let's look at the type of <code>Run</code> :</p>
-<pre><code class="language-purescript">newtype Run r a = Run (Free (VariantF r) a)
+<pre><code class="language-haskell">newtype Run r a = Run (Free (VariantF r) a)
 </code></pre>
 <p>We can see that <code>Run</code> is a compile-time-only type that specifies the <code>Functor</code> type of <code>Free</code> to the open <code>CoProduct</code> type: <code>VariantF</code>.</p>
 <p>Let's compare the same idea encoded in both forms (note: <code>Run</code> will use naming conventions that will be explained below):</p>
-<pre><code class="language-purescript">free :: Free (VariantF (add :: FProxy Add, subtract :: FProxy Subtract)) a
+<pre><code class="language-haskell">free :: Free (VariantF (add :: FProxy Add, subtract :: FProxy Subtract)) a
 -- is the same as
 run  :: Run (ADD + SUBTRACT) a
 </code></pre>
@@ -183,7 +183,7 @@ run  :: Run (ADD + SUBTRACT) a
 <h2><a class="header" href="#comparing-run-to-free-and-mtl" id="comparing-run-to-free-and-mtl">Comparing Run to Free and MTL</a></h2>
 <h3><a class="header" href="#free-and-run-some-core-functions-compared" id="free-and-run-some-core-functions-compared">Free and Run: Some Core Functions Compared</a></h3>
 <p>Let's look at a few core functions (the following block of code is licensed under <a href="https://github.com/natefaubion/purescript-run/blob/v2.0.0/LICENSE">the MIT license</a>:</p>
-<pre><code class="language-purescript">newtype Run r a = Run (Free (VariantF r) a)
+<pre><code class="language-haskell">newtype Run r a = Run (Free (VariantF r) a)
 
 -- `Run`'s version of `Free`'s `liftF`
 lift
@@ -207,14 +207,14 @@ peel :: forall a r. Run r a -&gt; Either (VariantF r (Run r a)) a
 </code></pre>
 <h3><a class="header" href="#naming-conventions-for-effects" id="naming-conventions-for-effects">Naming Conventions for Effects</a></h3>
 <p>Let's look at some of the type aliases it provides:</p>
-<pre><code class="language-purescript">type EFFECT = FProxy Effect
+<pre><code class="language-haskell">type EFFECT = FProxy Effect
 type AFF = FProxy Aff
 </code></pre>
 <p>Rather than typing <code>(fieldName :: FProxy Functor)</code>, we use an all-caps type alias: <code>(fieldName :: FUNCTOR)</code>. This improves code readability, so we will follow suit.</p>
 <h3><a class="header" href="#similarities-to-mtl" id="similarities-to-mtl">Similarities to MTL</a></h3>
 <h4><a class="header" href="#type-aliases" id="type-aliases">Type Aliases</a></h4>
 <p><code>purescript-run</code> has a few other type aliases that will look familiar.</p>
-<pre><code class="language-purescript">newtype Reader e a = Reader (e → a)
+<pre><code class="language-haskell">newtype Reader e a = Reader (e → a)
 type READER e = FProxy (Reader e)
 
 data State s a = State (s → s) (s → a)
@@ -236,7 +236,7 @@ type FAIL = EXCEPT Unit
 <h4><a class="header" href="#mtl-like-functions" id="mtl-like-functions">MTL-Like Functions</a></h4>
 <p>If we look at some of the functions that each of the above MTL-like types provide, we'll notice another pattern. Each type (e.g. <code>Reader</code>) seems to define its own <code>Symbol</code> (e.g. <code>_reader :: SProxy &quot;reader&quot;</code>) for the corresponding type in <code>VariantF</code>'s row type (e.g. <code>READER</code>).</p>
 <p>However, if one wanted to use a custom <code>Symbol</code> name for their usage of an MTL-like type (e.g. <code>Reader</code>), they can append <code>at</code> to the function and get the same thing. In other words:</p>
-<pre><code class="language-purescript">liftReader readerObj = liftReaderAt _reader readerObj
+<pre><code class="language-haskell">liftReader readerObj = liftReaderAt _reader readerObj
 
 liftReaderAt symbol readerObj = -- implementation
 

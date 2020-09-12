@@ -172,7 +172,7 @@
 </ul>
 <h2><a class="header" href="#monadstate-allows-only-one-state-manipulation-type" id="monadstate-allows-only-one-state-manipulation-type"><code>MonadState</code> Allows Only One State Manipulation Type</a></h2>
 <p>First, due to the functional dependency from <code>m</code> to <code>s</code> in <code>MonadState</code>'s definition, it's impossible to do two different state manipulations within the same function. For example...</p>
-<pre><code class="language-purescript">f :: forall m ouput.
+<pre><code class="language-haskell">f :: forall m ouput.
   =&gt; MonadState Int m
   =&gt; MonadState String m
   -&gt; m output
@@ -181,13 +181,13 @@ f = do
 </code></pre>
 <p>The compiler will complain because it doesn't know which value it should 'get'. See the answer to <a href="https://stackoverflow.com/a/49782427">Haskell -- Chaining two states using StateT monad transformer</a></p>
 <p>One solution to this is to store all states in one larger state type and then use a <code>Lens</code> to access/change it:</p>
-<pre><code class="language-purescript">type IntAndString = { i :: Int, s :: String }
+<pre><code class="language-haskell">type IntAndString = { i :: Int, s :: String }
 f :: forall m output.
   =&gt; MonadState IntAndString m
   -&gt; m output
 </code></pre>
 <p>The second solution is to use type-level programming to specify which <code>MonadState</code> we are referring to via an <code>id</code> Symbol. This would force us to change <code>MonadState</code>'s definition to:</p>
-<pre><code class="language-purescript">class (Monad m) &lt;= MonadState (id :: Symbol) state m | m -&gt; state
+<pre><code class="language-haskell">class (Monad m) &lt;= MonadState (id :: Symbol) state m | m -&gt; state
   state :: forall a. SProxy id -&gt; (s -&gt; m (Tuple a s)) -&gt; m a
 
 _i :: SProxy &quot;i&quot;
@@ -215,7 +215,7 @@ f = do
 <ul>
 <li>1 <code>MonadAuthenticate</code> instance for each <code>[Word]T</code> type via <code>MonadTrans</code> to lift the monadic newtyped <code>AuthenticateT</code> function.</li>
 </ul>
-<pre><code class="language-purescript">-- Given this stack of monad transformers
+<pre><code class="language-haskell">-- Given this stack of monad transformers
 runCode :: AuthenticateT Credentials (StateT state (ReaderT value Identity Unit))
 
 -- Each monadic function type (e.g. StateT, ReaderT, etc.) must
@@ -225,7 +225,7 @@ runCode :: AuthenticateT Credentials (StateT state (ReaderT value Identity Unit)
 <ul>
 <li>n instances for the monadic newtyped <code>AuthenticateT</code> function, so that it can lift its computation into all the other monad transformer type classes (e.g. <code>AuthenticateT</code> -&gt; <code>MonadState</code>, <code>MonadWriter</code>, etc.)</li>
 </ul>
-<pre><code class="language-purescript">-- Given this stack of monad transformers
+<pre><code class="language-haskell">-- Given this stack of monad transformers
 runCode :: ReaderT Value (StateT state (AuthenticateT Credentials Identity Unit))
 
 -- AuthenticateT must lift ReaderT and StateT into an AuthenticateT
@@ -235,12 +235,12 @@ runCode :: ReaderT Value (StateT state (AuthenticateT Credentials Identity Unit)
 <p>Note: I say roughly <strong>~</strong><code>n^2</code> because apparently there are some cases where &quot;lifting&quot; a function would break a law (or something).</p>
 <h2><a class="header" href="#monad-transformer-stacks-type-signatures-get-complicated-quickly" id="monad-transformer-stacks-type-signatures-get-complicated-quickly">Monad transformer stacks' type signatures get complicated quickly</a></h2>
 <p>Related to the previous point, but the type signatures start getting crazy very quickly. For new beginners who are just learning about monad transformers, this can be quite offsetting:</p>
-<pre><code class="language-purescript">-- as an example using pseudo-syntax...
+<pre><code class="language-haskell">-- as an example using pseudo-syntax...
 f :: StateT State (ReaderT reader (WriterT writer (ExceptT error Effect output) output))
 </code></pre>
 <h2><a class="header" href="#the-order-of-the-monad-transformer-stack-matters" id="the-order-of-the-monad-transformer-stack-matters">The Order of the Monad Transformer Stack Matters</a></h2>
 <p>We mentioned this previously when covering how to use a monad transformer:</p>
-<pre><code class="language-purescript">type Output = Int
+<pre><code class="language-haskell">type Output = Int
 type StateType = Int
 type NonOutputData = String
 computation :: forall m

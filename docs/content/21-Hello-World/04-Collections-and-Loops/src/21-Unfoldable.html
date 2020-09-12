@@ -194,7 +194,7 @@ return a container/collection, `t`, that stores all the `a` values
 <h2><a class="header" href="#definition" id="definition">Definition</a></h2>
 <h3><a class="header" href="#code-definition" id="code-definition">Code Definition</a></h3>
 <p>Don't look at its docs until after looking at the visual overview in the next section: <a href="https://pursuit.purescript.org/packages/purescript-unfoldable/docs/Data.Unfoldable#t:Unfoldable">Unfoldable</a></p>
-<pre><code class="language-purescript">-- We'll ignore the `Unfoldable1` superclass for now..
+<pre><code class="language-haskell">-- We'll ignore the `Unfoldable1` superclass for now..
 class Unfoldable1 t &lt;= Unfoldable t where
   unfoldr :: forall a b. (b -&gt; Maybe (Tuple a b)) -&gt; b -&gt; t a
 </code></pre>
@@ -203,7 +203,7 @@ class Unfoldable1 t &lt;= Unfoldable t where
 <h3><a class="header" href="#examples" id="examples">Examples</a></h3>
 <p>We'll implement an instance for <code>List a</code>.</p>
 <h4><a class="header" href="#lists-instance" id="lists-instance"><code>List</code>'s Instance</a></h4>
-<pre><code class="language-purescript">data List a = Nil | Cons a
+<pre><code class="language-haskell">data List a = Nil | Cons a
 
 instance unfoldableList :: Unfoldable List where
   unfoldr :: forall a b. (b -&gt; Maybe (Tuple a b)) -&gt; b -&gt; List a
@@ -216,7 +216,7 @@ instance unfoldableList :: Unfoldable List where
 <h2><a class="header" href="#derived-functions" id="derived-functions">Derived Functions</a></h2>
 <h3><a class="header" href="#overview-of-possible-functions-for-f" id="overview-of-possible-functions-for-f">Overview of Possible Functions for <code>f</code></a></h3>
 <p>The only part of <code>unfoldr f initialB</code> we can hard-code in a derived function is the <code>f</code> function. There are three different functions we could use for <code>f</code>:</p>
-<pre><code class="language-purescript">-- We'll use this type alias in the next couple of sections
+<pre><code class="language-haskell">-- We'll use this type alias in the next couple of sections
 type UnfoldrFunction a b = b -&gt; Maybe Tuple a b
 
 -- case 1
@@ -237,7 +237,7 @@ itDepends = -- possibilities are shown later
 <tr><td>case 3</td><td><code>replicate</code>, <code>replicateA</code>, and <code>fromMaybe</code></td><td>see below overviews of each function</td></tr>
 </tbody></table>
 <p>Case 1 functions always produce a runtime error due to creating an infinite loop. They will appear in two ways:</p>
-<pre><code class="language-purescript">-- obvious because Just is always returned
+<pre><code class="language-haskell">-- obvious because Just is always returned
 example1 = unfoldr (const Just (Tuple 0 0)) 0
 
 -- Not as obvious in situations where
@@ -254,7 +254,7 @@ example2 =
 </code></pre>
 <h3><a class="header" href="#case-3-functions" id="case-3-functions">Case 3 Functions</a></h3>
 <h4><a class="header" href="#using-a-countdown-or-countup-function-to-do-something-n-many-times" id="using-a-countdown-or-countup-function-to-do-something-n-many-times">Using a countdown or countup function to do something <code>n</code>-many times</a></h4>
-<pre><code class="language-purescript">countUp :: forall a. Int -&gt; UnfoldrFunction a Int
+<pre><code class="language-haskell">countUp :: forall a. Int -&gt; UnfoldrFunction a Int
 countUp limit = \nextInt -&gt;
   if nextInt &gt;= limit then Nothing
   else Just (Tuple aValue (nextInt + 1))

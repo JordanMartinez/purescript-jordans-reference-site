@@ -165,12 +165,12 @@
                     <main>
                         <h1><a class="header" href="#the-original-free-monad" id="the-original-free-monad">The Original Free Monad</a></h1>
 <p>Rather than explaining how one can eventually reason their way through defining what the type is for the original <code>Free</code> monad (a bottom-up approach), we'll simply show its definition, its instances, and demonstrate why it has to work that way (a top-down approach).</p>
-<pre><code class="language-purescript">data Free f a
+<pre><code class="language-haskell">data Free f a
   = Pure a
   | Impure (f (Free f a))
 </code></pre>
 <p>Let's say that <code>Identity</code> is our <code>f</code>/<code>Functor</code> type. What does a concrete value of the <code>Free</code> data type look like?</p>
-<pre><code class="language-purescript">Impure ( Identity (
+<pre><code class="language-haskell">Impure ( Identity (
   Impure ( Identity (
     Impure ( Identity (
       Pure a
@@ -179,7 +179,7 @@
 ))
 </code></pre>
 <p>In other words, <code>Free</code> is just a tree-like data structure of nested <code>Identity</code> values (the branches in our tree) that eventually wrap a final value (the leaf in our tree). In our current example, the tree is unbalanced, so that it appears more like a linked-list than a tree:</p>
-<pre><code class="language-purescript">{- Impure ( -} Identity (
+<pre><code class="language-haskell">{- Impure ( -} Identity (
   {- Impure ( -} Identity (
     {- Impure ( -} Identity (
       {- Pure -}     a
@@ -188,7 +188,7 @@
 {- ) -}        )
 </code></pre>
 <p>The only difference is that <code>Identity</code> itself is wrapped in another type. So how do we change a value that is wrapped in a box-like type? We use <code>Functor</code>'s <code>map</code>, of course! We'll use <code>map</code> in most of <code>Free</code>'s instances for the needed type classes:</p>
-<pre><code class="language-purescript">-- easiest one!
+<pre><code class="language-haskell">-- easiest one!
 instance Applicative :: Applicative (Free f) where
   pure a = Pure a
 
@@ -205,7 +205,7 @@ instance functor :: (Functor f) =&gt; Functor (Free f) where
     ))
 </code></pre>
 <p>Let's see <code>map</code> in action via a graph reduction:</p>
-<pre><code class="language-purescript">-- Start!
+<pre><code class="language-haskell">-- Start!
 map f (
   Impure ( Identity (
     Impure ( Identity (
@@ -270,7 +270,7 @@ map f (
   ))
 </code></pre>
 <p>Let's look at the <code>Apply</code> instance now:</p>
-<pre><code class="language-purescript">instance apply :: (Functor f) =&gt; Apply (Free f) where
+<pre><code class="language-haskell">instance apply :: (Functor f) =&gt; Apply (Free f) where
   apply (Pure f) (Pure a) = Pure (f a)
   apply (Impure f_of_Free_F) pure_A =
     Impure (f_of_Free_F &lt;#&gt; (
@@ -288,7 +288,7 @@ map f (
     ))
 </code></pre>
 <p>Let's see <code>apply</code> in action via a graph reduction:</p>
-<pre><code class="language-purescript">-- Reminder: function arg == arg # function
+<pre><code class="language-haskell">-- Reminder: function arg == arg # function
 
 -- Start
 --    &quot;Left&quot; Impure            &quot;Right&quot; Impure
@@ -318,7 +318,7 @@ Impure (Identity (Impure (Identity (apply (Pure f) (Pure a)))))
 Impure (Identity (Impure (Identity (Pure (f a)))))
 </code></pre>
 <p>Now let's define <code>Bind</code>, again using the <code>map</code> recursively:</p>
-<pre><code class="language-purescript">instance bind :: (Functor f) =&gt; Bind (Free f) where
+<pre><code class="language-haskell">instance bind :: (Functor f) =&gt; Bind (Free f) where
   bind (Pure a) f = f a
   bind (Impure f_of_Free) f =
     Impure (f_of_Free &lt;#&gt; (
@@ -329,7 +329,7 @@ Impure (Identity (Impure (Identity (Pure (f a)))))
     ))
 </code></pre>
 <p>Let's see <code>bind</code> in action via a graph reduction:</p>
-<pre><code class="language-purescript">-- Start!
+<pre><code class="language-haskell">-- Start!
 bind (Impure ( Identity (Pure a))) f
 
 -- Recursively call `bind` via `map` until reach a `Pure` value:
@@ -348,7 +348,7 @@ Impure ( Identity (Pure (f a)))
 </code></pre>
 <h2><a class="header" href="#definition-of-free-monad" id="definition-of-free-monad">Definition of Free Monad</a></h2>
 <p>Putting it all together, we get this:</p>
-<pre><code class="language-purescript">data Free f a
+<pre><code class="language-haskell">data Free f a
   = Pure a
   | Impure (f (Free f a))
 

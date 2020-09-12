@@ -179,17 +179,17 @@
 <h2><a class="header" href="#what-are-types-and-functions" id="what-are-types-and-functions">What Are Types and Functions?</a></h2>
 <h3><a class="header" href="#types-reexamined" id="types-reexamined">Types Reexamined</a></h3>
 <p>When we define a type like so...</p>
-<pre><code class="language-purescript">data MyType
+<pre><code class="language-haskell">data MyType
   = Value1
   | Value2
 </code></pre>
 <p>... we are saying there is a set or domain called <code>MyType</code> that has two members, <code>Value1</code> and <code>Value2</code>.
 Thus, when we write...</p>
-<pre><code class="language-purescript">value1 :: MyType
+<pre><code class="language-haskell">value1 :: MyType
 value1 = Value1
 </code></pre>
 <p>... we could also write it with more type information:</p>
-<pre><code class="language-purescript">value1 :: MyType
+<pre><code class="language-haskell">value1 :: MyType
 value1 = (Value1 :: MyType)
 </code></pre>
 <p>The syntax <code>(Value1 :: MyType)</code> means <code>Value1</code> is a value of the <code>MyType</code> type (or <code>Value1</code> is a member of the <code>MyType</code> set/domain)</p>
@@ -203,7 +203,7 @@ value1 = (Value1 :: MyType)
 <tr><td>*Does it throw exceptions?</td><td>Never</td><td></td><td>Sometimes</td><td><code>function (e) { throw Exception(&quot;error&quot;) }</code></td></tr>
 </tbody></table>
 <p>Pure functions can better be explained as mapping some input to some output. The simplest example is pattern matching:</p>
-<pre><code class="language-purescript">data Fruit = Apple | Orange
+<pre><code class="language-haskell">data Fruit = Apple | Orange
 
 stringify :: Fruit -&gt; String
 stringify Apple = &quot;Apple&quot;

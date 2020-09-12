@@ -171,14 +171,14 @@
 <li>running some computation and, if it fails, retrying it again until it succeeds</li>
 </ul>
 <p>For example, the below <code>factorial'</code> function calculates its result by calling itself recursively.</p>
-<pre><code class="language-purescript">factorial :: Int -&gt; Int
+<pre><code class="language-haskell">factorial :: Int -&gt; Int
 factorial n = n * (factorial (n - 1))
 </code></pre>
 <p>However, this design choice comes with an annoying problem: stack-safety. While this recursive function will theoretically always &quot;return,&quot; the number of stacks it takes depends on its input. Unfortunately, computers have limited resources and cannot always provide the total number of stacks such a function needs. If we call <code>factorial</code> with a &quot;large&quot; enough input (e.g. <code>99999</code>), the computer will &quot;blow the stack&quot; and produce a StackOverflow runtime error.</p>
 <p>So, how do we prevent this?</p>
 <h2><a class="header" href="#tail-call-optimization-for-pure-functions-via-the-last-branch" id="tail-call-optimization-for-pure-functions-via-the-last-branch">Tail-Call Optimization for Pure Functions via the Last Branch</a></h2>
 <p>Our first defense against this is &quot;tail-call optimization.&quot; In short, we indicate that a recursive function should be converted into a stack-friendly <code>while</code> loop. When writing simple recursive functions, we can trigger the tail-call optimization only if we call the function recursively in the final &quot;branch.&quot; For example, if we rewrote the above computation to store the &quot;accumulated value&quot; as another argument to the function, then we could call the function recursively in the last branch:</p>
-<pre><code class="language-purescript">factorial :: Int -&gt; Int
+<pre><code class="language-haskell">factorial :: Int -&gt; Int
 factorial n = go n 1
   where
   go :: StartingInt -&gt; AccumulatedInt -&gt; AccumulatedInt
@@ -198,14 +198,14 @@ go (1) (24)
 <h2><a class="header" href="#tail-call-optimization-for-pure-functions-via-multiple-branches" id="tail-call-optimization-for-pure-functions-via-multiple-branches">Tail-Call Optimization for Pure Functions via Multiple Branches</a></h2>
 <p>The above recursive function is stack-safe only because the recursion occurs once in the last pattern match branch. However, what if we had multiple branches where we needed to call it recursively? In such situations, the tail-call optimization won't be triggered.</p>
 <p>Recursive functions always have a &quot;base case&quot; that ends the recursion and a &quot;recursive case&quot; that continues it. In PureScript, we use a special function called <a href="https://pursuit.purescript.org/packages/purescript-tailrec/4.0.0/docs/Control.Monad.Rec.Class#v:tailRec"><code>tailRec</code></a> alongside of a data type called <code>Step</code> to achieve stack-safety at the cost of some performance. <code>Step</code> indicates whether our function has finished (base case) or needs to continue looping (recursive case):</p>
-<pre><code class="language-purescript">data Step accumulatedValue finalValue
+<pre><code class="language-haskell">data Step accumulatedValue finalValue
   -- recursive case: keep looping
   = Loop accumulatedValue
   -- base case: we're done; it's time to return a value
   | Done finalValue
 </code></pre>
 <p>Here is our previous stack-safe <code>factorial</code> function:</p>
-<pre><code class="language-purescript">factorial :: Int -&gt; Int
+<pre><code class="language-haskell">factorial :: Int -&gt; Int
 factorial n = go n 1
   where
   go :: StartingInt -&gt; AccumulatedInt -&gt; AccumulatedInt
@@ -214,7 +214,7 @@ factorial n = go n 1
     go (loopsRemaining - 1) (loopsRemaining * accumulatedSoFar)
 </code></pre>
 <p>Here is the same implementation via <code>tailRec</code>:</p>
-<pre><code class="language-purescript">factorial :: Int -&gt; Int
+<pre><code class="language-haskell">factorial :: Int -&gt; Int
 factorial n = tailRec go { loopsRemaining: n, accumulatedSoFar: 1 }
   where
   go ::      { loopsRemaining :: Int, accumulatedSoFar :: Int }
@@ -224,7 +224,7 @@ factorial n = tailRec go { loopsRemaining: n, accumulatedSoFar: 1 }
     Loop { loopsRemaining: remaining - 1, accumulatedSoFar: remaining * acc }
 </code></pre>
 <p>Let's write the same function but utilize more branches without losing stack-safety. In the below example, if one calls <code>factorial 1</code>, <code>factorial 2</code>, or <code>factorial 3</code>, the function will return in one &quot;loop.&quot; If one calls <code>factorial n</code> where <code>n</code> is greater than 3, the function will return in 2 less loops than our previous implementation at the cost of more checks per loop:</p>
-<pre><code class="language-purescript">factorial :: Int -&gt; Int
+<pre><code class="language-haskell">factorial :: Int -&gt; Int
 factorial n = tailRec go { loopsRemaining: n, accumulatedSoFar: 1 }
   where
   go ::      { loopsRemaining :: Int, accumulatedSoFar :: Int }
@@ -237,7 +237,7 @@ factorial n = tailRec go { loopsRemaining: n, accumulatedSoFar: 1 }
 </code></pre>
 <h2><a class="header" href="#tail-call-optimization-for-monadic-computations" id="tail-call-optimization-for-monadic-computations">Tail-Call Optimization for Monadic Computations</a></h2>
 <p>But what happens when we need to run a side-effectful monadic computation recursively? For example, let's say we wanted to print the same message to the console a specific number of times and then stop:</p>
-<pre><code class="language-purescript">printMessageAndLoop :: Effect Unit
+<pre><code class="language-haskell">printMessageAndLoop :: Effect Unit
 printMessageAndLoop 0 = pure unit
 printMessageAndLoop loopsRemaining = do
   log &quot;Printing a message to the console!&quot;
@@ -249,7 +249,7 @@ main = printMessageAndLoop 10000
 <p>Fortunately, we can use the <a href="https://pursuit.purescript.org/packages/purescript-tailrec/4.0.0/docs/Control.Monad.Rec.Class#t:MonadRec"><code>MonadRec</code> type class' <code>tailRecM</code> function</a>.</p>
 <p>The only change from above is that now we wrap the returned <code>Step</code> data type in the monadic type.</p>
 <p>In other words:</p>
-<pre><code class="language-purescript">tailRec  go initialValue
+<pre><code class="language-haskell">tailRec  go initialValue
   where
   go ::             Accumulator
      -&gt;        Step Accumulator Output
@@ -261,7 +261,7 @@ tailRecM go initialValue
      -&gt; monad (Step Accumulator Output)
 </code></pre>
 <p>Once again, our original stack-unsafe code:</p>
-<pre><code class="language-purescript">printMessageAndLoop :: Effect Unit
+<pre><code class="language-haskell">printMessageAndLoop :: Effect Unit
 printMessageAndLoop 0 = pure unit
 printMessageAndLoop loopsRemaining = do
   log &quot;Printing a message to the console!&quot;
@@ -271,7 +271,7 @@ main :: Effect Unit
 main = printMessageAndLoop 10000
 </code></pre>
 <p>Now our modified stack-safe code:</p>
-<pre><code class="language-purescript">printMessageAndLoop ::              { loopsRemaining :: Int }
+<pre><code class="language-haskell">printMessageAndLoop ::              { loopsRemaining :: Int }
                     -&gt; Effect (Step { loopsRemaining :: Int } Unit )
 printMessageAndLoop 0 = pure (Done unit)
 printMessageAndLoop { loopsRemaining } = do

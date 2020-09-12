@@ -190,7 +190,7 @@
 <li>A flipped version of bind that shows how it relates to <code>Functor</code> and <code>Apply</code></li>
 <li>The correct version:</li>
 </ol>
-<pre><code class="language-purescript">-- in real definition, 'f' (functor) is really 'm' (monad)
+<pre><code class="language-haskell">-- in real definition, 'f' (functor) is really 'm' (monad)
 class (Appy f) &lt;= Bind f where
   bind :: forall a b. f a -&gt; (a -&gt; f b) -&gt; f b
 

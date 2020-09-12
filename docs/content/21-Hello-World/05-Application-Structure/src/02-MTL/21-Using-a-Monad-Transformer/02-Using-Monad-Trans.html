@@ -165,7 +165,7 @@
                     <main>
                         <h1><a class="header" href="#using-monadtrans" id="using-monadtrans">Using MonadTrans</a></h1>
 <p>When we wrote code for our <code>MonadState</code> example, we had something that looked like this:</p>
-<pre><code class="language-purescript">type Output = Int
+<pre><code class="language-haskell">type Output = Int
 type StateType = Int
 computation :: State StateType Output
 computation = do
@@ -181,7 +181,7 @@ main = case runState computation 0 of
 </code></pre>
 <p>The above code works because we're using <code>MonadState</code> behind the scenes via <code>StateT</code>'s instance. However, this function's type signature restricts us to only using <code>StateT</code> for computations. If we want to define <code>computation</code>, so that it can use functions from <code>MonadWriter</code>, we'll need to use a different approach. Let's fix this one step at a time.</p>
 <p>First, we'll abstract our <code>State</code> type into <code>MonadState</code> by using a type constraint:</p>
-<pre><code class="language-purescript">type Output = Int
+<pre><code class="language-haskell">type Output = Int
 type StateType = Int
 computation :: forall m =&gt; MonadState StateType m =&gt; m Output
 computation = do
@@ -201,7 +201,7 @@ main = case runProgram computation of
     log $ &quot;End state of computation: &quot; &lt;&gt; show state
 </code></pre>
 <p>Second, we'll add another type class constraint for <code>MonadAsk</code> to expose it's <code>tell</code> function:</p>
-<pre><code class="language-purescript">type Output = Int
+<pre><code class="language-haskell">type Output = Int
 type StateType = Int
 type NonOutputData = String
 computation :: forall m
@@ -217,11 +217,11 @@ computation = do
   modify_ (_ + 1)
 </code></pre>
 <p>Great! We now have a single computation that can do both state manipulation and use <code>tell</code>. However, how does that affect <code>runProgram</code>?</p>
-<pre><code class="language-purescript">runProgram :: StateT_and_WriterT -&gt; StateT_and_WriterT_Output
+<pre><code class="language-haskell">runProgram :: StateT_and_WriterT -&gt; StateT_and_WriterT_Output
 runProgram s = -- ???
 </code></pre>
 <p>When we used a monad (e.g. <code>WriterT</code>) to run a computation, we didn't need to specify the monad type being used. So, we used <code>Identity</code> as a placeholder monad and used the type alias, <code>Writer</code>, to make it easier to write. To use another computational monad (e.g. <code>StateT</code>) inside of <code>Writer</code>, we now need to specify what that monad is by re-exposing the <code>T</code> part of <code>WriterT</code> and replacing <code>Identity</code> with <code>StateT</code>. Putting it differently, <code>WriterT</code> is now transforming the monad, <code>StateT</code> with additional effects, which is likewise transforming the base monad, <code>Identity</code> with additional effects:</p>
-<pre><code class="language-purescript">-- simple writer computation
+<pre><code class="language-haskell">-- simple writer computation
 writer :: Writer NonOutputData Output -&gt; Tuple NonOuputData Output
 writer w = runWriter w
 
@@ -300,7 +300,7 @@ runProgram ws initialState = ???
 <p>Since we're running one monad inside of another, the second option seems more likely.</p>
 <p>The question is, which one is correct?</p>
 <p>Let's continue by examining <code>runStateT</code>/<code>runState</code> and <code>runWriterT</code>/<code>runWriter</code>. We know that <code>runMonad</code> is just a wrapper around <code>runMonadT</code> when the monad is <code>Identity</code>:</p>
-<pre><code class="language-purescript">newtype StateT s m a =
+<pre><code class="language-haskell">newtype StateT s m a =
   StateT (s -&gt; m (Tuple a s))
 
 runState :: StateT state Identity output -&gt; state -&gt; Tuple output state
@@ -319,18 +319,18 @@ runWriterT :: WriterT nonOutputData monad output -&gt; monad Tuple output nonOut
 runWriterT w = w
 </code></pre>
 <p>They key takeaway here is that <code>run[Monad]T</code> returns the same monad that is specified in <code>[Monad]T</code>. Looking at our function again...</p>
-<pre><code class="language-purescript">runProgram :: WriterT NonOutputData (StateT State Identity) Output
+<pre><code class="language-haskell">runProgram :: WriterT NonOutputData (StateT State Identity) Output
            -&gt; State
            -&gt; finalOutput
 runProgram ws initialState = ???
 </code></pre>
 <p>... running the <code>WriterT NonOuputData monad output</code> via <code>runWriterT</code> will return its <code>monad</code> type. Since that monad type is <code>StateT State Identity Output</code>, we will take the output of running <code>WriterT</code> (which outputs a <code>StateT</code>) and run the output via <code>runState</code> since <code>StateT</code>'s monad type is <code>Identity</code>:</p>
-<pre><code class="language-purescript">runProgram :: WriterT NonOutputData (StateT State Identity) Output
+<pre><code class="language-haskell">runProgram :: WriterT NonOutputData (StateT State Identity) Output
            -&gt; finalOutput
 runProgram ws = runState (runWriterT ws) initialState
 </code></pre>
 <p>That answers the second question (how to implement <code>runProgram</code>), but it still leaves us wondering what <code>finalOutput</code> is. This is easier to determine if we just look at <code>runState</code> and <code>runWriterT</code> again:</p>
-<pre><code class="language-purescript">runWriterT :: WriterT nonOutputData monad output -&gt; monad Tuple output nonOutputData
+<pre><code class="language-haskell">runWriterT :: WriterT nonOutputData monad output -&gt; monad Tuple output nonOutputData
 
 -- reducing `monad Tuple output nonOutputData` to something easier, `m a`
 type A = Tuple output nonOutputData
@@ -370,7 +370,7 @@ runProgram ws initialState =
 </code></pre>
 <h2><a class="header" href="#reordering-the-monad-stack" id="reordering-the-monad-stack">Reordering the Monad Stack</a></h2>
 <p>What happens, however, if we flip the order of the stack? We'll see that the arguments get flipped and the output gets flipped.</p>
-<pre><code class="language-purescript">runProgram :: StateT state (Writer NonOutputData) Output
+<pre><code class="language-haskell">runProgram :: StateT state (Writer NonOutputData) Output
            -&gt; state
            -&gt; Tuple (Tuple Output state) NonOuputData
 runProgram computation initialState =

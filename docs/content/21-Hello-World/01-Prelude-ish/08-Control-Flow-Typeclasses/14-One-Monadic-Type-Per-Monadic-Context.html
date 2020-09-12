@@ -167,7 +167,7 @@
 <p>Before we can continue further, we must understand one of the implications of the <code>bind</code> function.</p>
 <h2><a class="header" href="#defining-the-problem" id="defining-the-problem">Defining the Problem</a></h2>
 <p>Let's look at the type signature for the <code>bind</code> function.</p>
-<pre><code class="language-purescript">class Apply boxLike &lt;= Bind boxLike where
+<pre><code class="language-haskell">class Apply boxLike &lt;= Bind boxLike where
   bind :: forall a b. boxLike a -&gt; (a -&gt; boxLike b) -&gt; boxLike b
 </code></pre>
 <p>If we ignore the <code>(a -&gt; boxLike b)</code> argument, we can summarize it like this:</p>
@@ -179,7 +179,7 @@
 <p>For now, let's provide an example of this problem.</p>
 <h2><a class="header" href="#example-of-the-problem" id="example-of-the-problem">Example of the Problem</a></h2>
 <p>Let's say we have two <code>Box</code> types. They differ only in their name. Each implements the <code>Functor</code>, <code>Apply</code>, and <code>Bind</code> instances in the exact same way. Below, we will only show the <code>Bind</code> instance, but assume they have implemented the other type classes:</p>
-<pre><code class="language-purescript">data Box1 a = Box1 a
+<pre><code class="language-haskell">data Box1 a = Box1 a
 data Box2 a = Box2 a
 
 class Apply m &lt;= Bind m where
@@ -193,7 +193,7 @@ instance b2 :: Bind Box2 where
   bind               (Box2 a)   f              = f a
 </code></pre>
 <p>Recall that <code>do notation</code> desugars into multiple <code>bind</code> calls:</p>
-<pre><code class="language-purescript">example :: Box1 int
+<pre><code class="language-haskell">example :: Box1 int
 example = do
   u &lt;- Box unit
   five &lt;- Box 5
@@ -206,15 +206,15 @@ example =
       pure (five + 1)
 </code></pre>
 <p>The below <code>Box1</code> computation compiles fine.</p>
-<pre><code class="language-purescript">box1Computation :: Box1 Unit
+<pre><code class="language-haskell">box1Computation :: Box1 Unit
 box1Computation = Box1 unit
 </code></pre>
 <p>The below <code>Box2</code> computation compiles fine:</p>
-<pre><code class="language-purescript">box2Computation :: Box2 Unit
+<pre><code class="language-haskell">box2Computation :: Box2 Unit
 box2Computation = Box2 unit
 </code></pre>
 <p>If I write the following code, which (if any) will compile?</p>
-<pre><code class="language-purescript">box1ThenBox2 :: Box2 Unit
+<pre><code class="language-haskell">box1ThenBox2 :: Box2 Unit
 box1ThenBox2 = do
   box1Computation
   box2Computation
@@ -228,7 +228,7 @@ box2ThenBox1 = do
 <h2><a class="header" href="#the-first-workaround-lifting-one-monad-into-another" id="the-first-workaround-lifting-one-monad-into-another">The First Workaround: Lifting One Monad into Another</a></h2>
 <p>Sometimes, this restriction actually helps us write safer code. Other times, this restriction is problematic and we need to get around it.</p>
 <p>To help develop the necessary foundation for later understanding, we'll show a general approach to workaround this restriction. We use a type class that follows this idea:</p>
-<pre><code class="language-purescript">class LiftSourceIntoTargetMonad sourceMonad targetMonad where {-
+<pre><code class="language-haskell">class LiftSourceIntoTargetMonad sourceMonad targetMonad where {-
   liftSourceMonad :: forall a. sourceMonad a -&gt; targetMonad a -}
   liftSourceMonad ::           sourceMonad   ~&gt; targetMonad
 
@@ -239,7 +239,7 @@ instance box2_into_box1 :: LiftSourceIntoTargetMonad Box2 Box1 where {-
   liftSourceMonad (Box2 a) = Box1 a
 </code></pre>
 <p>This enables something like the following. It can be pasted into the REPL and one can try it out by calling <code>bindAttempt</code>:</p>
-<pre><code class="language-purescript">import Prelude -- for the (+) and (~&gt;) function aliases
+<pre><code class="language-haskell">import Prelude -- for the (+) and (~&gt;) function aliases
 
 data Box1 a = Box1 a
 data Box2 a = Box2 a

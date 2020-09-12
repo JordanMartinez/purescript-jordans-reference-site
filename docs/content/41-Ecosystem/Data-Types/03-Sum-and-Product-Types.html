@@ -171,7 +171,7 @@
 </ul>
 <p>These are better explained <a href="https://youtu.be/Up7LcbGZFuo?t=19m8s">in this video</a> as to how they get their names.</p>
 <p>The simplest form of them are <code>Either</code> and <code>Tuple</code></p>
-<pre><code class="language-purescript">-- sum
+<pre><code class="language-haskell">-- sum
 data Either a b   -- is an `a` value OR  a `b` value
   = Left a
   | Right b
@@ -187,7 +187,7 @@ data Tuple a b
 </tbody></table>
 <h2><a class="header" href="#what-does-open-mean" id="what-does-open-mean">What does 'Open' mean?</a></h2>
 <p>Using this example from the Syntax folder...</p>
-<pre><code class="language-purescript">-- the 'r' means, 'all other fields in the record'
+<pre><code class="language-haskell">-- the 'r' means, 'all other fields in the record'
 function :: forall r. { fst :: String, snd :: String | r } -&gt; String
 function record = record.fst &lt;&gt; record.snd
 
@@ -202,7 +202,7 @@ function { fst: &quot;hello&quot;, snd: &quot;world&quot;, unrelatedField: 0 } -
 <li><code>Record</code>s are 'nested <code>Tuple</code>s'</li>
 <li><code>Variant</code>s are 'nested <code>Either</code>s'</li>
 </ul>
-<pre><code class="language-purescript">-- We could write
+<pre><code class="language-haskell">-- We could write
 Tuple a (Tuple b (Tuple c (Tuple d e)))
 -- or we could write
 { a :: A, b :: B, c :: C, d :: D, e :: E }
@@ -215,7 +215,7 @@ Either a (Either b (Either c (Either d e)))
 Variant ( a :: A, b :: B, c :: C, d :: D, e :: E)
 </code></pre>
 <p>Keep in mind that records/variants <strong>can be but do not necessarily have to be</strong> open. If we changed the above function's type signature to remove the <code>r</code>, it would restrict its arguments to a closed Record:</p>
-<pre><code class="language-purescript">closed :: { fst :: String, snd :: String } -&gt; String
+<pre><code class="language-haskell">closed :: { fst :: String, snd :: String } -&gt; String
 closed record = record.fst &lt;&gt; record.snd
 
 closed { fst: &quot;hello&quot;, snd: &quot;world&quot; } -- compiles
@@ -223,7 +223,7 @@ closed { fst: &quot;hello&quot;, snd: &quot;world&quot;, unrelatedField: 0 } -- 
 </code></pre>
 <h2><a class="header" href="#the-types" id="the-types">The Types</a></h2>
 <h3><a class="header" href="#tuple" id="tuple">Tuple</a></h3>
-<pre><code class="language-purescript">data Tuple a b = Tuple a b
+<pre><code class="language-haskell">data Tuple a b = Tuple a b
 </code></pre>
 <table><thead><tr><th>Package</th><th>Type name</th><th>&quot;Plain English&quot; name</th></tr></thead><tbody>
 <tr><td><a href="https://pursuit.purescript.org/packages/purescript-tuples/5.0.0">purescript-tuples</a></td><td><code>Tuple a b</code></td><td>2-value Box</td></tr>
@@ -232,7 +232,7 @@ closed { fst: &quot;hello&quot;, snd: &quot;world&quot;, unrelatedField: 0 } -- 
 <tr><td>Stores two ordered unnamed values of the same/different types.<br>Can be used to return or pass in multiple unnamed values from or into a function.</td><td><code>Tuple a b</code></td></tr>
 </tbody></table>
 <h3><a class="header" href="#record" id="record">Record</a></h3>
-<pre><code class="language-purescript">forall r. { a :: A, b :: B, {- ... -} | r } -- open record
+<pre><code class="language-haskell">forall r. { a :: A, b :: B, {- ... -} | r } -- open record
           { a :: A, b :: B, {- ... -}     } -- closed record
 </code></pre>
 <table><thead><tr><th>Package</th><th>Type name</th><th>&quot;Plain English&quot; name</th></tr></thead><tbody>
@@ -242,7 +242,7 @@ closed { fst: &quot;hello&quot;, snd: &quot;world&quot;, unrelatedField: 0 } -- 
 <tr><td>Stores N ordered named values of the same/different types.<br>Can be used to return or pass in multiple unnamed values from or into a function.</td><td><code>{ field :: ValueType }</code></td></tr>
 </tbody></table>
 <h3><a class="header" href="#either" id="either">Either</a></h3>
-<pre><code class="language-purescript">data Either a b
+<pre><code class="language-haskell">data Either a b
   = Left a
   | Right b
 </code></pre>
@@ -261,7 +261,7 @@ closed { fst: &quot;hello&quot;, snd: &quot;world&quot;, unrelatedField: 0 } -- 
 <tr><td>Used to indicate one type among many types</td><td>See docs</td></tr>
 </tbody></table>
 <h3><a class="header" href="#these" id="these">These</a></h3>
-<pre><code class="language-purescript">data These a b
+<pre><code class="language-haskell">data These a b
   = This a      -- Left  a
   | That b      -- Right b
   | Both a b    -- Tuple a b

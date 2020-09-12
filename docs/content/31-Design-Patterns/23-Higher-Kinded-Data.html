@@ -166,7 +166,7 @@
                         <h1><a class="header" href="#higher-kinded-data" id="higher-kinded-data">Higher-Kinded Data</a></h1>
 <h2><a class="header" href="#reviewing-higher-kinded-types" id="reviewing-higher-kinded-types">Reviewing Higher-Kinded Types</a></h2>
 <p>We have higher-kinded types in PureScript (e.g. anything that requires another type to be specified before it becomes a concrete type):</p>
-<pre><code class="language-purescript">-- higher-kinded by 1
+<pre><code class="language-haskell">-- higher-kinded by 1
 data List :: Type -&gt; Type
 data List a
   = Nil
@@ -180,14 +180,14 @@ data Either e a
 </code></pre>
 <p>In other words, we never have just <code>List</code>s. Rather, we always have a <code>List</code> of <code>String</code>s or a <code>List</code> of <code>Int</code>s. The <code>a</code> type needs to be specified before we can use this value in most contexts.</p>
 <p>We can apply this idea in a different manner called &quot;higher-kinded data&quot;. I first saw this in a blog post called <a href="https://reasonablypolymorphic.com/blog/higher-kinded-data/">Higher-Kinded Data</a>, saw its usage in Thomas Honeyman's <code>halogen-formless</code>, and then saw <code>@kritzcreek</code>'s comment on the various types one could define with them (shown later in this file). We'll document the pattern below and why you might want to use it.</p>
-<pre><code class="language-purescript">-- Given this type...
+<pre><code class="language-haskell">-- Given this type...
 newtype HKD :: (Type -&gt; Type) -&gt; Type
 newtype HKD f = HKD (f Int)
 </code></pre>
 <p>We can specify <code>f</code> to a number of different types, thereby defining multiple types in-line with little effort.</p>
 <h2><a class="header" href="#basic-types" id="basic-types">Basic Types</a></h2>
 <h3><a class="header" href="#using-unlift-a-to-ignore-the-f-type-parameter" id="using-unlift-a-to-ignore-the-f-type-parameter">Using <code>Unlift a</code> to Ignore the <code>f</code> Type Parameter</a></h3>
-<pre><code class="language-purescript">-- Given a type that satisfies the (Type -&gt; Type) kind signature
+<pre><code class="language-haskell">-- Given a type that satisfies the (Type -&gt; Type) kind signature
 -- but is the same type as the `a` type parameter...
 type Unlift a = a
 
@@ -199,7 +199,7 @@ newtype HKD f = HKD (f Int)
 type HKD_Unlift = HKD Unlift
 </code></pre>
 <h3><a class="header" href="#using-const-a-b-to-ignoreoverride-the-int-type-parameter" id="using-const-a-b-to-ignoreoverride-the-int-type-parameter">Using <code>Const a b</code> to Ignore/Override the <code>Int</code> Type Parameter</a></h3>
-<pre><code class="language-purescript">-- Given a type that ignores its second type parameter
+<pre><code class="language-haskell">-- Given a type that ignores its second type parameter
 type Const a b = a
 
 -- and our Higher-Kinded Data type
@@ -211,7 +211,7 @@ type HKD_ConstBoolean = HKD (Const Boolean)
 </code></pre>
 <h2><a class="header" href="#common-types" id="common-types">Common Types</a></h2>
 <h3><a class="header" href="#using-maybe-a-to-make-the-int-type-parameter-optional" id="using-maybe-a-to-make-the-int-type-parameter-optional">Using <code>Maybe a</code> to Make the <code>Int</code> Type Parameter Optional</a></h3>
-<pre><code class="language-purescript">-- Given a type that may contain a value
+<pre><code class="language-haskell">-- Given a type that may contain a value
 type Maybe a
   = Nothing
   | Just a
@@ -224,7 +224,7 @@ newtype HKD f = HKD (f Int)
 type HKD_Maybe = HKD Maybe
 </code></pre>
 <h3><a class="header" href="#using-either-e-to-provide-an-alternative-to-the-int-type-parameter" id="using-either-e-to-provide-an-alternative-to-the-int-type-parameter">Using <code>Either e</code> to Provide an Alternative to the <code>Int</code> Type Parameter</a></h3>
-<pre><code class="language-purescript">-- Given a type that may contain a value
+<pre><code class="language-haskell">-- Given a type that may contain a value
 type Either e a
   = Left e
   | Right a
@@ -237,7 +237,7 @@ newtype HKD f = HKD (f Int)
 type HKD_Either = HKD (Either String)
 </code></pre>
 <h3><a class="header" href="#using-list-a-to-provide-0-or-more-int-values" id="using-list-a-to-provide-0-or-more-int-values">Using <code>List a</code> to Provide 0 or more <code>Int</code> values</a></h3>
-<pre><code class="language-purescript">-- Given a type that may contain a value
+<pre><code class="language-haskell">-- Given a type that may contain a value
 type List a
   = Nil
   | Cons a (List a)
@@ -250,7 +250,7 @@ newtype HKD f = HKD (f Int)
 type HKD_List = HKD List
 </code></pre>
 <h3><a class="header" href="#using-nonempty-f-a-to-provide-1-or-more-int-values" id="using-nonempty-f-a-to-provide-1-or-more-int-values">Using <code>NonEmpty f a</code> to Provide 1 or more <code>Int</code> values</a></h3>
-<pre><code class="language-purescript">-- Given a type that may contain a value
+<pre><code class="language-haskell">-- Given a type that may contain a value
 newtype NonEmpty f a = NonEmpty a (f a)
 
 -- and our Higher-Kinded Data type
@@ -262,7 +262,7 @@ type HKD_List = HKD (NonEmpty List)
 </code></pre>
 <h2><a class="header" href="#more-complex-types" id="more-complex-types">More Complex Types</a></h2>
 <h3><a class="header" href="#using-function-a-b-to-produce-int-values-given-some-argument" id="using-function-a-b-to-produce-int-values-given-some-argument">Using <code>Function a b</code> to Produce <code>Int</code> Values Given Some Argument</a></h3>
-<pre><code class="language-purescript">-- Given a type that produces a value when given an argument
+<pre><code class="language-haskell">-- Given a type that produces a value when given an argument
 data Function a b
 
 -- and our Higher-Kinded Data type
@@ -276,7 +276,7 @@ type HKD_List = HKD (Function String)
 type HKD_List = HKD ((-&gt;) String)
 </code></pre>
 <h3><a class="header" href="#using-op-a-b-to-produce-some-value-given-an-int-argument" id="using-op-a-b-to-produce-some-value-given-an-int-argument">Using <code>Op a b</code> to Produce Some Value Given an <code>Int</code> Argument</a></h3>
-<pre><code class="language-purescript">-- Given a type that produces a value when given an argument
+<pre><code class="language-haskell">-- Given a type that produces a value when given an argument
 newtype Op a b = Op (b -&gt; a)
 
 -- and our Higher-Kinded Data type
@@ -287,7 +287,7 @@ newtype HKD f = HKD (f Int)
 type HKD_List = HKD (Op String)
 </code></pre>
 <h3><a class="header" href="#using-compose-f-g-a-to-model-miscellaenous-types-using-int" id="using-compose-f-g-a-to-model-miscellaenous-types-using-int">Using <code>Compose f g a</code> to Model Miscellaenous Types Using <code>Int</code></a></h3>
-<pre><code class="language-purescript">-- Given a type that may contain a value
+<pre><code class="language-haskell">-- Given a type that may contain a value
 newtype Compose f g a = Compose (f (g a))
 
 -- and our Higher-Kinded Data type
@@ -315,7 +315,7 @@ type HKD_ComposeMaybeMaybe = HKD (Compose List Maybe)
 <p>You can see how <code>Compose</code> makes it possible to do some interesting things.</p>
 <h3><a class="header" href="#using-row-kinds-record-and-variant-to-model-product-and-sum-types" id="using-row-kinds-record-and-variant-to-model-product-and-sum-types">Using <code>Row</code> kinds, <code>Record</code>, and <code>Variant</code> to Model Product and Sum Types</a></h3>
 <p>Recall that product types (e.g. a AND b) and sum types (e.g. a OR b) are modeled by <code>Record</code> and <code>Variant</code>. So, what happens when we define a higher-kinded-data type that takes <code>rows</code> as the argument that it passes into <code>f</code>? It looks like this:</p>
-<pre><code class="language-purescript">data Record :: Row Type -&gt; Type
+<pre><code class="language-haskell">data Record :: Row Type -&gt; Type
 
 data Variant :: Row Type -&gt; Type
 
@@ -331,7 +331,7 @@ type HKD_Row_Variant = HKD_Row Variant
 <h2><a class="header" href="#examples-demonstrating-why-one-would-use-higher-kinded-data" id="examples-demonstrating-why-one-would-use-higher-kinded-data">Examples Demonstrating Why One Would Use Higher-Kinded data?</a></h2>
 <h3><a class="header" href="#reducing-boilerplate" id="reducing-boilerplate">Reducing Boilerplate</a></h3>
 <p>Now that we have an understanding for how these work, what happens if we interleave two higher-kinded data types together? We find that we get a number of types for free.</p>
-<pre><code class="language-purescript">type AllTypes recordOrVariant f =
+<pre><code class="language-haskell">type AllTypes recordOrVariant f =
   recordOrVariant ( name :: f String, age :: f Int )
 
 -- { name :: String, age :: Age }
@@ -351,7 +351,7 @@ type PersonToggleLabel = AllTypes Variant (Const Boolean)
 </code></pre>
 <h3><a class="header" href="#reusing-labels-in-rows-for-multiple-things" id="reusing-labels-in-rows-for-multiple-things">Reusing Labels in Rows for Multiple Things</a></h3>
 <p>What if we used a version of <code>Unlift</code> that &quot;selects&quot; which type to use among multiple types? <code>Halogen Formless</code> uses this trick to use the same labels to refer to different things depending on the context (e.g. the input value, the output value, the error, etc.):</p>
-<pre><code class="language-purescript">data InvalidName = InvalidName
+<pre><code class="language-haskell">data InvalidName = InvalidName
 data NotPositiveAge = NotPositiveAge
 newtype Name = Name String
 newtype Age = Age Int

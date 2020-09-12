@@ -166,7 +166,7 @@
                         <h1><a class="header" href="#node-readline-api" id="node-readline-api">Node ReadLine API</a></h1>
 <p>Node's ReadLine API docs are <a href="https://nodejs.org/api/readline.html">here</a>. In this folder, we'll use the following Purescript bindings of the API (The Pursuit docs are outdated as they only show docs for an earlier release. So, either run <code>spago docs</code> and look at the <code>Node.ReadLine</code> module's docs, or look at the <a href="https://github.com/purescript-node/purescript-node-readline/blob/master/src/Node/ReadLine.purs">source code</a> to see all of what is supported.</p>
 <p>Below, I cover some of the API (some of the functions below had their 'foreign import' part removed to shorten the type signature):</p>
-<pre><code class="language-purescript">-- Copyright is at the end of this file
+<pre><code class="language-haskell">-- Copyright is at the end of this file
 foreign import data Interface :: Type
 
 -- | A function which performs tab completion.

@@ -167,7 +167,7 @@
 <h2><a class="header" href="#array-mutable" id="array-mutable">Array (Mutable)</a></h2>
 <p>https://pursuit.purescript.org/packages/purescript-arrays/5.0.0/docs/Data.Array.ST</p>
 <h2><a class="header" href="#array-immutable" id="array-immutable">Array (Immutable)</a></h2>
-<pre><code class="language-purescript">[]  -- empty array
+<pre><code class="language-haskell">[]  -- empty array
 [1] -- array with content
 </code></pre>
 <table><thead><tr><th>Package</th><th>Type name</th><th>&quot;Plain English&quot; name</th></tr></thead><tbody>
@@ -178,7 +178,7 @@
 <tr><td>A &quot;type class wrapper type&quot;</td><td>Easily implement instances for some type classes by wrapping a type in <code>Array</code></td></tr>
 </tbody></table>
 <h2><a class="header" href="#vec" id="vec">Vec</a></h2>
-<pre><code class="language-purescript">newtype Vec s a = -- implementation
+<pre><code class="language-haskell">newtype Vec s a = -- implementation
 
 empty :: -- TypeLevel Programming
 
@@ -192,7 +192,7 @@ infixr 5 cons as +&gt;
 <tr><td><a href="https://pursuit.purescript.org/packages/purescript-sized-vectors/3.1.0/docs/Data.Vec">purescript-sized-vectors</a></td><td><code>Vec s a</code></td><td>Immutable strict size-known-at-compile-time array</td></tr>
 </tbody></table>
 <h2><a class="header" href="#list-strict" id="list-strict">List (Strict)</a></h2>
-<pre><code class="language-purescript">-- Data.List.Types
+<pre><code class="language-haskell">-- Data.List.Types
 
 data List a
   = Nil
@@ -211,7 +211,7 @@ infixr 6 Cons as :
 <tr><td>A &quot;type class wrapper type&quot;</td><td>Easily implement instances for some type classes by wrapping a type in <code>List</code></td></tr>
 </tbody></table>
 <h2><a class="header" href="#list-lazy" id="list-lazy">List (Lazy)</a></h2>
-<pre><code class="language-purescript">-- Data.List.Lazy.Types
+<pre><code class="language-haskell">-- Data.List.Lazy.Types
 
 newtype List a = -- implementation
 

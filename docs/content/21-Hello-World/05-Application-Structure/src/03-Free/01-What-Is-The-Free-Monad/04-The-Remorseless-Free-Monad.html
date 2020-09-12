@@ -171,14 +171,14 @@
 </ul>
 <h2><a class="header" href="#similar-shapes-the-free-monoid-and-the-free-monad" id="similar-shapes-the-free-monoid-and-the-free-monad">Similar Shapes: The Free Monoid and the Free Monad</a></h2>
 <p>Surpisingly, these two &quot;free&quot; types bear a similar resemblence:</p>
-<pre><code class="language-purescript">data List a   = Nil    | Cons    a (List a  )
+<pre><code class="language-haskell">data List a   = Nil    | Cons    a (List a  )
 data Free f a = Pure a | Impure (f (Free f a))
 </code></pre>
 <p>A list is just an unbalanced tree. Thus, <code>Free</code> is essentially the same as <code>List</code>, except that it stores a higher-kinded type (kind <code>Type -&gt; Type</code>) rather than a concrete type (kind <code>Type</code>)</p>
 <p>This similarity will be used to explain why <code>Free</code> has performance problems.</p>
 <h2><a class="header" href="#the-direction-matters" id="the-direction-matters">The Direction Matters</a></h2>
 <p>Let's talk about <code>Semigroup</code>:</p>
-<pre><code class="language-purescript">class Semigroup a where
+<pre><code class="language-haskell">class Semigroup a where
   append :: a -&gt; a -&gt; a
 
 infix 4 append as &lt;&gt;
@@ -187,7 +187,7 @@ instance a :: Semigroup Int where
   append i1 i2 = i1 + i2
 </code></pre>
 <p><code>Semigroup</code> requires its implementation to adhere to the law of association, meaning that, when <code>append</code> is used on the output of a previous <code>append</code> and some other value, the location of the parenthenses don't matter:</p>
-<pre><code class="language-purescript">1 &lt;&gt; 2 &lt;&gt; 3 &lt;&gt; 4 &lt;&gt; 5 &lt;&gt; 6 &lt;&gt; 7 &lt;&gt; 8
+<pre><code class="language-haskell">1 &lt;&gt; 2 &lt;&gt; 3 &lt;&gt; 4 &lt;&gt; 5 &lt;&gt; 6 &lt;&gt; 7 &lt;&gt; 8
 
 -- no association: Tree-like structure
 -- Start
@@ -224,7 +224,7 @@ instance a :: Semigroup Int where
 </code></pre>
 <p>We can see that the output of adding up all these integers, regardless of where we put the parenthesis, will still be the same output value  (that's the law of associativity).</p>
 <p>However, functions that are &quot;associative&quot; sometimes take longer to output that value depending on which &quot;direction&quot; it goes. As an example, consider the <code>Semigroup</code> instance for <code>List</code>:</p>
-<pre><code class="language-purescript">data List a
+<pre><code class="language-haskell">data List a
   = Nil
   | Cons a (List a)
 
@@ -290,7 +290,7 @@ append (1 : 2 : 3 : 4 : Nil) (5 : Nil)                                    -- 13
 </code></pre>
 <p>The law of associativity guarantees that the output of a non/left/right-associative function will always be the same. However, the above code demonstrates that one direction of function application (right association) can be faster than another (left association).</p>
 <p>So, let's think about why this occured. Due to the way the type is defined, <code>List</code> must use recursion to get to its tail <code>Nil</code> before it can replace that tail, <code>Nil</code>, with the list to which it is being appended. Since <code>List</code> and <code>Free</code> are structured similarly, then <code>Free</code> will also suffer the same performance costs if it uses a left-associative function to reach its tail, <code>Pure</code>. So, which function does <code>Free</code> use that acts just like <code>append</code>? The <code>bind</code> function. Every <code>bind</code>/<code>&gt;&gt;=</code> call will iterate through the entire <code>Free</code> structure, apply the function to its <code>Pure a</code> value and then rewrap everything in an <code>Impure</code> value:</p>
-<pre><code class="language-purescript">-- Thus, this code...
+<pre><code class="language-haskell">-- Thus, this code...
 freeMonad &gt;&gt;= f &gt;&gt;= g &gt;&gt;= h &gt;&gt;= ...
 -- is synonymous with the runtime performance hit as this code...
 (((list &lt;&gt; f) &lt;&gt; g) &lt;&gt; h) &lt;&gt; ...

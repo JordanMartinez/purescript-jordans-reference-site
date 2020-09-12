@@ -165,14 +165,14 @@
                     <main>
                         <h1><a class="header" href="#syntax" id="syntax">Syntax</a></h1>
 <p>This folder contains compileable Purescript syntax using meta-language (a language that describes the syntax). Thus, rather than saying something like</p>
-<pre><code class="language-purescript">f :: String -&gt; Int
+<pre><code class="language-haskell">f :: String -&gt; Int
 </code></pre>
 <p>which doesn't tell you anything, it'll say:</p>
-<pre><code class="language-purescript">functionName :: ParameterType -&gt; ReturnType
+<pre><code class="language-haskell">functionName :: ParameterType -&gt; ReturnType
 </code></pre>
 <p>Since the syntax can be compiled, it can be verified as valid and correct syntax.</p>
 <p>As a result, most files will appear like so:</p>
-<pre><code class="language-purescript">-- The module will be declared at the top of the file
+<pre><code class="language-haskell">-- The module will be declared at the top of the file
 --   It can be ignored.
 module Syntax.ModuleName where
 

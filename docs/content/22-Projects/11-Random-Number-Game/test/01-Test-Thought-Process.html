@@ -235,7 +235,7 @@ To support the &quot;get user's input,&quot; we need to provide a new <code>Stri
 <p>So, how do we generate this? It should be obvious that we cannot generate the <code>GameResult</code> until we know what the other two values are. So, we'll start with them.</p>
 <h3><a class="header" href="#random-number" id="random-number">Random Number</a></h3>
 <p>First, let's start with the random number. How could we generate it? We could generate it by creating a random integer and then defining a lower and upper value that corresponds to that. We can also define the bounds first and then generate a random int within that bounds. Both can work, but we've opted for the second approach. Thus, we get this type:</p>
-<pre><code class="language-purescript">type MockedBounds = Tuple Int Int
+<pre><code class="language-haskell">type MockedBounds = Tuple Int Int
 
 genTestData :: Gen TestData
 genTestData = do
@@ -252,7 +252,7 @@ The way the program works, it will request items in this order:</p>
 <li>Recursively make guess until game ends</li>
 </ol>
 <p>Due to the above, we have already generated the bounds value, so let's not focus on that. However, we have not generated a value for remaining guesses. To define the remaining guesses, we just generate a positive integer</p>
-<pre><code class="language-purescript">type MockedBounds = Tuple Int Int
+<pre><code class="language-haskell">type MockedBounds = Tuple Int Int
 
 genTestData :: Gen TestData
 genTestData = do
@@ -270,7 +270,7 @@ genTestData = do
 <li><code>Just takesXGuessesToWin</code> represents a winning state and the total guesses needed before one wins</li>
 <li><code>Nothing</code> represents a losing state.</li>
 </ul>
-<pre><code class="language-purescript">type MockedBounds = Tuple Int Int
+<pre><code class="language-haskell">type MockedBounds = Tuple Int Int
 
 genTestData :: Gen TestData
 genTestData = do
@@ -285,7 +285,7 @@ genTestData = do
 
 </code></pre>
 <p>At this point, we need to generate a specified number of incorrect guesses. The <code>Just</code> path should generate one less than the <code>takesXGuessesToWin</code> whereas the <code>Nothing</code> path should use <code>totalGuesses</code> to create it:</p>
-<pre><code class="language-purescript">type MockedBounds = Tuple Int Int
+<pre><code class="language-haskell">type MockedBounds = Tuple Int Int
 
 genTestData :: Gen TestData
 genTestData = do
@@ -300,7 +300,7 @@ genTestData = do
       incorrectGuesses &lt;- genIncorrectGuesses totalGuesses
 </code></pre>
 <p>In the <code>Just</code> path, we should append the random number to get all of our guesses. In the <code>Nothing</code> path, we're already done.</p>
-<pre><code class="language-purescript">type MockedBounds = Tuple Int Int
+<pre><code class="language-haskell">type MockedBounds = Tuple Int Int
 
 genTestData :: Gen TestData
 genTestData = do
@@ -317,7 +317,7 @@ genTestData = do
 </code></pre>
 <p>To finish creating the user's inputs, we need to combine our <code>bounds.lower</code>, <code>bounds.upper</code>, <code>totalGuesses</code>, and <code>gueses</code> values into a <code>ListLike String</code> type. Then, we will have generated all of our user's inputs.</p>
 <p>Now, we need to convert our <code>guesses</code> values into <code>ListLike String</code> type. We could use <code>List String</code> or <code>Array String</code>:</p>
-<pre><code class="language-purescript">type MockedBounds = Tuple Int Int
+<pre><code class="language-haskell">type MockedBounds = Tuple Int Int
 type GuessLimit = Int
 type ListLike a = -- define it later
 type Guesses = ListLike Int
@@ -328,7 +328,7 @@ mkUserInputs (Tuple lower upper) total guesses =
  (show lower : show upper : show total : Nil) &lt;&gt; (show &lt;$&gt; guesses) -- list version
 </code></pre>
 <p>We can now generate our test's inputs.</p>
-<pre><code class="language-purescript">type MockedBounds = Tuple Int Int
+<pre><code class="language-haskell">type MockedBounds = Tuple Int Int
 
 genTestData :: Gen TestData
 genTestData = do
@@ -352,7 +352,7 @@ genTestData = do
 <li><code>PlayerLoses RandomInt</code></li>
 </ul>
 <p>The only way to create the types that are wrapped by <code>GameResult</code>'s members require us to use their smart constructors, which require <code>Either ErrorType TheTypeWeWant</code>. To get around that, we'll use partial functions since we can guarantee that these functions are only being passed correct values. They will follow this idea: <code>unsafePartial $ fromRight $ smartConstructor</code>. Since that is a lot of character to type, which will clutter our code and make it harder to read, we'll defined our own code for that by adding a <code>_</code> suffix to the smart constructor names:</p>
-<pre><code class="language-purescript">type MockedBounds = Tuple Int Int
+<pre><code class="language-haskell">type MockedBounds = Tuple Int Int
 
 genTestData :: Gen TestData
 genTestData = do
@@ -376,7 +376,7 @@ mkType_ args = unsafePartial $ fromRight $ mkType args
 </code></pre>
 <h3><a class="header" href="#defining-its-arbitrary-instance" id="defining-its-arbitrary-instance">Defining its Arbitrary instance</a></h3>
 <p>Now, we just need to lift all the three values into a <code>Gen</code> via <code>pure</code>. Since <code>pure</code> only takes one value, we'll wrap them up using a Record:</p>
-<pre><code class="language-purescript">type TestDataRecord = { random :: Int
+<pre><code class="language-haskell">type TestDataRecord = { random :: Int
                       , userInputs :: ListLike String
                       , result :: GameResult
                       }
@@ -402,7 +402,7 @@ genTestData = do
       pure { random: random, userInputs: userInputs, gameResult: gameResult }
 </code></pre>
 <p>Finally, to make it usable in QuickCheck, we need to define an <code>Arbitrary</code> instance for it. This is why we defined <code>TestData</code> as a newtype:</p>
-<pre><code class="language-purescript">instance tda :: Arbitrary TestData where
+<pre><code class="language-haskell">instance tda :: Arbitrary TestData where
   arbitrary = genTestData
 </code></pre>
 

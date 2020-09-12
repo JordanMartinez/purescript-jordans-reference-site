@@ -166,11 +166,11 @@
                         <h1><a class="header" href="#unit-testing-vs-property-testing" id="unit-testing-vs-property-testing">Unit Testing vs Property Testing</a></h1>
 <h2><a class="header" href="#what-is-unit-testing" id="what-is-unit-testing">What is Unit Testing</a></h2>
 <p>Unit- / behavior- / example-testing verifies that a function (e.g. <code>reverse</code>) that receives a specific value (e.g. <code>&quot;apple&quot;</code>) of some data type (e.g. <code>String</code>) will output a specific value (e.g. <code>&quot;elppa&quot;</code>) of the same/different data type. In code:</p>
-<pre><code class="language-purescript">unitTest :: Boolean
+<pre><code class="language-haskell">unitTest :: Boolean
 unitTest = (reverse &quot;apple&quot;) == &quot;elppa&quot;
 </code></pre>
 <p>If we want to test <code>reverse</code> for a different value of <code>String</code> (e.g. &quot;pineapple&quot;), we would need to write a second test:</p>
-<pre><code class="language-purescript">unitTest2 :: Boolean
+<pre><code class="language-haskell">unitTest2 :: Boolean
 unitTest2 = (reverse &quot;pineapple&quot;) == &quot;elppaenip&quot;
 </code></pre>
 <p>If the function can take <code>n</code> different intputs, we need to write <code>n</code> different unit tests.</p>
@@ -212,11 +212,11 @@ unitTest2 = (reverse &quot;pineapple&quot;) == &quot;elppaenip&quot;
 <h2><a class="header" href="#what-is-property-testing-and-why-it-succeeds" id="what-is-property-testing-and-why-it-succeeds">What is Property Testing and Why It Succeeds</a></h2>
 <p>Property-testing verifies that a function (e.g. <code>reverse</code>) that receives <strong>any</strong> value of some data type (e.g. <code>String</code>) will output an expected value of the same/different data type; the expected value is calculated using the given input.</p>
 <p>One might immediately think of this code before realizing that it doesn't work:</p>
-<pre><code class="language-purescript">propertyTestFail :: String -&gt; Boolean
+<pre><code class="language-haskell">propertyTestFail :: String -&gt; Boolean
 propertyTestFail input = (reverse input) == -- ???
 </code></pre>
 <p>What should the expected output be? One way to resolve this is to call reverse twice on the input and see if it matches the original input. In code:</p>
-<pre><code class="language-purescript">propertyTest :: String -&gt; Boolean
+<pre><code class="language-haskell">propertyTest :: String -&gt; Boolean
 propertyTest input = (reverse (reverse input)) == input
 </code></pre>
 <p>In a few lines, we have made it possible to test every possible value of <code>String</code> on the function <code>reverse</code>. We spent only a few seconds and got 100% coverage (solving the above Problem 1). Moreover, the test doesn't require any creativity on our part. Whether the <code>String</code> value uses alphabetical characters, or numbers, or special symbols, or even characters from Asian languages, the test covers all of them (solving the above Problem 2)</p>
@@ -224,7 +224,7 @@ propertyTest input = (reverse (reverse input)) == input
 <p>Lastly, Problem 4 is solved with a feature called &quot;shrinking.&quot; While a unit test cannot shrink <code>8,423,522</code> to <code>1,000,001</code>, a property test can. This feature exists in the originaly Haskell library, but unfortunately, it does not yet seem to exist in Purescript's port of the library.</p>
 <h2><a class="header" href="#the-trustworthiness-of-property-testing" id="the-trustworthiness-of-property-testing">The Trustworthiness of Property Testing</a></h2>
 <p>In some cases, such as <code>Boolean</code>, one has a finite number of input values to verify:</p>
-<pre><code class="language-purescript">testBooleanWithAnd :: Boolean -&gt; Boolean
+<pre><code class="language-haskell">testBooleanWithAnd :: Boolean -&gt; Boolean
 testBooleanWithAnd randomBoolean = (randomBoolean &amp;&amp; true) == randomBoolean
 </code></pre>
 <p>After proving that the above property is true for both the <code>true</code> and <code>false</code> values of <code>Boolean</code>, one does not need to retest it again with either values. In such a case, the test can be proven exhaustively and one's certainty in the code is 100%.</p>

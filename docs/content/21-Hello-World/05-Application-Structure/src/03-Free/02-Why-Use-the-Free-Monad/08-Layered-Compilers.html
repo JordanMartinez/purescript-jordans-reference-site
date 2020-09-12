@@ -165,7 +165,7 @@
                     <main>
                         <h1><a class="header" href="#layered-compilers" id="layered-compilers">Layered Compilers</a></h1>
 <p>Previously, we saw that we could &quot;interpret&quot; the <code>Free</code> monad into another monad, namely, <code>Effect</code>, to simulate state manipulation effects. This idea is similar to a compiler: a high-level language (i.e. <code>Free</code>'s languages) get &quot;compiled&quot;/&quot;interpreted&quot; into a lower-level language (i.e. <code>Effect</code>/<code>Aff</code>). However, what if we recursively interpreted the <code>Free</code> monad into another <code>Free</code> monad for a few rounds until the last one gets interpreted into the <code>Effect</code> monad?</p>
-<pre><code class="language-purescript">type Free1 = Free f a
+<pre><code class="language-haskell">type Free1 = Free f a
 type Free2 = Free g a
 type Free3 = Free h a
 
@@ -177,7 +177,7 @@ Free3 ~&gt; Effect
 Free1 ~&gt; Effect
 </code></pre>
 <p>This allows us to write one high-level language that gets &quot;interpreted&quot; into a lower-level language, which itself gets interpreted into an even lower-level language. Each <code>~&gt;</code> is going from a high-level abstract language to a lower-level more-platform-specific language. In other words, a chain of compiler, where the output of the previous is the input of the next. Updating our code above to use meta-language, we would have something like this:</p>
-<pre><code class="language-purescript">-- Let your domain experts write their domain-specific &quot;programs&quot;
+<pre><code class="language-haskell">-- Let your domain experts write their domain-specific &quot;programs&quot;
 -- using a familiar domain-specific language...
 type HighestLevelLanguage = CoproductN Language1 Language2 Language3 -- ...
 type HighestLevelProgram = Free HighestLevelLanguage

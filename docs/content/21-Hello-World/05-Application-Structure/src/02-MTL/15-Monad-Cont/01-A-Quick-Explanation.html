@@ -179,7 +179,7 @@
 </ul>
 <h2><a class="header" href="#why-callbacks-exist" id="why-callbacks-exist">Why Callbacks Exist</a></h2>
 <p>When writing a library (e.g. GUI toolkit, game engine, etc.), one may want the end-developer to be able to run their own custom code at some point. In the example below, the custom code is represented by the type hole, <code>?doSomething</code>:</p>
-<pre><code class="language-purescript">attack :: Target -&gt; Effect Unit
+<pre><code class="language-haskell">attack :: Target -&gt; Effect Unit
 attack target = do
   valid &lt;- isTargetValid target
   if valid
@@ -187,7 +187,7 @@ attack target = do
   else ignoreAttack
 </code></pre>
 <p>Since the library developer does not know how the end-developer will use this function, they can convert <code>?doSomething</code> into a callback function that the end-developer supplies:</p>
-<pre><code class="language-purescript">-- library developer's code
+<pre><code class="language-haskell">-- library developer's code
 attack :: Target -&gt; (Target -&gt; Effect Unit) -&gt; Effect Unit
 attack target doSomething = do
   valid &lt;- isTargetValid target
@@ -201,7 +201,7 @@ attack orc reduceLifeBy50
 <p>This makes life easy for the library-developer, but not for the end-developer as a large number of nested callbacks can make code very unreadable. (We only need to look at Node.js for an example)</p>
 <h2><a class="header" href="#the-continutation-solution" id="the-continutation-solution">The Continutation Solution</a></h2>
 <p>The problem is not the callback function; there is no other solution for the library-developer. The problem is &quot;where&quot; that function appears in <code>attackUnit</code>. In short, the type appears in the argument part of the function (<code>attackUnit_arg</code>) instead of in the return part of the function (<code>attackUnit_return</code>):</p>
-<pre><code class="language-purescript">-- original version (curried function)
+<pre><code class="language-haskell">-- original version (curried function)
 attack ::           Target -&gt;  (Target -&gt; Effect Unit)  -&gt; Effect Unit
 
 -- original version (uncurried function)
@@ -217,11 +217,11 @@ attack :: Function  Target    ((Target -&gt; Effect Unit)  -&gt; Effect Unit)
 attack ::           Target -&gt; ((Target -&gt; Effect Unit)  -&gt; Effect Unit)
 </code></pre>
 <p><code>Effect</code> is a monad, so we can chain multiple sequential computations like that together using <code>bind</code>/<code>&gt;&gt;=</code>. If we can do that for <code>Effect</code>, why not do so for every monad? This changes our type signature of <code>attack</code>:</p>
-<pre><code class="language-purescript">attack_no_monad ::  Target -&gt; ((Target -&gt; Effect Unit) -&gt; Effect Unit)
+<pre><code class="language-haskell">attack_no_monad ::  Target -&gt; ((Target -&gt; Effect Unit) -&gt; Effect Unit)
 attack_monad    ::  Target -&gt; ((Target -&gt; monad  Unit) -&gt; monad  Unit)
 </code></pre>
 <p>That's a lot of code to write each time, so it can be converted into a <code>newtype</code>:</p>
-<pre><code class="language-purescript">newtype ContT return monad input =
+<pre><code class="language-haskell">newtype ContT return monad input =
   ContT ((input -&gt; monad return) -&gt; monad return)
 
 attack_no_monad ::  Target -&gt; ((Target -&gt; Effect Unit) -&gt; Effect Unit)
@@ -229,14 +229,14 @@ attack_monad    ::  Target -&gt; ((Target -&gt; monad  Unit) -&gt; monad  Unit)
 attack_cont     ::  Target -&gt; ContT Unit Effect Target
 </code></pre>
 <p>To create a <code>ContT</code>, we create a function whose only argument is the callback function:</p>
-<pre><code class="language-purescript">ContT (\callbackFunction -&gt; do
+<pre><code class="language-haskell">ContT (\callbackFunction -&gt; do
   -- everything else we did beforehand...
   callbackFunction arg
   -- everything else we did afterwards...
 )
 </code></pre>
 <p>Let's implement it for <code>attack</code> and compare the two approaches:</p>
-<pre><code class="language-purescript">attack_original :: Target -&gt; (Target -&gt; Effect Unit) -&gt; Effect Unit
+<pre><code class="language-haskell">attack_original :: Target -&gt; (Target -&gt; Effect Unit) -&gt; Effect Unit
 attack_original target doSomething = do
   valid &lt;- isTargetValid target
   if valid
@@ -252,11 +252,11 @@ attack_contT target = ContT (\doSomething -&gt; do
   )
 </code></pre>
 <p>And if we didn't want to use a monad, we could use <code>Identity</code> as a placeholder monad:</p>
-<pre><code class="language-purescript">type Cont return input = ContT return Identity input
+<pre><code class="language-haskell">type Cont return input = ContT return Identity input
 </code></pre>
 <h2><a class="header" href="#comparing-contt-to-another-function" id="comparing-contt-to-another-function">Comparing ContT to Another Function</a></h2>
 <p>Let's play with <code>ContT</code> for a bit and see what it reminds us of:</p>
-<pre><code class="language-purescript">-- Original version
+<pre><code class="language-haskell">-- Original version
 newtype ContT return monad input =
   ContT ((input -&gt; monad return) -&gt; monad return)
 
@@ -281,7 +281,7 @@ apply function arg = function arg
 infixr 0 apply as $
 </code></pre>
 <p>Exactly. <code>ContT</code> is just a monad transformer for the <code>apply</code>/<code>$</code> function. Let's compare them further:</p>
-<pre><code class="language-purescript">print   10
+<pre><code class="language-haskell">print   10
 -- ==
 print $ 10
 -- ==
@@ -295,7 +295,7 @@ runCont (Cont (\f -&gt; f     (10))) print
 </code></pre>
 <h2><a class="header" href="#when-you-need-two-or-more-callback-functions" id="when-you-need-two-or-more-callback-functions">When You Need Two or More Callback Functions</a></h2>
 <p>If <code>attack</code> is modified, so that it requires two callback functions, <code>?doSomethingWithDamage</code> and <code>doSomethingWithBoth</code>, it would seem that our nice solution from above would no longer work since we can only specify one of the two functions:</p>
-<pre><code class="language-purescript">attackWith :: Target -&gt; Weapon -&gt; ContT Unit Effect Target
+<pre><code class="language-haskell">attackWith :: Target -&gt; Weapon -&gt; ContT Unit Effect Target
 attackWith target weapon = ContT (\only1CallbackFunction -&gt; do
     damage &lt;- calculateDamageFor weapon (modifiedBy 1.5)
     ?doSomethingWithDamage damage
@@ -306,7 +306,7 @@ attackWith target weapon = ContT (\only1CallbackFunction -&gt; do
   )
 </code></pre>
 <p>The solution is to pass in a callback function that takes a sum type as its argument. When using <code>ContT</code>/<code>Cont</code>, the callback function is usually called <code>k</code>, so we'll do that here, too:</p>
-<pre><code class="language-purescript">data AllPossibleInputs
+<pre><code class="language-haskell">data AllPossibleInputs
   -- where each constructor wraps the arguments
   -- that will be used in a function
   = DoSomethingWithDamage Damage

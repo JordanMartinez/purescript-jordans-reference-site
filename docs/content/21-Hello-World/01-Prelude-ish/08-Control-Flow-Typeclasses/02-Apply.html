@@ -175,7 +175,7 @@ into `b`
 </code></pre>
 <h2><a class="header" href="#definition" id="definition">Definition</a></h2>
 <p>See its docs: <a href="https://pursuit.purescript.org/packages/purescript-prelude/4.1.1/docs/Control.Apply">Apply</a></p>
-<pre><code class="language-purescript">class (Functor f) &lt;= Apply f where
+<pre><code class="language-haskell">class (Functor f) &lt;= Apply f where
   apply :: forall a b. f (a -&gt; b) -&gt; f a -&gt; f b
 
 infixl 4 apply as &lt;*&gt;
@@ -191,12 +191,12 @@ instance apply :: Apply Box where
   apply               (Box  f     )   (Box a) = Box (f a)
 </code></pre>
 <p>Put differently, <code>Apply</code> solves a problem that occurs when using <code>Functor</code>. If I have a function of type <code>(a -&gt; b -&gt; c)</code>, I can use <code>Functor</code>'s <code>map</code>/<code>&lt;$&gt;</code> to lift that function into a Box-like type as before....</p>
-<pre><code class="language-purescript">mapResult :: Box (Int -&gt; Int)
+<pre><code class="language-haskell">mapResult :: Box (Int -&gt; Int)
 mapResult = map (\first second -&gt; first + second) (Box 1)
 </code></pre>
 <p>However, the resulting value stored in that Box-like type is a function. In other words, <code>mapResult == Box (\second -&gt; 1 + second)</code>. <code>Functor</code>'s <code>map</code> only works if the function takes only one argument. If it takes 2+ arguments, <code>map</code> will return a function stored in a <code>Box</code>.</p>
 <p>This is where <code>Apply</code> comes to the rescue. We can continue to apply boxed arguments to that function until we eventually get a Box with a value in it:</p>
-<pre><code class="language-purescript">finalResult :: Box Int
+<pre><code class="language-haskell">finalResult :: Box Int
 finalResult =
   apply mapResult (Box 2)                                 {-
 
@@ -223,18 +223,18 @@ finalResult =
 </ul>
 <h3><a class="header" href="#liftn-notation" id="liftn-notation">LiftN Notation</a></h3>
 <p>Let's rename that <code>Functor</code>'s <code>map</code> function to <code>lift1</code>:</p>
-<pre><code class="language-purescript">{-
+<pre><code class="language-haskell">{-
 map   (\oneArg -&gt; doStuffWith oneArg) (Box 4) -}
 lift1 (\oneArg -&gt; doStuffWith oneArg) (Box 4)
 </code></pre>
 <p>This function can only take one arg. What if want to take two args? We should call it <code>lift2</code>:</p>
-<pre><code class="language-purescript">lift2 (\arg1 arg2 -&gt; andThen (doStuffWith arg1) arg2) (Box 4) (Box 4)
+<pre><code class="language-haskell">lift2 (\arg1 arg2 -&gt; andThen (doStuffWith arg1) arg2) (Box 4) (Box 4)
 </code></pre>
 <p>That works, but we could also write it:</p>
-<pre><code class="language-purescript">(\arg1 arg2 -&gt; andThen (doStuffWith arg1) arg2) &lt;$&gt; (Box 4) &lt;*&gt; (Box 4)
+<pre><code class="language-haskell">(\arg1 arg2 -&gt; andThen (doStuffWith arg1) arg2) &lt;$&gt; (Box 4) &lt;*&gt; (Box 4)
 </code></pre>
 <p>Using meta-language</p>
-<pre><code class="language-purescript">function_NotInBox_takes_n_args &lt;$&gt; boxedArg1 &lt;*&gt; boxedArg2 -- &lt;*&gt; boxedArgN ...
+<pre><code class="language-haskell">function_NotInBox_takes_n_args &lt;$&gt; boxedArg1 &lt;*&gt; boxedArg2 -- &lt;*&gt; boxedArgN ...
 </code></pre>
 
                     </main>

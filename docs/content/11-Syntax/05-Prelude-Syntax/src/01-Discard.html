@@ -165,7 +165,7 @@
                     <main>
                         <h1><a class="header" href="#discard" id="discard">Discard</a></h1>
 <p>There is a type class in Prelude called <a href="https://pursuit.purescript.org/packages/purescript-prelude/docs/Control.Bind#t:Discard"><code>Discard</code></a> that does not appear in our diagram of Prelude's type classes. It is implemented only by <code>Unit</code>.:</p>
-<pre><code class="language-purescript">-- Pseudo-Syntax: combines the class and its only instance into one block:
+<pre><code class="language-haskell">-- Pseudo-Syntax: combines the class and its only instance into one block:
 class Discard Unit where
   discard :: forall f b. Bind f =&gt; f Unit -&gt; (Unit -&gt; f b) -&gt; f b
   discard = bind

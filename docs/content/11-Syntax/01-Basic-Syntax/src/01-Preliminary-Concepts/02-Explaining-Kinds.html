@@ -165,16 +165,16 @@
                     <main>
                         <h1><a class="header" href="#explaining-kinds" id="explaining-kinds">Explaining Kinds</a></h1>
 <p>This code...</p>
-<pre><code class="language-purescript">function :: Int -&gt; String
+<pre><code class="language-haskell">function :: Int -&gt; String
 function x = &quot;an integer value!&quot;
 </code></pre>
 <p>... translates to, &quot;I cannot give you a concrete value (i.e. <code>String</code>) until you give me an <code>Int</code> value&quot;</p>
 <p>Similarly, this code...</p>
-<pre><code class="language-purescript">data Box a = Box a
+<pre><code class="language-haskell">data Box a = Box a
 </code></pre>
 <p>... translates to, &quot;I cannot give you a concrete type (e.g. <code>Box Int</code>, a box that stores an <code>Int</code> value (rather than a <code>String</code> value or some other value)) until you tell me what <code>a</code> is.&quot;</p>
 <p>Let's rewrite the above <code>Box</code> type. Things on the left of the <code>=</code> indicate type information. Things on the right of the <code>=</code> indicate value information.</p>
-<pre><code class="language-purescript">{-
+<pre><code class="language-haskell">{-
 | Type information | Value information |                                     -}
 data BoxType a     = BoxValue a
 </code></pre>
@@ -185,7 +185,7 @@ data BoxType a     = BoxValue a
 </blockquote>
 <p>^^ This is a &quot;working definition.&quot; There's more to it than that when one considers type-level programming, but for now, this will suffice.&quot;</p>
 <p>We saw earlier that we annotate functions with type signatures via <code>-&gt;</code>:</p>
-<pre><code class="language-purescript">--              ||
+<pre><code class="language-haskell">--              ||
 --              \/
 function :: Int -&gt; String
 function x = &quot;an integer value!&quot;
@@ -202,7 +202,7 @@ Kind signatures annotate type-level entities like <code>BoxType</code>. They are
 <p>^^ These columns are right-aligned to show that the right-most <code>Type</code>/<code>*</code> is the &quot;concrete&quot; type. Also, the <code>... Type ... -&gt; Type</code> (and its Haskell equivalent) syntax is not real syntax but merely conveys the recursive idea in an n-kinded type. The other three (0 - 2) are real syntax.</p>
 <h2><a class="header" href="#concrete-types" id="concrete-types">Concrete Types</a></h2>
 <p>Concrete types can usually be written with literal values:</p>
-<pre><code class="language-purescript">integerValue :: Int
+<pre><code class="language-haskell">integerValue :: Int
 integerValue = 1
 
 (1 :: Int) -- this is notation for saying that `1` is a value of type, `Int`.
@@ -226,7 +226,7 @@ arrayOfIntsValue = [1, 2, 3]
 </code></pre>
 <h2><a class="header" href="#higher-kinded-types" id="higher-kinded-types">Higher-Kinded Types</a></h2>
 <p>Higher-kinded types are those that still need one or more types to be defined.</p>
-<pre><code class="language-purescript">-- Kind Signature: Type -&gt; Type
+<pre><code class="language-haskell">-- Kind Signature: Type -&gt; Type
 -- Reason: the `a` type needs to be defined
 data Box a = Box a
 
@@ -242,7 +242,7 @@ boxedBoxedInt :: Box (Box Int)
 boxedBoxedInt = Box boxedInt
 </code></pre>
 <p>We can make the type's kind higher by adding more types that need to be specified. For example:</p>
-<pre><code class="language-purescript">-- A box that holds two values of same or different types!
+<pre><code class="language-haskell">-- A box that holds two values of same or different types!
 -- Kind Signature: `Type -&gt; Type -&gt; Type`
 data BoxOfTwo a b = BoxOfTwo a b
 
@@ -262,7 +262,7 @@ concreteType :: BoxOfTwo Int String
 concreteType = BoxOfTwo 3 &quot;a string value&quot;
 </code></pre>
 <p>Generic types can also be split across the values of a type:</p>
-<pre><code class="language-purescript">-- It's either an A or it's a B, but not both!
+<pre><code class="language-haskell">-- It's either an A or it's a B, but not both!
 -- Kind signature is implicit: `Type -&gt; Type -&gt; Type`
 data Either a b
   = Left a
@@ -285,7 +285,7 @@ higherKindedBy1L_ignoreBoth a b = Left 3
 </code></pre>
 <p><code>Either</code> (where the <code>a</code> and <code>b</code> are not yet specified) has kind <code>Type -&gt; Type -&gt; Type</code> because it cannot become a concrete type until both <code>a</code> and <code>b</code> types are defined, even if only constructing one of its values whose generic type is known.</p>
 <p>In other words</p>
-<pre><code class="language-purescript">allSpecified :: Either Int String
+<pre><code class="language-haskell">allSpecified :: Either Int String
 allSpecified = Right &quot;foo&quot;
 
 {-

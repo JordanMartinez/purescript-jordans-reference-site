@@ -203,7 +203,7 @@ return a single value of type, `b` by
 <h2><a class="header" href="#definition" id="definition">Definition</a></h2>
 <h3><a class="header" href="#code-definition" id="code-definition">Code Definition</a></h3>
 <p>Don't look at its docs until after looking at the visual overview in the next section: <a href="https://pursuit.purescript.org/packages/purescript-foldable-traversable/4.0.1/docs/Data.Foldable#t:Foldable">Foldable</a></p>
-<pre><code class="language-purescript">class (Functor f) =&gt; Foldable f where
+<pre><code class="language-haskell">class (Functor f) =&gt; Foldable f where
   foldMap :: forall a m. Monoid m =&gt; (a -&gt; m) -&gt; f a -&gt; m
 
   foldr :: forall a b. (a -&gt; b -&gt; b) -&gt; b -&gt; f a -&gt; b
@@ -254,7 +254,7 @@ Since each step towards the bottom-right of the tree allocates a stack, this fun
 <h3><a class="header" href="#examples" id="examples">Examples</a></h3>
 <p>We'll implement instances for three types: <code>Box a</code>, <code>Maybe a</code>, and <code>List a</code>. Each implementation will become more complicated that the previous one.</p>
 <h4><a class="header" href="#boxs-instance" id="boxs-instance"><code>Box</code>'s Instance</a></h4>
-<pre><code class="language-purescript">data Box a = Box a
+<pre><code class="language-haskell">data Box a = Box a
 
 -- Box's implementation doesn't show the difference between `foldl` and `foldr`.
 -- Moreover, the initial `b` value isn't really necessary.
@@ -269,7 +269,7 @@ instance foldableBox :: Foldable Box where
   foldMap aToMonoid (Box a) = aToMonoid a
 </code></pre>
 <h4><a class="header" href="#maybes-instance" id="maybes-instance"><code>Maybe</code>'s instance</a></h4>
-<pre><code class="language-purescript">-- Maybe's implementation doesn't show the difference between `foldl` and `foldr`.
+<pre><code class="language-haskell">-- Maybe's implementation doesn't show the difference between `foldl` and `foldr`.
 -- However, the initial `b` value is necessary
 -- because of the possible `Nothing` case.
 instance foldableMaybe :: Foldable Maybe where
@@ -288,7 +288,7 @@ instance foldableMaybe :: Foldable Maybe where
     foldl (\b a -&gt; b &lt;&gt; (aToMonoid a)) mempty maybe
 </code></pre>
 <h4><a class="header" href="#lists-instance" id="lists-instance"><code>List</code>'s instance</a></h4>
-<pre><code class="language-purescript">-- Cons 1 (Cons 2 Nil)
+<pre><code class="language-haskell">-- Cons 1 (Cons 2 Nil)
 -- 1 : (Cons 2 Nil)
 -- 1 : 2 : Nil
 -- same as [1, 2]
@@ -322,7 +322,7 @@ instance functorList :: Functor List where
 </code></pre>
 <h3><a class="header" href="#general-usage-patterns" id="general-usage-patterns">General Usage Patterns</a></h3>
 <p>We'll see more of this in the upcoming overview of the derived functions. However, <code>foldl</code> and its corresponding members tend to follow a few patterns:</p>
-<pre><code class="language-purescript">reduceAllAsIntoOneAValue = foldl reduce initial foldableType
+<pre><code class="language-haskell">reduceAllAsIntoOneAValue = foldl reduce initial foldableType
   where
     iniital = -- a type class value or hard-coded value
               -- like `mempty` or `true` or `Data.Ordering.LT`, etc.
@@ -501,7 +501,7 @@ for (int i = 0; i &lt; array.length; i++) {
 <p>A related function is <code>foldM</code>, which allows one to run a monadic computation multiple times where the next computation depends on the output of the previous computation. <strong>As the docs indicate, this function is not generally stack-safe.</strong></p>
 <p><a href="https://pursuit.purescript.org/packages/purescript-foldable-traversable/docs/Data.Foldable#v:foldM"><code>foldM</code></a></p>
 <p>Here's an example:</p>
-<pre><code class="language-purescript">main :: Effect Unit
+<pre><code class="language-haskell">main :: Effect Unit
 main = do
   int &lt;- randomInt 1 10
   output &lt;- foldM recursiveComputation 1 [1, 2, 3]
@@ -512,7 +512,7 @@ main = do
       pure (anotherInt + initialOrAccumulatedValue)
 </code></pre>
 <p>... which is the same as writing...</p>
-<pre><code class="language-purescript">main :: Effect Unit
+<pre><code class="language-haskell">main :: Effect Unit
 main = do
   int &lt;- randomInt 1 10
 

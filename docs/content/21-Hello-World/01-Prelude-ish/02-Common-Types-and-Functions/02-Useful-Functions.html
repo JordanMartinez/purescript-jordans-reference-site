@@ -166,7 +166,7 @@
                         <h1><a class="header" href="#useful-functions" id="useful-functions">Useful Functions</a></h1>
 <p>These all come from <code>Data.Function</code> in Prelude.</p>
 <h2><a class="header" href="#const" id="const">Const</a></h2>
-<pre><code class="language-purescript">const :: forall a b. a -&gt; b -&gt; a
+<pre><code class="language-haskell">const :: forall a b. a -&gt; b -&gt; a
 const x _ = x
 
 -- Example
@@ -175,7 +175,7 @@ const 1 true    = 1
 const 1 42      = 1
 </code></pre>
 <h2><a class="header" href="#flip" id="flip">Flip</a></h2>
-<pre><code class="language-purescript">-- Flip the argument order
+<pre><code class="language-haskell">-- Flip the argument order
 flip :: forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
 flip twoArgFunction secondArg firstArg = twoArgFunction firstArg secondArg
 
@@ -186,7 +186,7 @@ flip twoArgFunction secondArg firstArg = twoArgFunction firstArg secondArg
 <h2><a class="header" href="#apply" id="apply">Apply</a></h2>
 <p>Forewarning: <code>apply</code> via <code>$</code> shows up EVERYWHERE! Bookmark this until you get it.</p>
 <p>I read somewhere (I think <code>@garyb</code> mentioned this on the FP Slack, maybe...?) that <code>$</code> was chosen because it's two parenthesis with a line through it, symbolizing that it removes the need to use parenthesis.</p>
-<pre><code class="language-purescript">-- Reduce the number of parenthesis needed
+<pre><code class="language-haskell">-- Reduce the number of parenthesis needed
 apply :: (a -&gt; b) -&gt; a -&gt; b
 apply function arg = function arg
 
@@ -198,7 +198,7 @@ print (5 + 5) == print $ 5 + 5
 print (append &quot;foo&quot; (4 + 4)) == print $ append &quot;foo&quot; $ 4 + 4
 </code></pre>
 <h2><a class="header" href="#other-less-used-functions" id="other-less-used-functions">Other Less-Used Functions</a></h2>
-<pre><code class="language-purescript">-- apply with its arguments flipped
+<pre><code class="language-haskell">-- apply with its arguments flipped
 applyFlipped :: forall a b. a -&gt; (a -&gt; b) -&gt; b
 applyFlipped = flip apply
 

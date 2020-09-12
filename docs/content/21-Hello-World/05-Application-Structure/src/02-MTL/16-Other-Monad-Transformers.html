@@ -170,7 +170,7 @@
 <h3><a class="header" href="#maybet" id="maybet">MaybeT</a></h3>
 <p><a href="https://pursuit.purescript.org/packages/purescript-transformers/4.1.0/docs/Control.Monad.Maybe.Trans#t:MaybeT">MaybeT</a>, a computation the returns a <code>Maybe a</code>. The below code snippet shows why you'd use it and when:</p>
 <p>Before (ugly verbose code):</p>
-<pre><code class="language-purescript">getName :: Effect (Maybe String)
+<pre><code class="language-haskell">getName :: Effect (Maybe String)
 getAge :: Effect (Maybe Int)
 
 main :: Effect Unit
@@ -186,7 +186,7 @@ main = do
           log $ &quot;Got name: &quot; &lt;&gt; name &lt;&gt; &quot; and age &quot; &lt;&gt; show age
 </code></pre>
 <p>After (clear readable code):</p>
-<pre><code class="language-purescript">getName :: Effect (Maybe String)
+<pre><code class="language-haskell">getName :: Effect (Maybe String)
 getAge :: Effect (Maybe Int)
 
 main :: Effect Unit

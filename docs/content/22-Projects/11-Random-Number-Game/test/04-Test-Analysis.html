@@ -166,11 +166,11 @@
                         <h1><a class="header" href="#readert-different-monad-test-analysis" id="readert-different-monad-test-analysis">ReaderT Different Monad Test Analysis</a></h1>
 <p>This post comes out of my dialogue with <code>thomashoneyman</code> on Slack.</p>
 <p>Some might say that there's a problem with how <code>AppM</code> works. Due to hard-coding the <code>Aff</code> monad in <code>AppM</code>'s type definition...</p>
-<pre><code class="language-purescript">-- source code: AppM
+<pre><code class="language-haskell">-- source code: AppM
 newtype AppM a = AppM (ReaderT Environment Aff a)
 </code></pre>
 <p>... we must create and use a completely different monad (i.e. <code>TestM</code>) for our tests:</p>
-<pre><code class="language-purescript">-- test code: TestM
+<pre><code class="language-haskell">-- test code: TestM
 newtype TestM a = TestM (ReaderT Environment (State (Array String)) a)
 </code></pre>
 <p>This leads to boilerplate. One way to improve this situation is to make the monad in our <code>AppM</code> definition generic, so that any monad type can be used there. Then, our instances for a specific type class is defined by using the <code>Environment</code> type.</p>

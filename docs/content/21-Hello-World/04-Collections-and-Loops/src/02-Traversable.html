@@ -175,13 +175,13 @@
 <h3><a class="header" href="#sequence" id="sequence">Sequence</a></h3>
 <h4><a class="header" href="#use-case-1-swap-the-box-types" id="use-case-1-swap-the-box-types">Use Case 1: Swap the box types</a></h4>
 <p>I have <code>Array (Maybe a)</code>. I need <code>Maybe (Array a)</code>. The box-like types, <code>Array</code> and <code>Maybe</code> need to swap places.</p>
-<pre><code class="language-purescript">sequence [Just 1, Just 2, Nothing] == Nothing -- because the array had at least 1 `Nothing`.
+<pre><code class="language-haskell">sequence [Just 1, Just 2, Nothing] == Nothing -- because the array had at least 1 `Nothing`.
 sequence [Just 1, Just 2, Just 8] == Just [1, 2, 8] -- because the array only had `Just`s.
 </code></pre>
 <h4><a class="header" href="#use-case-2-run-all-computations-in-a-traversable-type-and-store-their-outputs-in-the-same-traversable-type" id="use-case-2-run-all-computations-in-a-traversable-type-and-store-their-outputs-in-the-same-traversable-type">Use Case 2: run all computations in a <code>Traversable</code> type and store their outputs in the same <code>Traversable</code> type</a></h4>
 <p>This box-swapping property is quite useful as the below example illustrates.</p>
 <p>We'll start with sequence first. I could write:</p>
-<pre><code class="language-purescript">main :: Effect Unit
+<pre><code class="language-haskell">main :: Effect Unit
 main = do
   let produceInt = randomInt 1 10
 
@@ -194,7 +194,7 @@ main = do
 </code></pre>
 <p>The above code works. However, if I want to add a fifth one, I need to add another <code>outputN &lt;- produceInt</code> line and add the <code>outputN</code> to the array.</p>
 <p>Instead, I could write</p>
-<pre><code class="language-purescript">main :: Effect Unit
+<pre><code class="language-haskell">main :: Effect Unit
 main = do
   outputArray &lt;- sequence
     [ produceInt
@@ -207,7 +207,7 @@ main = do
 </code></pre>
 <h3><a class="header" href="#traverse-convert-each-a-value-in-the-traversable-type-into-a-computation-run-all-computations-and-store-their-outputs-in-the-same-traversable-type" id="traverse-convert-each-a-value-in-the-traversable-type-into-a-computation-run-all-computations-and-store-their-outputs-in-the-same-traversable-type">Traverse: convert each <code>a</code> value in the <code>Traversable</code> type into a computation, run all computations, and store their outputs in the same <code>Traversable</code> type</a></h3>
 <p>I could write:</p>
-<pre><code class="language-purescript">main :: Effect Unit
+<pre><code class="language-haskell">main :: Effect Unit
 main = do
   let produceInt = \maxBound -&gt; randomInt 1 maxBound
 
@@ -219,14 +219,14 @@ main = do
   log $ &quot;Generated Ints were: &quot; &lt;&gt; show [output1, output2, output3, output4]
 </code></pre>
 <p>The same problems as before arise. Instead, I could write</p>
-<pre><code class="language-purescript">main :: Effect Unit
+<pre><code class="language-haskell">main :: Effect Unit
 main = do
   let produceInt = \maxBound -&gt; randomInt 1 maxBound
   outputArray &lt;- traverse produceInt [8, 20, 40, 90]
   log $ &quot;Generated Ints were: &quot; &lt;&gt; show outputArray
 </code></pre>
 <h2><a class="header" href="#definition" id="definition">Definition</a></h2>
-<pre><code class="language-purescript">class (Functor t, Foldable t) &lt;= Traversable t where
+<pre><code class="language-haskell">class (Functor t, Foldable t) &lt;= Traversable t where
   traverse :: forall a b m. Applicative m =&gt; (a -&gt; m b) -&gt; t a -&gt; m (t b)
   sequence :: forall a m. Applicative m =&gt; t (m a) -&gt; m (t a)
 </code></pre>
@@ -248,14 +248,14 @@ sequence = traverse identity
 <li><a href="https://pursuit.purescript.org/packages/purescript-foldable-traversable/docs/Data.Traversable#v:for"><code>for</code></a></li>
 </ul>
 <p>Using the same <code>traverse</code> example as above:</p>
-<pre><code class="language-purescript">main :: Effect Unit
+<pre><code class="language-haskell">main :: Effect Unit
 main = do
   outputArray &lt;- for [8, 20, 40, 90] \maxBound -&gt; randomInt 1 maxBound
   log $ &quot;Generated Ints were: &quot; &lt;&gt; show outputArray
 </code></pre>
 <h3><a class="header" href="#outputting-each-steps-accumulated-value-at-that-time-for-a-foldlfoldr-computation" id="outputting-each-steps-accumulated-value-at-that-time-for-a-foldlfoldr-computation">Outputting each step's accumulated value at that time for a <code>foldl</code>/<code>foldr</code> computation</a></h3>
 <p>The downside of using <code>foldl</code>/<code>foldr</code> is that you only know the <code>foldl</code>/<code>foldr</code> computation's final output. You don't know how that output was reached / what each step's accumulated value was.</p>
-<pre><code class="language-purescript">foldl (+) 0 [1, 2, 3, 4,  5 ] ==
+<pre><code class="language-haskell">foldl (+) 0 [1, 2, 3, 4,  5 ] ==
             15 -- &lt;= know the output, but don't know how we reached that conclusion
                --    What was the output of `accumulatedValueAtThatPoint + 2`?
 </code></pre>
@@ -264,7 +264,7 @@ main = do
 <li><a href="https://pursuit.purescript.org/packages/purescript-foldable-traversable/docs/Data.Traversable#v:scanl"><code>scanl</code></a></li>
 <li><a href="https://pursuit.purescript.org/packages/purescript-foldable-traversable/docs/Data.Traversable#v:scanr"><code>scanr</code></a></li>
 </ul>
-<pre><code class="language-purescript">foldl (+) 0 [1, 2, 3, 4,  5 ] ==
+<pre><code class="language-haskell">foldl (+) 0 [1, 2, 3, 4,  5 ] ==
             15 -- &lt;= know the output, but don't know how we reached that conclusion
 
 scanl (+) 0 [1, 2, 3, 4,  5 ] ==
@@ -278,7 +278,7 @@ scanr (+) 0 [1,  2,  3,  4, 5] ==
 <p>In other words, the value at index <code>n</code> in the outtputted array is the output of passing the value at index <code>n</code> in the input array and the accumulated value at that point in time into the folding function (i.e. <code>+</code>). Using the <code>scanr</code> example, the input array's index 2 value (i.e. <code>3</code>) and the accumulated value at that time (the output array's index 3 value, <code>9</code>) were both passed into the folding function, <code>+</code>, to produce the output array's index 2 value (i.e. <code>12</code>).</p>
 <h3><a class="header" href="#outputting-both-the-output-and-each-steps-accumulated-value-at-that-time-for-a-foldlfoldr-computation" id="outputting-both-the-output-and-each-steps-accumulated-value-at-that-time-for-a-foldlfoldr-computation">Outputting <strong>both</strong> the output <strong>and</strong> each step's accumulated value at that time for a <code>foldl</code>/<code>foldr</code> computation</a></h3>
 <p>The downside of using <code>scanl</code>/<code>scanr</code> is that we don't have access to <strong>both</strong> the final output of the fold <strong>and</strong> the path it took to get there.</p>
-<pre><code class="language-purescript">foldl (+) 0 [1, 2, 3, 4,  5 ] ==
+<pre><code class="language-haskell">foldl (+) 0 [1, 2, 3, 4,  5 ] ==
             15 -- &lt;= know the output, but don't know the path of how we got there
 
 scanl (+) 0 [1, 2, 3, 4,  5 ] ==
@@ -289,7 +289,7 @@ scanl (+) 0 [1, 2, 3, 4,  5 ] ==
 <li><a href="https://pursuit.purescript.org/packages/purescript-foldable-traversable/docs/Data.Traversable#v:mapAccumL"><code>mapAccumL</code></a></li>
 <li><a href="https://pursuit.purescript.org/packages/purescript-foldable-traversable/docs/Data.Traversable#v:mapAccumR"><code>mapAccumR</code></a></li>
 </ul>
-<pre><code class="language-purescript">foldl (+) 0 [1, 2, 3, 4,  5 ] ==
+<pre><code class="language-haskell">foldl (+) 0 [1, 2, 3, 4,  5 ] ==
             15 -- &lt;= know the output, but don't know the path of how we got there
 
 scanl (+) 0 [1, 2, 3, 4,  5 ] ==
@@ -305,7 +305,7 @@ mapAccumL (\accumulationSoFar nextValue -&gt;
 </code></pre>
 <p>You can see how <code>mapAccumL</code>/<code>mapAccumR</code> enables you to write even complex computations fairly easily. Still, these two functions are more expressive than just a combining the outputs of <code>foldl</code> and <code>scanl</code> in one computation, since they allow for more types to be used in the computation.</p>
 <p>Below is a nonsensical example demonstrating this:</p>
-<pre><code class="language-purescript">import Prelude
+<pre><code class="language-haskell">import Prelude
 import Data.Traversable (mapAccumL)
 import Data.Traversable.Accum (Accum)
 import Data.Foldable (sum, length)

@@ -199,11 +199,11 @@ The following table that shows a comparison of pure and impure functions is lice
 <li>Left-Hand Side (LHS): the function name and all of its arguments</li>
 <li>Right-Hand Side (RHS): the body or implementation of the function</li>
 </ul>
-<pre><code class="language-purescript">|         LHS         |    |     RHS     |
+<pre><code class="language-haskell">|         LHS         |    |     RHS     |
 functionName int1 int2   =   int1 + int2
 </code></pre>
 <p>When using pure functions, one can replace the LHS with the RHS, and the program will still work the same. This concept is known as <strong>referential transparency</strong>:</p>
-<pre><code class="language-purescript">functionName 4 3
+<pre><code class="language-haskell">functionName 4 3
 -- replace LHS with RHS
 4 + 3
 -- reduce into final form
@@ -224,7 +224,7 @@ functionName int1 int2   =   int1 + int2
 </code></pre>
 <p>Although the above examples are very simple functions, imagine if one's entire program was one function that exhibited this behavior. If so, it would be very easy to understand and reason one's way through such a program.</p>
 <h2><a class="header" href="#execution-vs-description-and-interpretation" id="execution-vs-description-and-interpretation">Execution vs Description and Interpretation</a></h2>
-<pre><code class="language-purescript">-- Most OO languages
+<pre><code class="language-haskell">-- Most OO languages
 executeCode :: Int
 executeCode = 3
 

@@ -172,7 +172,7 @@
 <tr><td>Lazy</td><td>defers computation until its needed</td><td>Saves CPU cycles and memory: unneeded/unused computations are never computed</td><td>When computations will occur every time, this adds unneeded overhead</td></tr>
 </tbody></table>
 <p>To make something lazy, we turn it into a function. This function takes one argument (<code>Unit</code>) and returns the value we desire. This is called a <code>thunk</code>: a computation that we know how to do but have not executed yet. To run the code stored in the <code>thunk</code>, we use the phrase <code>forcing the thunk</code>.</p>
-<pre><code class="language-purescript">-- Given an Int, I can return another Int
+<pre><code class="language-haskell">-- Given an Int, I can return another Int
 strictlyCompute :: Int -&gt; Int
 strictlyCompute x = x + 4
 

@@ -194,7 +194,7 @@
 <p>(The remainder of this article is my own work.)</p>
 <h2><a class="header" href="#understanding-the-effect-monad" id="understanding-the-effect-monad">Understanding the Effect Monad</a></h2>
 <p>The following code is not necessarily how <code>Effect</code> is implemented, but it does help one quickly understand it by analogy:</p>
-<pre><code class="language-purescript">data Unit = Unit
+<pre><code class="language-haskell">data Unit = Unit
 
 unit :: Unit
 unit = Unit
@@ -220,7 +220,7 @@ unsafePerformEffect (Box pendingComputation) = pendingComputation unit
 <p>When one executes the command <code>spago bundle-app</code>, one could say that, conceptually, spago will compile <code>unsafePerformEffect main</code> into Javascript and the resulting Javascript is what gets run by the RunTime System (RTS) when the program is executed.</p>
 </blockquote>
 <p>In other words, spago &quot;creates&quot; a function called <code>runProgram</code> and tells the RunTime System (RTS) to execute it</p>
-<pre><code class="language-purescript">runProgram :: Unit
+<pre><code class="language-haskell">runProgram :: Unit
 runProgram = unsafePerformEffect main
 </code></pre>
 <p>This limits our impure code as much as possible to the program's start. Hopefully, everything else in our code is pure.</p>

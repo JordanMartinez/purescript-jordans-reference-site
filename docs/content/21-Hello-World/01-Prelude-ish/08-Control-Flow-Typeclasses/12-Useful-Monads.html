@@ -190,7 +190,7 @@ if (a == null) {
 </code></pre>
 <h3><a class="header" href="#purescript-code-non-idiomatic" id="purescript-code-non-idiomatic">PureScript Code (non-idiomatic)</a></h3>
 <p>In PureScript, we <em>could</em> write the following <strong>non-idiomatic</strong> code that repeats this Pyramid of Doom:</p>
-<pre><code class="language-purescript">data Maybe a
+<pre><code class="language-haskell">data Maybe a
   = Nothing
   | Just a
 
@@ -211,7 +211,7 @@ someComputation =
 </code></pre>
 <h3><a class="header" href="#purescript-code-idiomatic" id="purescript-code-idiomatic">PureScript Code (idiomatic)</a></h3>
 <p>Or, we could use <code>Maybe</code>'s <code>Monad</code> instance via <code>do notation</code> to write <strong>idiomatic</strong> PureScript code:</p>
-<pre><code class="language-purescript">data Maybe a
+<pre><code class="language-haskell">data Maybe a
   = Nothing
   | Just a
 
@@ -238,7 +238,7 @@ someComputation = do
 </code></pre>
 <p>If a <code>Nothing</code> value is given at any point in the nested-<code>bind</code> computations, it will short-circuit and return immediately.</p>
 <p>What is a real-world example of using the Maybe monad? One often writes monadic code using Maybe as the Monad to lookup values in some structure (e.g. <code>Map</code>, <code>Array</code>, <code>List</code>, or <code>Tree</code>). Often, this control flow reads like this: &quot;Try to get value X. If it exists, try to get value Y. If that exists, do something with both. If either one of them does not exist, stop and return immediately.&quot; In other words...</p>
-<pre><code class="language-purescript">example :: Maybe String
+<pre><code class="language-haskell">example :: Maybe String
 example = do
   x &lt;- index 4 array
   y &lt;- lookup &quot;fooKey&quot; map
@@ -265,7 +265,7 @@ if (isError(a)) {
 }
 </code></pre>
 <h3><a class="header" href="#purescript-code-non-idiomatic-1" id="purescript-code-non-idiomatic-1">PureScript Code (non-idiomatic)</a></h3>
-<pre><code class="language-purescript">data Either a b
+<pre><code class="language-haskell">data Either a b
   = Left a
   | Right b
 
@@ -286,7 +286,7 @@ someComputation = do
 </code></pre>
 <h3><a class="header" href="#purescript-code-idiomatic-1" id="purescript-code-idiomatic-1">PureScript Code (idiomatic)</a></h3>
 <p>Or, we could use <code>Either</code>'s <code>Monad</code> instance via <code>do notation</code> to write <strong>idiomatic</strong> PureScript code:</p>
-<pre><code class="language-purescript">data Either a b
+<pre><code class="language-haskell">data Either a b
   = Left a
   | Right b
 
@@ -308,7 +308,7 @@ someComputation = do
 </code></pre>
 <p>If a <code>Left</code> value is given at any point in the nested-<code>bind</code> computations, it will short-circuit and return immediately.</p>
 <p>What is a real-world example of using the Either monad? One often uses it to validate that some data is correct. It reads like, &quot;Try to parse the given <code>String</code> into an <code>Int</code>. If it fails, stop. Otherwise, try to parse the given <code>String</code> into a <code>Foo</code>. If it fails, stop. Otherwise, take the <code>Int</code> and the <code>Foo</code> and do something with them.&quot;</p>
-<pre><code class="language-purescript">example :: String -&gt; Either String ValidatedData
+<pre><code class="language-haskell">example :: String -&gt; Either String ValidatedData
 example string = do
   intValue &lt;- parseString string
   fooValue &lt;- parseNextPart
@@ -334,7 +334,7 @@ return finalList;
 </code></pre>
 <h2><a class="header" href="#purescript-code-idiomatic-2" id="purescript-code-idiomatic-2">PureScript Code (idiomatic)</a></h2>
 <p>The non-idiomatic version of the PureScript code below is complicated because it uses a lot of recusion. Thus, I do not show it here. Rather, we'll only show the idiomatic version:</p>
-<pre><code class="language-purescript">data List a
+<pre><code class="language-haskell">data List a
   = Nil
   | Cons a (List a)
 
@@ -360,7 +360,7 @@ someComputation = do
   pure (a + b + c)
 </code></pre>
 <p>which outputs:</p>
-<pre><code class="language-purescript">-- a = 1, b = 2
+<pre><code class="language-haskell">-- a = 1, b = 2
 ( 6 : 7 : 8
 -- a = 1, b = 3
 : 7 : 8 : 9

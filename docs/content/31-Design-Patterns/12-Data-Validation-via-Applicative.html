@@ -187,7 +187,7 @@
 <p>The difference between <code>Either</code> and <code>V</code> is their implementation of <code>Apply</code>. Either's <a href="https://github.com/purescript/purescript-either/blob/v4.0.0/src/Data/Either.purs#L44-L78"><code>apply</code></a> does not combine two errors together via a <code>Semigroup</code> constraint like <code>V</code>'s <a href="https://github.com/purescript/purescript-either/blob/v4.0.0/src/Data/Either.purs#L44-L78"><code>apply</code></a></p>
 <h2><a class="header" href="#the-pattern" id="the-pattern">The Pattern</a></h2>
 <p>To validate data, it follows this idea:</p>
-<pre><code class="language-purescript">mkData :: forall a b. a -&gt; a -&gt; b
+<pre><code class="language-haskell">mkData :: forall a b. a -&gt; a -&gt; b
 mkData arg1 arg2 = B_Constructor arg1 arg2
 
 isValidM :: Arg -&gt; Maybe Unit

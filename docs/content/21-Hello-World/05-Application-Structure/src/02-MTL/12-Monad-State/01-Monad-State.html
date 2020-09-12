@@ -165,7 +165,7 @@
                     <main>
                         <h1><a class="header" href="#monadstate" id="monadstate">MonadState</a></h1>
 <p><code>MonadState</code> is used to run state manipulating functions. Since only one type implements the class, we'll combine the class' definition and instance into one block:</p>
-<pre><code class="language-purescript">newtype StateT state monad output =
+<pre><code class="language-haskell">newtype StateT state monad output =
   StateT (\state -&gt; monad (Tuple output state))
 
 -- Pseudo syntax: combines class and instance into one block:
@@ -174,7 +174,7 @@ class (Monad m) &lt;= MonadState s (StateT s m) where
   state f = StateT (\s -&gt; pure $ f s)
 </code></pre>
 <h2><a class="header" href="#reading-its-do-notation" id="reading-its-do-notation">Reading Its Do Notation</a></h2>
-<pre><code class="language-purescript">stateT_do_notation :: StateT State Value
+<pre><code class="language-haskell">stateT_do_notation :: StateT State Value
 stateT_do_notation = do
     value1 &lt;- state (\initialState -&gt; Tuple value1 state2)
     value2 &lt;- state (\state2       -&gt; Tuple value2 state3)
@@ -183,7 +183,7 @@ stateT_do_notation = do
 </code></pre>
 <h2><a class="header" href="#derived-functions" id="derived-functions">Derived Functions</a></h2>
 <p>As we saw above, whenever we wrote <code>state function</code>, <code>function</code> always had to wrap our output into a <code>Tuple</code> type:</p>
-<pre><code class="language-purescript">(\state -&gt; {- do stuff -} Tuple output nextState)
+<pre><code class="language-haskell">(\state -&gt; {- do stuff -} Tuple output nextState)
 </code></pre>
 <p>This gets tedious really fast. Fortunately, <code>MonadState</code>'s derived functions remove that boilerplate and emphasize the developer's intent:</p>
 <ul>
@@ -193,7 +193,7 @@ stateT_do_notation = do
 <li><code>modify</code>: modify the state and return the updated state</li>
 <li><code>modify_</code>: same as <code>modify</code> but return <code>unit</code> so we can ignore the <code>binding &lt;-</code> syntax</li>
 </ul>
-<pre><code class="language-purescript">sideBySideComparison :: State Int String
+<pre><code class="language-haskell">sideBySideComparison :: State Int String
 sideBySideComparison = do
   state1  &lt;- state (\s -&gt; Tuple s s)
   state2  &lt;- get
@@ -229,7 +229,7 @@ sideBySideComparison = do
 <li>Return <code>addStringLengthTo</code>'s output: <code>Tuple value2 nextState3</code></li>
 </ol>
 <p>With <code>MonadState</code>, we would now write:</p>
-<pre><code class="language-purescript">crazyFunction :: State Int String
+<pre><code class="language-haskell">crazyFunction :: State Int String
 crazyFunction = do
   value1 &lt;- modify (_ + 1)
   modify_ (_ + (length $ show value1))

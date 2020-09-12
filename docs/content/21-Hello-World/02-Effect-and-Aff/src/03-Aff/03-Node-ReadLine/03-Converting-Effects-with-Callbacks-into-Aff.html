@@ -174,12 +174,12 @@
 </ul>
 <p>To model the possibility for a computation to return an error or actual output, we can use <code>Either a b</code>. Handling errors and output implies a function. <code>Aff</code> uses the type signature, <code>Either errorType outputType -&gt; Effect Unit</code>, for that.</p>
 <p>Lastly, cancelling implies what to do when the computation is either no longer needed or it has failed (but we aren't using the function just discussed above). As an example, one will use <code>Canceller</code>s to clean up resources (e.g. <code>clearTimeout</code>).</p>
-<pre><code class="language-purescript">newtype Canceler = Canceler (Error -&gt; Aff Unit)
+<pre><code class="language-haskell">newtype Canceler = Canceler (Error -&gt; Aff Unit)
 </code></pre>
 <p>Since our present interests do not require cancellation, we can use a no-op <code>Canceler</code>: <code>nonCanceler</code></p>
 <h2><a class="header" href="#understanding-runaff" id="understanding-runaff">Understanding <code>runAff</code></a></h2>
 <p>For our purposes, we need an <code>Aff</code> to run inside of an <code>Effect</code> monadic context. If one looks through <code>Aff</code>'s docs, the only one that does this besides <code>launchAff</code> and its variants is <code>runAff_</code>:</p>
-<pre><code class="language-purescript">runAff_ :: forall a.
+<pre><code class="language-haskell">runAff_ :: forall a.
            (Either Error a -&gt; Effect Unit) -&gt;  -- arg 1
            Aff a -&gt;                            -- arg 2
            Effect Unit                         -- outputted value
@@ -190,14 +190,14 @@
 <li>a function for handling a possible asynchronous <code>Error</code> if the computation fails or a the computation's output, <code>a</code>, if it succeeds.</li>
 </ul>
 <p>Using it should look something like:</p>
-<pre><code class="language-purescript">runAff_ (\either -&gt; case either of
+<pre><code class="language-haskell">runAff_ (\either -&gt; case either of
     Left error -&gt; log $ show error
     Right a -&gt; -- do something with 'a' or run cleanup code
   )
   affValue
 </code></pre>
 <p>We could make the code somewhat easier by using <code>Data.Either (either)</code></p>
-<pre><code class="language-purescript">runAff_ (either
+<pre><code class="language-haskell">runAff_ (either
           (\error -&gt; log $ show error   ) -- Left value
           (\a -&gt; {- usage or cleanup -} ) -- Right value
   )
@@ -205,7 +205,7 @@
 </code></pre>
 <h2><a class="header" href="#understanding-makeaff" id="understanding-makeaff">Understanding <code>makeAff</code></a></h2>
 <p>Next, we need to convert <code>question</code> from an <code>Effect</code>-based computation into an <code>Aff</code>-based one. Looking through Pursuit again, <code>makeAff</code> is the only function that does this:</p>
-<pre><code class="language-purescript">makeAff :: forall a. ((Either Error a -&gt; Effect Unit) -&gt; Effect Canceler) -&gt; Aff a
+<pre><code class="language-haskell">makeAff :: forall a. ((Either Error a -&gt; Effect Unit) -&gt; Effect Canceler) -&gt; Aff a
 </code></pre>
 <p>Breaking this down, <code>makeAff</code> takes only one argument. However, the argument is a bit quirky since it takes a function as its argument. We should read it as...</p>
 <pre><code>  Given a function
@@ -215,7 +215,7 @@
 output an `Aff` computation that produces a value of type `a` when `bind`ed
 </code></pre>
 <p>To create this type signature, we'll write something like this:</p>
-<pre><code class="language-purescript">affValue :: Aff String
+<pre><code class="language-haskell">affValue :: Aff String
 affValue = makeAff go
   where
   go :: (Either Error a -&gt; Effect Unit) -&gt; Effect Canceler
@@ -226,7 +226,7 @@ affValue = makeAff go
 <li>Lift a canceller into <code>Effect</code> via <code>pure</code>. This is pointless because then our <code>Aff</code> wouldn't do anything.</li>
 <li>Create an <code>Effect a</code> and use Functor's dervied function, <code>voidRight</code> (<code>&lt;$</code>), with <code>nonCanceler</code></li>
 </ol>
-<pre><code class="language-purescript">-- for a refresher on voidRight
+<pre><code class="language-haskell">-- for a refresher on voidRight
 2 `voidRight` (Box 1) == 2 &lt;$ (Box 1) == (Box 2)
 
 -- alias is: &quot;&lt;$&quot;
@@ -236,7 +236,7 @@ voidRight b box = (\_ -&gt; b) &lt;$&gt; box
 -- or ignore the monad's inner 'a' and replace it with 'b'
 </code></pre>
 <p>Updating our code to use these two ideas, we now have:</p>
-<pre><code class="language-purescript">affValue :: Aff String
+<pre><code class="language-haskell">affValue :: Aff String
 affValue = makeAff go
   where
   go :: (Either Error a -&gt; Effect Unit) -&gt; Effect Canceler
@@ -246,17 +246,17 @@ affValue = makeAff go
   effectBox runAffFunction = -- implementation
 </code></pre>
 <p>We want to use <code>question</code> to print something to the console, get the user's input, and return that value. It's type signature is:</p>
-<pre><code class="language-purescript">question :: String -&gt; (String -&gt; Effect Unit) -&gt; Interface -&gt; Effect String
+<pre><code class="language-haskell">question :: String -&gt; (String -&gt; Effect Unit) -&gt; Interface -&gt; Effect String
 question message handleUserInput interface = -- Node binding implementation
 </code></pre>
 <p>The only place we could insert <code>runAffFunction</code> is in <code>(String -&gt; Effect Unit)</code>. Thus, we come up with this function:</p>
-<pre><code class="language-purescript">effectBox :: (Either Error String -&gt; Effect Unit) -&gt; Effect Unit
+<pre><code class="language-haskell">effectBox :: (Either Error String -&gt; Effect Unit) -&gt; Effect Unit
 effectBox runAffFunction =
   question message (\userInput -&gt; runAffFunction (Right userInput)) interface
                               -- (runAffFunction &lt;&lt;&lt; Right) -- less verbose; same thing
 </code></pre>
 <p>Putting it all together and excluding the required arguments, we get:</p>
-<pre><code class="language-purescript">affValue :: Aff String
+<pre><code class="language-haskell">affValue :: Aff String
 affValue = makeAff go
   where
   go :: (Either Error a -&gt; Effect Unit) -&gt; Effect Canceler
@@ -266,7 +266,7 @@ affValue = makeAff go
   effectBox runAffFunction = question message (runAffFunction &lt;&lt;&lt; Right) interface
 </code></pre>
 <p>Cleaning it up and including the arguments, we get:</p>
-<pre><code class="language-purescript">affQuestion :: String -&gt; Interface -&gt; Aff String
+<pre><code class="language-haskell">affQuestion :: String -&gt; Interface -&gt; Aff String
 affQuestion mesage interface = makeAff go
   where
   go :: (Either Error a -&gt; Effect Unit) -&gt; Effect Canceler

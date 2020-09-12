@@ -168,7 +168,7 @@
 <p>In this file, we'll show one way to workaround this limitation. This solution will be used frequently in real code wherever the <code>Effect</code> monad is used. However, <em>this solution doesn't necessarily work for other monads</em>. Still, it is conceptually easy to understand and creates scaffolding. That scaffolding will make it easier to understand other workarounds to this restriction that we'll discuss in the <code>Application Structure</code> folder.</p>
 <h2><a class="header" href="#reviewing-a-previous-workaround-lifting-one-monad-into-another" id="reviewing-a-previous-workaround-lifting-one-monad-into-another">Reviewing a Previous Workaround: Lifting one Monad into another</a></h2>
 <p>When overviewing the &quot;&quot;<code>bind</code> outputs the same box-like type it receives&quot; restriction, we described the previous workaround:</p>
-<pre><code class="language-purescript">import Prelude -- for the (+) and (~&gt;) function aliases
+<pre><code class="language-haskell">import Prelude -- for the (+) and (~&gt;) function aliases
 
 data Box1 a = Box1 a
 data Box2 a = Box2 a
@@ -214,11 +214,11 @@ instance bs :: (Show a) =&gt; Show (Box1 a) where
 </code></pre>
 <h2><a class="header" href="#monadeffect-1" id="monadeffect-1">MonadEffect</a></h2>
 <p>When we have an <code>Effect</code>-based computation that we want to run in some other monadic context, we can use <code>liftEffect</code> from <a href="https://pursuit.purescript.org/packages/purescript-effect/2.0.0/docs/Effect.Class#v:liftEffect">MonadEffect</a> <strong>if the target monad has an instance for <code>MonadEffect</code></strong>:</p>
-<pre><code class="language-purescript">class (Monad m) &lt;= MonadEffect m where
+<pre><code class="language-haskell">class (Monad m) &lt;= MonadEffect m where
   liftEffect :: Effect ~&gt; m
 </code></pre>
 <p><code>Aff</code> has an instance for <code>MonadEffect</code>, so we can lift <code>Effect</code>-based computations into an <code>Aff</code> monadic context. Below was how we defined <code>specialLog</code>. You can see it in the next file:</p>
-<pre><code class="language-purescript">specialLog :: String -&gt; Aff Unit
+<pre><code class="language-haskell">specialLog :: String -&gt; Aff Unit
 specialLog message = liftEffect $ log message
 </code></pre>
 <p>Referring back to our previous &quot;local state&quot; example, the <code>ST</code> monad does not have an instance for <code>MonadEffect</code>. This decision is intentional: state manipulation of that kind should be pure and not have any side-effects. That's why it exists inside of its own monadic context: to ensure that those who attempt to do so get compiler errors. This is a safety precaution, not a &quot;we wanted to be jerks who frustrate you&quot; decision.</p>

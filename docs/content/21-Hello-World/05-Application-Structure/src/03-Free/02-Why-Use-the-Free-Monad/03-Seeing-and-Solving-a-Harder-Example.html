@@ -174,7 +174,7 @@
 <li>Adds two add expressions.</li>
 </ol>
 <p>To achieve this result, we'll define our type like so:</p>
-<pre><code class="language-purescript">data Expression
+<pre><code class="language-haskell">data Expression
   = Value Int
   | Add Expression Expression
 
@@ -187,7 +187,7 @@ show2 (Value i) = show i
 show2 (Add x y) = &quot;(&quot; &lt;&gt; show x &lt;&gt; &quot; + &quot; &lt;&gt; show y &lt;&gt; &quot;)&quot;
 </code></pre>
 <p>Now, if we want to add <code>Multiply</code> in &quot;file 2&quot; without changing or recompiling &quot;file 1&quot;, how does that fare? If we define our data type for <code>Multiply</code> like this...</p>
-<pre><code class="language-purescript">data Multiply = Multiply Expression Expression
+<pre><code class="language-haskell">data Multiply = Multiply Expression Expression
 </code></pre>
 <p>... then <code>Multiply</code> will work similarly to <code>Add</code>:</p>
 <ol>
@@ -202,7 +202,7 @@ show2 (Add x y) = &quot;(&quot; &lt;&gt; show x &lt;&gt; &quot; + &quot; &lt;&gt
 </ol>
 <h2><a class="header" href="#exploring-our-options" id="exploring-our-options">Exploring Our Options</a></h2>
 <p>Let's model these types differently by separating them all into their own types that we can later compose. We won't include <code>Multiply</code> yet:</p>
-<pre><code class="language-purescript">data Value = Value Int
+<pre><code class="language-haskell">data Value = Value Int
 data Add = Add Expression Expression
 
 type Expression = Value \/ Add
@@ -222,7 +222,7 @@ evaluate (Left (Value i)) = i
 evaluate (Right (Add x y)) = (evaluate x) + (evaluate y)
 </code></pre>
 <p>To achieve the capability to add and multiply <code>Multiply</code> expressions, what would we need to do, even if it means breaking the constraints of the Expression Problem?</p>
-<pre><code class="language-purescript">-- File 1
+<pre><code class="language-haskell">-- File 1
 data Value = Value Int
 data Add = Add Expression Expression
 
@@ -238,15 +238,15 @@ type Expression = Value \/ Add \/ Multiply
 <li>If we define it in File 2, then File 1 will not compile because the compiler does not know what the type, <code>Expression</code>, is.</li>
 </ul>
 <p>Hmm... The Expression Problem is more nuanced than first thought. Still, the above refactoring helps shed light on what needs to be done. Let's look back at <code>Add</code>:</p>
-<pre><code class="language-purescript">data Add = Add Expression Expression
+<pre><code class="language-haskell">data Add = Add Expression Expression
 </code></pre>
 <p><code>Add</code> must add 2 Expressions. However, we've hard-coded what <code>Expression</code> means. Since the location declaration of <code>Expression</code> causes a problem, we must turn this hard-coded type into a generic type to enable us to define it at a later time. The same goes for <code>Multiply</code>:</p>
-<pre><code class="language-purescript">data Add expression = Add expression expression
+<pre><code class="language-haskell">data Add expression = Add expression expression
 -- or a less verbose version
 data Multiply e = Multiply e e
 </code></pre>
 <p>We also know from our previous simpler problem that we will need to eventually compose our data types together into a big <code>Expression</code> type. In other words, we should get something like this:</p>
-<pre><code class="language-purescript">--        L             RL  RR
+<pre><code class="language-haskell">--        L             RL  RR
 -- Either Value (Either Add Multiply)
 
               Right ( Left ( Add (
@@ -264,7 +264,7 @@ data Multiply e = Multiply e e
 </ul>
 <h2><a class="header" href="#solving-the-problem" id="solving-the-problem">Solving the Problem</a></h2>
 <p>We'll show you how the paper solved this, starting with the type's value and then showing the actual type declaration/definition:</p>
-<pre><code class="language-purescript">-- Value of our Expression type with Placeholder commented out
+<pre><code class="language-haskell">-- Value of our Expression type with Placeholder commented out
 {- Placeholder ( -} Right ( Left ( Add (
   {- (Placeholder -} ( Left  (Value 1))   -- )
   {- (Placeholder -} ( Right ( Right ( Multiply
@@ -304,15 +304,15 @@ newtype AMV_Expression = AMV_Expression (Expression AMV)
 </code></pre>
 <h2><a class="header" href="#revealing-coproduct" id="revealing-coproduct">Revealing Coproduct</a></h2>
 <p>Above, we wrote this:</p>
-<pre><code class="language-purescript">Either (Value e) (Either (Add e)    (Multiply e))
+<pre><code class="language-haskell">Either (Value e) (Either (Add e)    (Multiply e))
        (Value e) \/      (Add e) \/ (Multiply e)
 </code></pre>
 <p>However, this is just a more verbose form of <a href="https://pursuit.purescript.org/packages/purescript-functors/3.0.1/docs/Data.Functor.Coproduct#t:Coproduct"><code>Coproduct</code></a>:</p>
-<pre><code class="language-purescript">newtype Coproduct f g a = Coproduct (Either (f a) (g a))
+<pre><code class="language-haskell">newtype Coproduct f g a = Coproduct (Either (f a) (g a))
 </code></pre>
 <p>Indeed, just as there was a library for nested <code>Either</code>s via <code>purescript-either</code>, there is also a library for nested <code>Coproduct</code>s: <a href="https://pursuit.purescript.org/packages/purescript-functors/3.0.1/docs/Data.Functor.Coproduct#t:Coproduct"><code>purescript-functors</code></a>, which also includes <a href="https://pursuit.purescript.org/packages/purescript-functors/3.0.1/docs/Data.Functor.Coproduct.Nested">convenience functions and types for dealing with nested versions of <code>Coproduct</code></a> as well as <a href="https://pursuit.purescript.org/packages/purescript-functors/3.0.1/docs/Data.Functor.Coproduct.Inject">inject values into and project values out of it</a>.</p>
 <p>To help us understand how to read and write <code>Coproduct</code>, let's compare the <code>Coproduct</code> version to its equivalent <code>Either</code> version:</p>
-<pre><code class="language-purescript">-- not nested
+<pre><code class="language-haskell">-- not nested
 Either   (Value e) (Add e)
 Coproduct Value     Add e
 

@@ -170,7 +170,7 @@
 <li>running a <code>StateT</code> and insuring it type checks.</li>
 </ul>
 <h2><a class="header" href="#reading-statet-do-notation" id="reading-statet-do-notation">Reading StateT Do Notation</a></h2>
-<pre><code class="language-purescript">newtype StateT state monad output = StateT (state -&gt; monad (Tuple output state))
+<pre><code class="language-haskell">newtype StateT state monad output = StateT (state -&gt; monad (Tuple output state))
 
 stateT_do_notation :: StateT StateType MonadType ValueType
 stateT_do_notation = do
@@ -184,12 +184,12 @@ stateT_do_notation = do
 </code></pre>
 <h2><a class="header" href="#reducing-a-statets-do-notation" id="reducing-a-statets-do-notation">Reducing a StateT's Do Notation</a></h2>
 <p>It's now time to reduce a simple <code>StateT</code>'s do notation expression into its final result. Here's the simple expression:</p>
-<pre><code class="language-purescript">f = do
+<pre><code class="language-haskell">f = do
   value1 &lt;- state (\initialState -&gt; Tuple value1 state2)
   state (\state2 -&gt; Tuple value1 state3)
 </code></pre>
 <p>It gets ugly pretty quickly, but we present it in a manner that reduces the information overload:</p>
-<pre><code class="language-purescript">-- Start!
+<pre><code class="language-haskell">-- Start!
 f = do
   value1 &lt;- state (\initialState -&gt; Tuple value1 state2)
   state (\state2 -&gt; Tuple value1 state3)
@@ -294,12 +294,12 @@ finalFunction = StateT (\sY -&gt; (g sY) &gt;&gt;= func2)
 </code></pre>
 <h2><a class="header" href="#running-a-statet-with-an-initial-value" id="running-a-statet-with-an-initial-value">Running a StateT with an Initial Value</a></h2>
 <p>To run a <code>StateT</code>, we just need to unwarp the <code>StateT</code> newtype wrapper.:</p>
-<pre><code class="language-purescript">runStateT :: forall s m a. StateT s m a -&gt; s -&gt; m (Tuple a s)
+<pre><code class="language-haskell">runStateT :: forall s m a. StateT s m a -&gt; s -&gt; m (Tuple a s)
 runStateT (StateT f) initS = f initS
 </code></pre>
 <h3><a class="header" href="#reducing-a-runstatet-call" id="reducing-a-runstatet-call">Reducing a <code>runStateT</code> Call</a></h3>
 <p>We'll run the de-sugared do-notation function from above on some initial state, <code>initS</code>. This won't produce anything important, but shows why/how it still type checks:</p>
-<pre><code class="language-purescript">-- From above
+<pre><code class="language-haskell">-- From above
 f = StateT (\sY -&gt; (g sY) &gt;&gt;= func2)
     where
     g = (\sZ -&gt; Identity ((\initialState -&gt; Tuple value1 state2) sZ))

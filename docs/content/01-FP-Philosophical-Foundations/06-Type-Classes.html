@@ -221,7 +221,7 @@
 </ul>
 <p>Lastly, the <code>Functor</code> type class (explained in more detail later) has all three:</p>
 <p>(1) The type class <code>Functor</code> specifies the type signature of a function called <code>map</code>. It does not specify a type signature for a value:</p>
-<pre><code class="language-purescript">class Functor f where
+<pre><code class="language-haskell">class Functor f where
   map :: forall a b. (a -&gt; b) -&gt; f a -&gt; f b
 </code></pre>
 <p>and it uses the alias <code>&lt;$&gt;</code> for <code>map</code> to enable one to write <code>function &lt;$&gt; f_a</code> instead of <code>map function f_a</code></p>
@@ -241,7 +241,7 @@
 <h2><a class="header" href="#similarities-and-dual-relationships-among-type-classes" id="similarities-and-dual-relationships-among-type-classes">Similarities and Dual Relationships Among Type Classes</a></h2>
 <p>Some type classes have a corresponding &quot;dual.&quot; While there are better ways to explain duals, the basic idea is that the &quot;direction&quot; of the function's arrow gets flipped. When this happens, we usually prefix them with &quot;Co&quot;. For example, if we have a type class called <code>Monad</code>, the dual of it is called <code>Comonad</code>. If <code>Monad</code> has laws <code>A</code> and <code>B</code>, then it's likely that <code>Comonad</code> will have laws <code>A'</code> and <code>B'</code>, which are &quot;flipped&quot; version of <code>A</code> and <code>B</code>.</p>
 <p>For example, a function like <code>toB</code> would have its arrow flipped to produce <code>toA</code>::</p>
-<pre><code class="language-purescript">toB :: a -&gt; b
+<pre><code class="language-haskell">toB :: a -&gt; b
 toB = -- function's implementation
 
     -- a &lt;- b

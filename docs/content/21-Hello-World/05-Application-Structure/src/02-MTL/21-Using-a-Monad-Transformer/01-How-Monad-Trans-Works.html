@@ -166,7 +166,7 @@
                         <h1><a class="header" href="#how-monadtrans-works" id="how-monadtrans-works">How MonadTrans Works</a></h1>
 <h2><a class="header" href="#reviewing-old-ideas" id="reviewing-old-ideas">Reviewing Old Ideas</a></h2>
 <p>Thus far, we've overviewed individual Monad Transformers. However, we have not yet combined them into a &quot;stack&quot; that allows us to write anything useful. It's now time to reveal this. It will look similar to something we've seen before:</p>
-<pre><code class="language-purescript">class LiftSourceIntoTargetMonad sourceMonad targetMonad where {-
+<pre><code class="language-haskell">class LiftSourceIntoTargetMonad sourceMonad targetMonad where {-
   liftSourceMonad :: forall a. sourceMonad a -&gt; targetMonad a -}
   liftSourceMonad ::           sourceMonad   ~&gt; targetMonad
 
@@ -179,7 +179,7 @@ instance box2_into_box1 :: LiftSourceIntoTargetMonad Box2 Box1 where {-
 <p>We stated beforehand that <code>MonadState</code>'s default implmenetation is <code>StateT</code>. <code>bind</code> only returns the same monad type it originally received. Thus, we have a problem if we want to use two effects at once. For example, if we to write a program that uses state manipulation effects (i.e. uses  <code>MonadState</code>) and some other effects in the same computation (i.e. another type class introduced in this folder like <code>MonadReader</code>).</p>
 <p>However, because our monadic newtyped functions serve only to &quot;transform&quot; the base monad by handling all the 'behind the scenes' stuff, it's actually possible to support all of these effects within the same monadic type. One monadic type is nested in another. This is where the &quot;stack&quot; idea comes from. In other words, we need to define a way to &quot;lift&quot; a monadic newtyped function into another. However, the direction should go both ways (former lifted into latter and latter lifted into former).</p>
 <p>Since this idea is an abstraction that will repeat, will define it as a type class called, <code>MonadTrans</code>:</p>
-<pre><code class="language-purescript">class MonadTrans t where
+<pre><code class="language-haskell">class MonadTrans t where
   lift :: forall m a. Monad m =&gt; m a -&gt; t m a
 
 -- using clearer type names, one should read it as

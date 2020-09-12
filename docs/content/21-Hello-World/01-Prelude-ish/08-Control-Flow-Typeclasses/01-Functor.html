@@ -172,7 +172,7 @@ into `b`
 </code></pre>
 <h2><a class="header" href="#definition" id="definition">Definition</a></h2>
 <p>See its docs: <a href="https://pursuit.purescript.org/packages/purescript-prelude/4.1.1/docs/Data.Functor">Functor</a></p>
-<pre><code class="language-purescript">class Functor f where
+<pre><code class="language-haskell">class Functor f where
   map :: forall a b. (a -&gt; b) -&gt; f a -&gt; f b
 
 infixl 4 map as &lt;$&gt;
@@ -184,7 +184,7 @@ instance f :: Functor Box where
   map                 f         (Box a) =  Box (f a)
 </code></pre>
 <p>Put differently, <code>Functor</code> solves a specific problem. If I have a function of type <code>(a -&gt; b)</code>, I cannot use that function on values of <code>a</code> if they are stored in a box-like type:</p>
-<pre><code class="language-purescript">function :: Int -&gt; String
+<pre><code class="language-haskell">function :: Int -&gt; String
 function 0 = &quot;0&quot;
 function _ = &quot;1&quot;
 
@@ -192,13 +192,13 @@ function 5 -- This works!
 function (Box 5) -- compiler error! Oh noes!
 </code></pre>
 <p>One could also see <code>map</code> as &quot;transforming&quot; a function, so that it also operates on Box-like types. This is often described as &quot;lifting&quot; a function into a Box-like type:</p>
-<pre><code class="language-purescript">map :: forall a b. (a -&gt; b) -&gt; (Box a -&gt; Box b)
+<pre><code class="language-haskell">map :: forall a b. (a -&gt; b) -&gt; (Box a -&gt; Box b)
 map f = (\(Box a) -&gt; Box (f b))
 </code></pre>
 <h2><a class="header" href="#laws" id="laws">Laws</a></h2>
 <h3><a class="header" href="#identity" id="identity">Identity</a></h3>
 <p>Definition: <code>(\x -&gt; x) &lt;$&gt; fa == fa</code></p>
-<pre><code class="language-purescript">-- Start!
+<pre><code class="language-haskell">-- Start!
 (\a -&gt; a) &lt;$&gt; (Box 4)
 -- De-infix &quot;&lt;$&gt;&quot; to map
 map (\a -&gt; a) (Box 4)
@@ -218,7 +218,7 @@ true
 <h3><a class="header" href="#composition" id="composition">Composition</a></h3>
 <p>(Remember, <code>g &lt;&lt;&lt; f</code> means <code>(\a -&gt; g (f a))</code>)</p>
 <p>Definition: <code>map (g &lt;&lt;&lt; f) = (map g) &lt;&lt;&lt; (map f)</code></p>
-<pre><code class="language-purescript">-- # Reduce left side of the law #
+<pre><code class="language-haskell">-- # Reduce left side of the law #
 
 -- Start!
 map ((\y -&gt; y * 10) &lt;&lt;&lt; (\x -&gt; x + 1)) (Box 4)
