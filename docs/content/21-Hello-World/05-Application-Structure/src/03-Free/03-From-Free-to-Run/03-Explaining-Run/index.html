@@ -166,7 +166,7 @@
                         <h1><a class="header" href="#explaining-run" id="explaining-run">Explaining <code>Run</code></a></h1>
 <p>This folder will explain the basic idea of <code>purescript-run</code> and then solve the paper's version of the Expression Problem using it.</p>
 <h2><a class="header" href="#what-is-run" id="what-is-run">What is <code>Run</code>?</a></h2>
-<p>If you recall, <code>xgromxx</code> mentions <a href="https://pursuit.purescript.org/packages/purescript-run/2.0.0"><code>purescript-run</code></a> in <a href="https://github.com/xgrommx/purescript-from-adt-to-eadt/blob/master/src/ADT8.purs#L11">a comment in <code>ADT8.purs</code></a>. (The ReadMe of this library provides an overview of the ideas we've explained here.)</p>
+<p>If you recall, <code>xgrommx</code> mentions <a href="https://pursuit.purescript.org/packages/purescript-run/2.0.0"><code>purescript-run</code></a> in <a href="https://github.com/xgrommx/purescript-from-adt-to-eadt/blob/master/src/ADT8.purs#L11">a comment in <code>ADT8.purs</code></a>. (The ReadMe of this library provides an overview of the ideas we've explained here.)</p>
 <p>What is <code>purescript-run</code>? Why would we use that over <code>Free</code>? There are three reasons.</p>
 <p>First, let's look at the type of <code>Run</code> :</p>
 <pre><code class="language-haskell">newtype Run r a = Run (Free (VariantF r) a)

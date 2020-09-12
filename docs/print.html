@@ -6028,7 +6028,7 @@ type Value_Level_Type = String
 foreign import kind KindName
 foreign import data Value :: KindName
 
--- The Proxy type usually has the first letter of the value-level type
+-- The name of the Proxy type is usually the first letter of the kind
 -- (&quot;K&quot; for &quot;KindName&quot;) followed by &quot;Proxy&quot;. The value name
 -- is the same as its type.
 data KProxy (a :: KindName) = KProxy
@@ -17163,7 +17163,7 @@ fold    f = go where
     Pure   a -&gt; a              -- Value
     Impure t -&gt; f (go &lt;$&gt; t)   -- Add
 </code></pre>
-<table><thead><tr><th>xgromxx's code</th><th>Our code</th></tr></thead><tbody>
+<table><thead><tr><th>xgrommx's code</th><th>Our code</th></tr></thead><tbody>
 <tr><td><code>Free ExprF a</code><br>or<br><code>Expr</code></td><td><code>Expression (Coproduct Value ExprF) a</code></td></tr>
 <tr><td><code>lit</code></td><td><code>value</code></td></tr>
 <tr><td><code>iter</code></td><td><code>fold</code></td></tr>
@@ -18242,7 +18242,7 @@ main = do
 <li>the original paper showed how to define an expression that only allowed <code>Value</code> and <code>Multiply</code> operations. xgrommx's original gist did not have this.</li>
 </ul>
 <p>The following table will help you understand the upcoming links to code:</p>
-<table><thead><tr><th>Our Code</th><th>xgromxx's code</th></tr></thead><tbody>
+<table><thead><tr><th>Our Code</th><th>xgrommx's code</th></tr></thead><tbody>
 <tr><td><code>newtype Expression f</code></td><td><a href="https://pursuit.purescript.org/packages/purescript-fixed-points/5.1.0/docs/Data.Functor.Mu#t:Mu"><code>newtype Mu f</code></a></td></tr>
 <tr><td><code>Expression (VariantF t)</code></td><td><code>MuV t</code></td></tr>
 <tr><td><code>In $ inj symbol data</code></td><td><code>injMu symbol data</code></td></tr>
@@ -18257,7 +18257,7 @@ main = do
 <h1><a class="header" href="#explaining-run" id="explaining-run">Explaining <code>Run</code></a></h1>
 <p>This folder will explain the basic idea of <code>purescript-run</code> and then solve the paper's version of the Expression Problem using it.</p>
 <h2><a class="header" href="#what-is-run" id="what-is-run">What is <code>Run</code>?</a></h2>
-<p>If you recall, <code>xgromxx</code> mentions <a href="https://pursuit.purescript.org/packages/purescript-run/2.0.0"><code>purescript-run</code></a> in <a href="https://github.com/xgrommx/purescript-from-adt-to-eadt/blob/master/src/ADT8.purs#L11">a comment in <code>ADT8.purs</code></a>. (The ReadMe of this library provides an overview of the ideas we've explained here.)</p>
+<p>If you recall, <code>xgrommx</code> mentions <a href="https://pursuit.purescript.org/packages/purescript-run/2.0.0"><code>purescript-run</code></a> in <a href="https://github.com/xgrommx/purescript-from-adt-to-eadt/blob/master/src/ADT8.purs#L11">a comment in <code>ADT8.purs</code></a>. (The ReadMe of this library provides an overview of the ideas we've explained here.)</p>
 <p>What is <code>purescript-run</code>? Why would we use that over <code>Free</code>? There are three reasons.</p>
 <p>First, let's look at the type of <code>Run</code> :</p>
 <pre><code class="language-haskell">newtype Run r a = Run (Free (VariantF r) a)

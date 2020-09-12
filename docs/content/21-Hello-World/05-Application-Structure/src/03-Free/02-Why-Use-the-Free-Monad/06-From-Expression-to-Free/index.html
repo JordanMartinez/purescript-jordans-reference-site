@@ -199,7 +199,7 @@ fold    f = go where
     Pure   a -&gt; a              -- Value
     Impure t -&gt; f (go &lt;$&gt; t)   -- Add
 </code></pre>
-<table><thead><tr><th>xgromxx's code</th><th>Our code</th></tr></thead><tbody>
+<table><thead><tr><th>xgrommx's code</th><th>Our code</th></tr></thead><tbody>
 <tr><td><code>Free ExprF a</code><br>or<br><code>Expr</code></td><td><code>Expression (Coproduct Value ExprF) a</code></td></tr>
 <tr><td><code>lit</code></td><td><code>value</code></td></tr>
 <tr><td><code>iter</code></td><td><code>fold</code></td></tr>
