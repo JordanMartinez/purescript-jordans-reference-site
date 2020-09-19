@@ -173,7 +173,7 @@
 <li>can be cancelled if it's no longer needed</li>
 </ul>
 <p>To model the possibility for a computation to return an error or actual output, we can use <code>Either a b</code>. Handling errors and output implies a function. <code>Aff</code> uses the type signature, <code>Either errorType outputType -&gt; Effect Unit</code>, for that.</p>
-<p>Lastly, cancelling implies what to do when the computation is either no longer needed or it has failed (but we aren't using the function just discussed above). As an example, one will use <code>Canceller</code>s to clean up resources (e.g. <code>clearTimeout</code>).</p>
+<p>Lastly, cancelling implies what to do when the computation is either no longer needed or it has failed (but we aren't using the function just discussed above). As an example, one will use <code>Canceler</code>s to clean up resources (e.g. <code>clearTimeout</code>).</p>
 <pre><code class="language-haskell">newtype Canceler = Canceler (Error -&gt; Aff Unit)
 </code></pre>
 <p>Since our present interests do not require cancellation, we can use a no-op <code>Canceler</code>: <code>nonCanceler</code></p>
@@ -187,7 +187,7 @@
 <p>Breaking this down, <code>runAff_</code> takes two arguments (explained in reverse):</p>
 <ul>
 <li>an <code>Aff</code> computation to run</li>
-<li>a function for handling a possible asynchronous <code>Error</code> if the computation fails or a the computation's output, <code>a</code>, if it succeeds.</li>
+<li>a function for handling a possible asynchronous <code>Error</code> if the computation fails or the computation's output, <code>a</code>, if it succeeds.</li>
 </ul>
 <p>Using it should look something like:</p>
 <pre><code class="language-haskell">runAff_ (\either -&gt; case either of
@@ -267,7 +267,7 @@ affValue = makeAff go
 </code></pre>
 <p>Cleaning it up and including the arguments, we get:</p>
 <pre><code class="language-haskell">affQuestion :: String -&gt; Interface -&gt; Aff String
-affQuestion mesage interface = makeAff go
+affQuestion message interface = makeAff go
   where
   go :: (Either Error a -&gt; Effect Unit) -&gt; Effect Canceler
   go runAffFunction =

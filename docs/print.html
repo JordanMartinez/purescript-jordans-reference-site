@@ -166,6 +166,8 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#preface" id="preface">Preface</a></h1>
+<p>This repo is my way of using the <a href="https://medium.com/taking-note/learning-from-the-feynman-technique-5373014ad230">Feynman Technique</a> to learn Purescript and its ecosystem.</p>
+<p>Feynman used simple language, storytelling, comprehensively wrote down everything he knew about the topic, then attempted to teach it such that a child could understand it. Without jargon but with brevity, he identified what he didn't know to the audience and had his content organized.</p>
 <h2><a class="header" href="#intended-audience" id="intended-audience">Intended Audience</a></h2>
 <p>The intended reader is one who has some background in programming, but no background in the Functional Programming paradigm. A reader should consult the summarized version of the Table of Contents below before determining what and how much to read.</p>
 <p>If you want to understand why you should care about PureScript, read through the <a href="./content/00-Getting-Started/01-Why-Learn-PureScript.html">Why Learn PureScript</a> page and <a href="./content/01-FP-Philosophical-Foundations">Philosophical Foundations</a> section.</p>
@@ -896,7 +898,7 @@ Type -&gt; Type
 <tr><td>Find real-world examples of code that uses libraries (e.g. <code>aff-bus</code>)</td><td><a href="https://github.com/search?q=language%3Apurescript+path%3Asrc%2F+in%3Afile+Bus"><code>language:purescript path:src/ in:file &quot;Effect.Aff.Bus&quot;</code></a></td><td>Search a project's <code>src</code> directory for files whose content mentions the <code>Effect.Aff.Bus</code> module at some point. (Note: the full module name must be surrounded by quotes)</td></tr>
 <tr><td>Find real-world examples of code that uses testing libraries (e.g. <code>aff-bus</code>)</td><td><a href="https://github.com/search?q=language%3Apurescript+path%3Atest%2F+in%3Afile+QuickCheck"><code>language:purescript path:test/ in:file &quot;Test.QuickCheck&quot;</code></a></td><td>Search a project's <code>test</code> directory for files whose content mentions the <code>Test.QuickCheck</code> module at some point. (Note: the full module name must be surrounded by quotes)</td></tr>
 </tbody></table>
-<h2><a class="header" href="#documenation" id="documenation">Documenation</a></h2>
+<h2><a class="header" href="#documentation" id="documentation">Documentation</a></h2>
 <ul>
 <li>Anytime you need to look up the documentation for a package, you have two options:
 <ul>
@@ -4940,6 +4942,18 @@ derive instance newtypeEmailAddress :: Newtype EmailAddress3 _
 -- | | One | Two | Three |
 -- | | --- | --- | ----- |
 -- | | a   | b   | c     |
+-- |
+-- | # Headers level 1 work
+-- |
+-- | ## Headers level 2 work
+-- |
+-- | ### Headers level 3 work
+-- |
+-- | #### Headers level 4 work
+-- |
+-- | ##### Headers level 5 work
+-- |
+-- | ###### Headers level 6 work
 -- |
 -- | Some code:
 -- | ```purescript
@@ -10204,7 +10218,7 @@ main = do
 <li>can be cancelled if it's no longer needed</li>
 </ul>
 <p>To model the possibility for a computation to return an error or actual output, we can use <code>Either a b</code>. Handling errors and output implies a function. <code>Aff</code> uses the type signature, <code>Either errorType outputType -&gt; Effect Unit</code>, for that.</p>
-<p>Lastly, cancelling implies what to do when the computation is either no longer needed or it has failed (but we aren't using the function just discussed above). As an example, one will use <code>Canceller</code>s to clean up resources (e.g. <code>clearTimeout</code>).</p>
+<p>Lastly, cancelling implies what to do when the computation is either no longer needed or it has failed (but we aren't using the function just discussed above). As an example, one will use <code>Canceler</code>s to clean up resources (e.g. <code>clearTimeout</code>).</p>
 <pre><code class="language-haskell">newtype Canceler = Canceler (Error -&gt; Aff Unit)
 </code></pre>
 <p>Since our present interests do not require cancellation, we can use a no-op <code>Canceler</code>: <code>nonCanceler</code></p>
@@ -10218,7 +10232,7 @@ main = do
 <p>Breaking this down, <code>runAff_</code> takes two arguments (explained in reverse):</p>
 <ul>
 <li>an <code>Aff</code> computation to run</li>
-<li>a function for handling a possible asynchronous <code>Error</code> if the computation fails or a the computation's output, <code>a</code>, if it succeeds.</li>
+<li>a function for handling a possible asynchronous <code>Error</code> if the computation fails or the computation's output, <code>a</code>, if it succeeds.</li>
 </ul>
 <p>Using it should look something like:</p>
 <pre><code class="language-haskell">runAff_ (\either -&gt; case either of
@@ -10298,7 +10312,7 @@ affValue = makeAff go
 </code></pre>
 <p>Cleaning it up and including the arguments, we get:</p>
 <pre><code class="language-haskell">affQuestion :: String -&gt; Interface -&gt; Aff String
-affQuestion mesage interface = makeAff go
+affQuestion message interface = makeAff go
   where
   go :: (Either Error a -&gt; Effect Unit) -&gt; Effect Canceler
   go runAffFunction =
