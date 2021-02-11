@@ -452,6 +452,7 @@
     - [GADTs](./content/31-Design-Patterns/21-GADTs.md)
     - [Existential Types.purs](./content/31-Design-Patterns/22-Existential-Types-ps.md)
     - [Higher Kinded Data](./content/31-Design-Patterns/23-Higher-Kinded-Data.md)
+    - [Parsing](./content/31-Design-Patterns/24-Parsing.md)
 - [Ecosystem](./content/41-Ecosystem/Readme.md)
     - [Data Types](./content/41-Ecosystem/Data-Types/Readme.md)
         - [Primitives](./content/41-Ecosystem/Data-Types/01-Primitives.md)
