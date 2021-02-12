@@ -201,7 +201,7 @@ PureScript buys &quot;power and productivity&quot; at the cost of &quot;populari
 </ul>
 </li>
 <li><a href="https://www.atrium.co/blog/founders-should-build-website-not-mobile-app/">Why Founders Should Start With a Website, Not a Mobile App</a></li>
-<li>The points mentioned in this article: <a href="https://hackernoon.com/learn-to-code-in-2018-get-hired-and-have-fun-along-the-way-b338247eed6a">Learn Javascript in 2018</a></li>
+<li>The points mentioned in this article: <a href="https://web.archive.org/web/20181201032915/https://medium.com/zerotomastery/learn-to-code-in-2018-get-hired-and-have-fun-along-the-way-b338247eed6a">Learn Javascript in 2018</a></li>
 </ul>
 <h2><a class="header" href="#but-not-write-javascript-to-build-it" id="but-not-write-javascript-to-build-it">...but not write Javascript to build it...</a></h2>
 <ul>
@@ -228,38 +228,43 @@ PureScript buys &quot;power and productivity&quot; at the cost of &quot;populari
 <li>See the <a href="https://github.com/jonasbuntinx/purescript-react-realworld">React version of 'Real World App'</a></li>
 </ul>
 </li>
-<li><a href="https://discourse.purescript.org/t/language-highlights/1471">A Discourse pose describing some of the disadvantages of TypeScript and Elmm when compared to PureScript</a></li>
+<li><a href="https://discourse.purescript.org/t/language-highlights/1471">A Discourse pose describing some of the disadvantages of TypeScript and Elm when compared to PureScript</a></li>
 </ul>
-<p>For those that say &quot;PureScript is dead, bad, stupid, not worth learning, etc.&quot; In response to these things, I'd recommend you watch <a href="https://www.youtube.com/watch?v=o_4EX4dPppA">The Hard Parts of Open Source</a></p>
 <h3><a class="header" href="#language-comparisons" id="language-comparisons">Language Comparisons</a></h3>
 <p>For a full list of possible alternatives to JavaScript, see <a href="https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS">CoffeeScript's wiki's list of 'Languages that compile to JavaScript'</a></p>
 <p><strong>Note</strong>: the below comparisons are still a WIP. To fully support this claim, it would help to compare each languages' various &quot;overall rating&quot; on various aspects. Unfortunately, since I'm not familiar with every other language mentioned, it's very difficult for me to do that. If you are familiar with such languages, consider opening an issue on this repo and discussing it with me.</p>
 <p>In short, the below comparison will be biased towards PureScript and will not yet fairly represent the corresponding side in some situations. Consider this a starting point for your own research.</p>
 <h4><a class="header" href="#purescript-vs-typescript" id="purescript-vs-typescript">PureScript vs TypeScript</a></h4>
-<p>One of the main issues with JavaScript is a poor type system. TypeScript seems to address this issue (just consider its name), but not quite as well as PureScript does.</p>
+<p>One of the main issues with JavaScript is a poor type system. Many errors aren't discovered until a person, usually a customer, runs the program. Many of these same errors could be detected and fixed before shipping code if one used a language with a better type system.</p>
+<p>TypeScript seems to address this type safety issue. Just consider its name! However, a few people who are using PureScript now have said this about TypeScript: &quot;You might as well be writing Javascript.&quot; TypeScript does not provide any real guarantees; it only pretends. PureScript does provide such guarantees.</p>
 <ul>
 <li><a href="https://blog.logrocket.com/typescript-vs-purescript-not-all-compilers-are-created-equal-c16dadaa7d3e">TypeScript vs PureScript: Not All Compilers Are Created Equal</a></li>
 <li><a href="https://www.youtube.com/watch?v=JTEfpNtEoSA">JavaScript, TypeScript, and PureScript</a> or &quot;Why TypeScript only 'pretends' to have types.&quot;</li>
+<li><a href="https://discourse.purescript.org/t/type-system-showdown-purescript-and-typescript/2084">Various examples comparing PureScript and TypeScript</a></li>
 </ul>
 <h4><a class="header" href="#purescript-vs-elm" id="purescript-vs-elm">PureScript vs Elm</a></h4>
-<p><strong>TL;DR</strong>: Since Elm is founded on the similar philosophical foundations, one can use Elm and gain benefits similar to using PureScript. Elm sacrifices powerful language features to gain a simpler learning curve. Thus, it's more suited for simple applications. PureScript buys powerful language features at the cost of a harder learning curve. Thus, it's more suited for complex applications.</p>
-<p>TODO, but the general idea is:</p>
+<p>Since Elm is founded on the similar philosophical foundations as PureScript, one can use Elm and gain many of the same benefits as PureScript due to its type safety. However, there is a ceiling on the abstractions one can express in Elm. PureScript's ceiling is much higher than Elm's because it has type classes.</p>
+<p>Elm</p>
 <ul>
-<li>Benefits of Elm:
+<li>... sacrifices the following features ...
 <ul>
-<li>Good documentation and error messages, making it easier for JavaScript-background developers to learn</li>
-<li>Works very well for simple applications without complex business logic</li>
-<li>Uses a simpler type system than PureScript to insure correctness</li>
-</ul>
-</li>
-<li>Costs of Elm:
+<li>type classes, which
 <ul>
-<li>Incurs a lot of boilerplate code to do anything</li>
-<li>Due to its simpler type system, it lacks more powerful abstractions, such as type classes. Thus, ideas that take a few lines of code in PureScript take much longer or cannot be done in Elm.</li>
-<li>Elm is works very well for simple applications, but incurs a lot of boilerplate code. For some applications, it's all that's needed</li>
+<li>reduce boilerplate code since the compiler can write code for you</li>
+<li>enable one to define and uphold constraints about their program (e.g. this sequence of commands must be executed in the correct order)</li>
 </ul>
 </li>
 </ul>
+</li>
+<li>... to gain the following ...
+<ul>
+<li>clear actionable error messages because there are less ambiguous cases to deal with in the type system</li>
+</ul>
+</li>
+</ul>
+<p>Elm and PureScript can both be used to build a complex website. However, one will need to write more lines of code in Elm than they would in PureScript.</p>
+<h4><a class="header" href="#purescript-vs-ocaml--reason" id="purescript-vs-ocaml--reason">PureScript vs OCaml / Reason</a></h4>
+<p>This section has not yet been written.</p>
 <h4><a class="header" href="#purescript-vs-ghcjs" id="purescript-vs-ghcjs">PureScript vs GHCJS</a></h4>
 <p>Haskell, which heavily influenced PureScript, has an option for compiling Haskell to JavaScript via GHCJS. However, that comes with its own tradeoffs. PureScript was developed partly because those tradeoffs were too costly.</p>
 <p>See <a href="https://discourse.purescript.org/t/ps-or-ghcjs-for-frontend-with-haskell-backend/666/2">PS or ghcjs for Frontend with Haskell backend</a> for my summary of the main issues at play here.</p>
@@ -290,11 +295,11 @@ PureScript buys &quot;power and productivity&quot; at the cost of &quot;populari
 </ul>
 </li>
 <li>The PureScript compiler infers most of your types for you. For those who are curious and want to understand how that works, see this video: <a href="https://www.youtube.com/watch?v=ytPAlhnAKro">Type Inference From Scratch</a></li>
-<li>The compiler (via its warning and error messages) is your friend, not your enemy. I was not able to find a good concise explanation, but here's a few reasons why. It
+<li>The compiler (via its warning and error messages) is your friend, not your enemy. It
 <ul>
 <li>prevents you from releasing bug-filled code to a customer. (Can I guarantee that the code &quot;just works&quot; or cannot be built at all?)</li>
-<li>forces you to handle most errors correctly the first time rather than permit you to throw them under the rug because you are lazy or foolish (Can I guarantee all possible errors will not create future problems that lead to short-term hard-to-understand code that rarely gets cleaned up and ultimately costs the company more time to fix than if it had just been written correctly the first time?)</li>
-<li>helps you figure out which type to use when the types get complicated (explained later in this repository: <code>Hello World/Debugging/</code>)</li>
+<li>forces you to handle most errors correctly the first time rather than permit you to throw them under the rug because you are lazy (Can I guarantee all possible errors will not create future problems that lead to short-term hard-to-understand code that rarely gets cleaned up and ultimately costs the company more time to fix than if it had just been written correctly the first time?)</li>
+<li>helps you figure out how to implement functions correctly via &quot;Typed Holes&quot; (explained later in the <code>Syntax</code> folder)</li>
 </ul>
 </li>
 <li>This video explains how a type system with <code>type classes</code> allow one to re-use &quot;dumb old data structures&quot; (i.e. <code>algebraic data types</code>) rather than create many new data structures that differ only one slight way: <a href="https://www.youtube.com/watch?v=hIZxTQP1ifo">Type Classes vs the World</a>. To summarize it, <code>type classes</code>
@@ -305,18 +310,25 @@ PureScript buys &quot;power and productivity&quot; at the cost of &quot;populari
 </li>
 </ul>
 <h4><a class="header" href="#immutable-persistent-data-structures-by-default" id="immutable-persistent-data-structures-by-default">Immutable Persistent Data Structures by Default</a></h4>
-<p>TODO, but the general idea is:</p>
+<p>In PureScript, immutable data structures are the default rather than being &quot;opt-in.&quot; In most other languages, mutable data structures are the default with immutable ones being &quot;opt-in.&quot;</p>
+<p>Immutable data structures are</p>
 <ul>
-<li>Immutable data structures are the default and always work as such (unlike some other languages)</li>
-<li>Mutable data structures are opt-in</li>
-<li>Such data structures are easier to use and reason about because they don't change</li>
+<li>easier to reason about because the value never changes</li>
+<li>are always thread-safe, preventing many typical issues with concurrency</li>
+<li>can be as performant as mutable data structures in most cases</li>
 </ul>
 <h4><a class="header" href="#multiple-backends-with-easy-foreign-function-interface" id="multiple-backends-with-easy-foreign-function-interface">Multiple Backends with Easy Foreign Function Interface</a></h4>
-<p>TODO, but the general idea is:</p>
+<p>Most languages have their own backend.</p>
 <ul>
-<li><a href="https://github.com/purescript/documentation/blob/master/ecosystem/Alternate-backends.md">PureScript compiles to other languages besides JavaScript</a>. Thus, writing one library in PureScript will work in multiple languages, and one can choose the backend that best solves their problem.</li>
-<li>one can easily migrate from some other language or framework (e.g. TypeScript, Angular, etc.) to PureScript in a modular, piece-by-piece fashion</li>
+<li>Javascript is compiled and run via a Javascript engine.</li>
+<li>Java compiles to bytecode that can be run on a Java Virtual Machine.</li>
+<li>Python gets compiled into bytecode that is then interpreted.</li>
 </ul>
+<p>PureScript does not have a backend. Rather, it's source code can be compiled to other languages. While JavaScript is the focus, <a href="https://github.com/purescript/documentation/blob/master/ecosystem/Alternate-backends.md">PureScript compiles to other languages besides JavaScript</a>. Thus, writing one library in PureScript can work in multiple languages, and one can choose the backend (or a combination of them) that best solves their problem.</p>
+<p>Caveat: PureScript's support for non-Javascript backends is still a work-in-progress. In future releases, they will be getting first-class support.</p>
+<p>This backend-independent nature of PureScript makes &quot;Foreign Function Interface&quot; very clean. At various times, Language X needs to use code from another language, Language Y. For code written in one language to use code written in another language, there needs to be a &quot;Foreign Function Interface&quot; or FFI.</p>
+<p>Many languages' FFI can be difficult to work with. Language X made various language tradeoff decisions that are different than Language Y. Getting two languages to work together is difficult to say the least. However, PureScript's FFI is very easy because PureScript already compiles to that language.</p>
+<p>If you are compiling PureScript to Javascript, you can still write JavaScript as FFI for PureScript. This makes it possible to wrap Javascript libraries on which you heavily depend. It also enables one to easily migrate from some other language or framework (e.g. TypeScript, Angular, etc.) to PureScript in a modular, piece-by-piece fashion</p>
 <h2><a class="header" href="#faq-answering-miscellaneous-questions-people-may-have" id="faq-answering-miscellaneous-questions-people-may-have">FAQ: Answering Miscellaneous Questions People May Have</a></h2>
 <p>This explanation depends on your particular background. As stated above, I'm focusing on these audiences:</p>
 <ul>
@@ -339,13 +351,13 @@ PureScript buys &quot;power and productivity&quot; at the cost of &quot;populari
 </ul>
 <p>Let's answer these one at a time. <strong>Each answer is my opinion and could be backed up with better arguments and explanations in some areas.</strong>.</p>
 <h3><a class="header" href="#is-the-price-of-the-steep-learning-curve-worth-the-benefits-of-using-purescript-in-code" id="is-the-price-of-the-steep-learning-curve-worth-the-benefits-of-using-purescript-in-code">Is the price of the steep learning curve worth the benefits of using PureScript in code?</a></h3>
-<p>Yes, but you won't really see why until you have learned it. PureScript (and FP languages in general) will expand your understanding of what programming can be and do.</p>
-<p>As always, some people prefer some languages over others and some languages are better suited for some problems as others. Feel free to disagree with me.</p>
+<p>Yes. Most mainstream languages force you to depend on the IDE, linters, and other tools outside of the language to help you write correct code. Such languages often lack the features within the language itself to help you express certain ideas and constraints within your program. PureScript's powerful language features allow you to express what other languages cannot.</p>
+<p>Even if one ultimately decides not to use PureScript, the language itself can be a helpful environment for training your mind to think more precisely about how to write code.</p>
 <h3><a class="header" href="#if-i-learn-purescript-can-i-get-a-good-developer-job" id="if-i-learn-purescript-can-i-get-a-good-developer-job">If I learn PureScript, can I get a good developer job?</a></h3>
 <ul>
 <li>See the community-curated list of <a href="https://github.com/ajnsit/purescript-companies">companies who use PureScript in production right now</a>.</li>
-<li>Check for PureScript jobs listed on <a href="https://functionaljobs.com/jobs/search/?q=PureScript">Functional Jobs</a></li>
 <li>See <a href="https://discourse.purescript.org/t/do-you-have-a-purescript-app-in-production/20">Do you have a PureScript app in production?</a></li>
+<li>Check for PureScript jobs listed on <a href="https://functionaljobs.com/jobs/search/?q=PureScript">Functional Jobs</a></li>
 </ul>
 <h3><a class="header" href="#should-i-learn-purescript-now-or-wait-until-sometime-later" id="should-i-learn-purescript-now-or-wait-until-sometime-later">Should I learn PureScript now or wait until sometime later?</a></h3>
 <p>You might want to learn it <strong>now</strong> for these reasons:</p>
@@ -376,19 +388,17 @@ PureScript buys &quot;power and productivity&quot; at the cost of &quot;populari
 <li>This project's <code>Hello World/FP Philosophical Foundations</code> folder exists to counter this issue</li>
 </ul>
 </li>
-<li>No one really explains what the &quot;big picture&quot; that FP programming is all about. Thus, it's hard to see how some concept fits in the larger scheme of things.
+<li>No one really explains what the &quot;big picture&quot; that FP programming is all about. Thus, it's hard to see how some concept fits in the larger scheme of things, much less why that concept is so fundamental to everything.
 <ul>
 <li>See this project's <code>Hello World/FP Philosophical Foundations/07-FP--The-Big-Picture.md</code> file</li>
 </ul>
 </li>
 <li>People (wrongly) believe that they must know a very abstract mathematics called &quot;Category Theory&quot; in order to use/write PureScript or another FP language. Due to its very abstract nature, Category Theory can be difficult to grasp and scares people off.
 <ul>
-<li>This &quot;myth&quot; is false. Similar to a non-techy person being able to use a very powerful computer to check their email without knowing how that computer works (e.g. the entire process from hardware -&gt; boot process -&gt; operating system -&gt; email application), an FP programmer can use concepts that have their foundations in Category Theory without fully understanding those foundations.</li>
-<li>The other consideration is the opportunity cost of learning Category Theory. A new learner can often get more benefit by spending their time learning something else rather than Category Theory. It might be worth learning later, but it's not necessary, nor always worth the time investment, for making someone a better programmer.</li>
-<li>In short, one can produce high-quality programs in an FP language for years without fully understanding all of these Category Theory concepts, nor does it always give the best return on your time investment. One might want to wait until getting more familiar with writing FP code before one considers learning it.</li>
+<li>This &quot;myth&quot; is false. Most FP developers do not understand Category Theory and yet they already have an intuition for some of its ideas.</li>
 </ul>
 </li>
-<li>The syntax for FP languages are paradigmatically different than the syntax with which most developers are familiar (C/Java/Python). It takes a while just to get used to a &quot;different&quot; syntax family before it feels normal. Until it feels normal, reading through code examples will be harder.
+<li>The syntax for FP languages are paradigmatically different than the syntax with which most developers are familiar (C/Java/Python). It takes a while to get used to a &quot;different&quot; syntax family before it feels normal. Until it feels normal, reading through code examples will be harder.
 <ul>
 <li>This project's <code>Syntax</code> folder exists to counter the above issue.</li>
 </ul>
@@ -403,19 +413,18 @@ PureScript buys &quot;power and productivity&quot; at the cost of &quot;populari
 <ul>
 <li>This project's <code>Syntax</code> folder (and more specifically, the <code>Syntax/Type-Level Programming Syntax</code> folder) explain enough to help one understand why some (but not all) problems arise.</li>
 <li>The <a href="https://github.com/purescript/documentation/tree/master/errors">Error Documentation</a> sometimes explains what the error is and how to fix it (<a href="https://github.com/purescript/documentation/blob/master/errors/NoInstanceFound.md">example</a>) and other times is simply left unexplained (<a href="https://github.com/purescript/documentation/blob/master/errors/AmbiguousTypeVariables.md">example</a>).</li>
+<li>The <code>purescript-beginner</code> Slack channel is active and often helps people troubleshoot the error messages.</li>
 </ul>
 </li>
-<li>Related to the above point, the powerful type system enables one to model some abstract ideas in a very precise way using well-defined types or things called type classes. However, those concepts can be recursive (they reference themselves in their definition), use higher-kinded types (these types are, in one way, defined only &quot;partially&quot; to enable code that works for many cases instead of just one), or work as part of a larger system outside of their definition. Thus, it can be very hard for a new learner to understand how to read a type or a type class.
+<li>Related to the above point, the powerful type system enables one to model some abstract ideas in a very precise way using well-defined types or things called type classes. When these features start to stack, a new learner can become overwhelmed.
 <ul>
-<li>While many cool things can be done using very complex types, new learners need to know that such types can wait until they get more familiar with the language. As an example, consider <a href="https://patrickmn.com/software/the-haskell-pyramid/">the Haskell Pyramid</a>. &quot;Monads&quot; are an important concept that are a bit harder to grasp. Learners need to be told that they do not need to know these things right away. They should learn them when they are ready and not be feel intimidated about types before then.</li>
-<li>This project either explains or links to other explanations on the most common types and type classes that are hard to understand but frequently used (e.g. Functor, Monad, Monad Transformers, the Free Monad).</li>
-<li>However, there are some concepts (e.g. Coyoneda, Free Applicatives, Day Convolution, etc.) that are not yet covered here.</li>
+<li>If one reads this work in order, they are unlikely to be overwhelmed.</li>
+<li>Most of the &quot;cool type things&quot; one can do are helpful but not always necessary. Consider <a href="https://patrickmn.com/software/the-haskell-pyramid/">the Haskell Pyramid</a>. &quot;Monads&quot; are an important and fundamental FP concept, but new learners do not need to learn what they are or how to use them right away.</li>
 </ul>
 </li>
 <li>Many people try to re-explain something that another has already explained well and they write a poor re-explanation. It's hard to determine which explanations are accurate and correct and which are vague and mistaken until after you have already read it and/or know better.
 <ul>
-<li>Ironically, this entire project could be a bad re-explanation! That's why I summarize or link to other posts that I believe to be credible.</li>
-<li>My sources include <code>Haskell Weekly</code>, the FP Slack community's <code>#purescript</code>/<code>#purescript-beginners</code> channels, a number of books I've read on FP programming, a number of papers I've read on FP programming, and various videos I've watched regarding FP programming. Consider yourself warned.</li>
+<li>I've been you. This work is my attempt to sift through the noise and present things in the best and simplest way possible. In various cases, I summarize and/or link to other posts that I believe to be credible that also explain a concept clearly. My sources include <code>Haskell Weekly</code>, the Functional Programming Slack channels of <code>#purescript</code> and <code>#purescript-beginners</code>, a number of books I've read on FP programming, a number of papers I've read on FP programming, and various videos I've watched regarding FP programming.</li>
 </ul>
 </li>
 <li>There are few sites or locations that &quot;centralize&quot; a lot of high-quality FP guides/explanations. Thus, it's hard for new learners to find them.
@@ -434,22 +443,34 @@ PureScript buys &quot;power and productivity&quot; at the cost of &quot;populari
 <p>You might regret it if you are not being honest or thoughtful about the purpose you are trying to achieve. Not being aware of your expectations, nor having realistic ones, will almost always end in having those expectatiosn broken, leaving you angry, disappointed, or frustrated.</p>
 <p>Some facts:</p>
 <ul>
-<li>Rust has a learning curve as well (i.e. lifetimes, borrow checker)</li>
 <li>WebAssembly holds promise, but it is still being developed.</li>
 <li>Languages that are popular or backed by companies with many resources are not necessarily the best languages to use for your particular purposes</li>
-<li>PureScript's type system is more powerful than similar languages' type system (if it exists)</li>
+<li>While PureScript offers more guarantees than most other languages, it unfortunately might not be the best language to use/learn if
+<ul>
+<li>you need mature libraries for a particular need that hasn't yet been written in PureScript. This is one benefit of TypeScript/Javascript.</li>
+<li>you find that Elm's tradeoffs are &quot;good enough&quot; for your purposes.</li>
+</ul>
+</li>
 <li>A few people who are using PureScript now have said this about TypeScript: &quot;You might as well be writing Javascript&quot;</li>
-<li>Elm forces you to write code in only one way. If it suits your needs, that's great. If it doesn't, it hurts.</li>
-<li>There's a general saying about FP languages: &quot;Once you go FP, you never go back.&quot;</li>
 </ul>
 <h3><a class="header" href="#how-mature-is-the-ecosystem-will-i-need-to-initially-spend-time-writingimprovingdocumenting-libraries-for-this-language-or-can-i-immediately-use-libraries-that-are-stable-and-mature" id="how-mature-is-the-ecosystem-will-i-need-to-initially-spend-time-writingimprovingdocumenting-libraries-for-this-language-or-can-i-immediately-use-libraries-that-are-stable-and-mature">How mature is the Ecosystem? Will I need to initially spend time writing/improving/documenting libraries for this language or can I immediately use libraries that are stable and mature?</a></h3>
 <p>It's primarily good for front-end work and not so much (yet) for back-end work. When it is lacking, one will likely need to use FFI to utilize JS libraries. See <a href="https://github.com/passy/awesome-purescript">awesome-purescript</a>; the documentation site, <a href="http://pursuit.purescript.org/">Pursuit</a>; and also this project's <code>Ecosystem</code> folder (still a WIP).</p>
 <p>Also, attempting to port over Haskell libraries to this language are harder at times and have unexpected performance. Why? Because Haskell is a lazily-evaluated language, but PureScript is a strictly-evaluated language.</p>
 <h3><a class="header" href="#how-hard-it-is-to-use-another-languages-libraries-via-bindings" id="how-hard-it-is-to-use-another-languages-libraries-via-bindings">How hard it is to use another language's libraries via bindings?</a></h3>
-<p>Creating bindings are easy. However, since the code was not written via PureScript, you don't know whether a function will throw an exception or not. On stable mature well-tested libraries, this shouldn't be a big problem.</p>
-<p>See the <code>Syntax/Foreign Function Interface</code> folder for examples of how easy bindings are and things related to this.</p>
+<p>Writing bindings is simple. See the <code>Syntax/Foreign Function Interface</code> folder for examples of how simple bindings are and things related to this.</p>
+<p>However, using FFI via bindings can introduce runtime errors. Whenever one uses a library via FFI, you don't know whether a function will throw an exception or not. This can produce unexpected runtime errors even though you've written your code in a type-safe language. On stable mature well-tested libraries, this shouldn't be a big problem.</p>
+<p>Lastly, writing bindings is tedious. PureScript uses algebraic data types (ADTs), but most libraries will define one function that can take multiple sets of arguments. For example, one might call the function, <code>foo</code>, with any of these sets of arguments:</p>
+<ul>
+<li><code>foo(&quot;apple&quot;)</code> (the first String argument, <code>apple</code>, is required)</li>
+<li><code>foo(&quot;apple&quot;, [&quot;banana&quot;, &quot;orange&quot;])</code> (the Array of Strings argument is optional)</li>
+<li><code>foo(&quot;apple&quot;, [&quot;banana&quot;, &quot;orange&quot;], true)</code> (the boolean flag is optional, too)</li>
+<li><code>foo(&quot;apple&quot;, {first:&quot;banana&quot;, second:&quot;orange&quot;}, true)</code> (the array can be passed in as a record/map/dictionary/object, too)</li>
+<li><code>foo(&quot;apple&quot;, {first:&quot;banana&quot;, second:&quot;orange&quot;, optional: true}, true)</code> (the second argument can have optional fields in addition to its required ones)</li>
+</ul>
+<p>In reality, <code>foo</code> is at least 5 different functions that are all using the same name. Thus, writing bindings for <code>foo</code> is tedious to do in a language like PureScript due to PureScript's type-safe nature. However, there is a <a href="https://github.com/jvliwanag/purescript-untagged-union">library for handling</a> these kind of situations.</p>
+<p>Others have also worked on writing code-generators that, for example, can look at the code of a library written in TypeScript and generate the corresponding PureScript bindings for that code. Such a tool is still a work-in-progress.</p>
 <h3><a class="header" href="#how-easypleasant-is-it-to-use-the-languages-build-tools-eg-compiler-lintertype-checker-dependency-manager-etc-and-text-editor-tools-eg-ease-of-setup-refactoring-support-pop-up-documentation-etc" id="how-easypleasant-is-it-to-use-the-languages-build-tools-eg-compiler-lintertype-checker-dependency-manager-etc-and-text-editor-tools-eg-ease-of-setup-refactoring-support-pop-up-documentation-etc">How easy/pleasant is it to use the language's build tools (e.g. compiler, linter/type checker, dependency manager, etc.) and text editor tools (e.g. ease of setup, refactoring support, pop-up documentation, etc.)?</a></h3>
-<p>The build tools are pretty good. One will typically use a <code>pulp + Bower</code>-based workflow or a <code>spago</code>-based workflow. These are explained in <code>Build Tools/Tool Comparisons/Dependency Managers.md</code>.</p>
+<p>The build tools are pretty good. One will typically use a <code>spago</code>-based workflow. These are explained in <code>Build Tools/Tool Comparisons/Dependency Managers.md</code>.</p>
 <p>See the <code>Build Tools/</code> folder for more up-to-date information. Likewise, see <a href="https://github.com/purescript/documentation/blob/master/ecosystem/Editor-and-tool-support.md">Editor and Tool Support</a> for other editor-related configurations.</p>
 <h3><a class="header" href="#how-friendly-helpful-responsive-inspiring-determined-and-collaborative-are-the-people-who-use-and-contribute-to-this-language-and-its-ecosystem" id="how-friendly-helpful-responsive-inspiring-determined-and-collaborative-are-the-people-who-use-and-contribute-to-this-language-and-its-ecosystem">How friendly, helpful, responsive, inspiring, determined, and collaborative are the people who use and contribute to this language and its ecosystem?</a></h3>
 <p>People usually get help from some of the core contributors or other well-informed people via the <code>#purescript</code> and <code>#purescript-beginners</code>. No question is too stupid. For longer threads, some post on the <a href="https://discourse.purescript.org">PureScript Discorse Forum</a>.</p>
