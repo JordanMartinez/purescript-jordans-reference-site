@@ -8,17 +8,17 @@ Feynman used simple language, storytelling, comprehensively wrote down everythin
 
 The intended reader is one who has some background in programming, but no background in the Functional Programming paradigm. A reader should consult the summarized version of the Table of Contents below before determining what and how much to read.
 
-If you want to understand why you should care about PureScript, read through the [Why Learn PureScript](./content/00-Getting-Started/01-Why-Learn-PureScript.md) page and [Philosophical Foundations](./content/01-FP-Philosophical-Foundations) section.
+If you want to understand why you should care about PureScript, read through the [Why Learn PureScript](./00-Getting-Started/01-Why-Learn-PureScript.md) page and **Philosophical Foundations** section, starting with [Composition Everywhere](./01-FP-Philosophical-Foundations/01-Composition-Everywhere.md).
 
-If you want to learn PureScript for web development, read the entire work from start to finish.
+If you want to learn PureScript, read the entire work from start to finish.
 
 ## Overview and Scope of the Work
 
-All code in this work uses PureScript `0.13.8`
+All code in this work uses PureScript `0.14.0`
 
-This work was created so a reader can understand PureScript and how to use it properly from a deep foundational understanding. Most other resources will get you started quickly, but then you will get confused at some point along the way. This resources takes longer to get started, but you will either not be confused or be less confused when we get to more advanced topics (e.g. monad transformers, type-level programming, etc.)
+This work was created so a reader can understand PureScript and how to use it properly from a deep foundational understanding. Most other resources will get you started quickly, but then you will get confused at some point along the way. This resource takes longer to get started, but you will either not be confused or be less confused when we get to more advanced topics (e.g. monad transformers, type-level programming, etc.)
 
-This work does not cover how to use PureScript to do web-development. In other words, things lik ethe following:
+This work does not cover how to use PureScript to do web-development. In other words, things like the following:
 - how to use a PureScript single-page application (SPA) framework to build a frontend
 - how to use a web server framework to build a backend
 - how to do bundling and/or code-splitting effectively
@@ -34,11 +34,8 @@ This work is intended to be read in the following order:
 1. Building Tools
 1. Syntax
 1. Hello World
-1. Projects
 
-The "Design Patterns" section should be read alongside of the "Syntax", "Hello World", and "Projects" folders.
-
-The "Ecosystem" section is a reference guide.
+The "Design Patterns" section should be read alongside of the "Syntax" and "Hello World" folders.
 
 Check the issue tracker for any [unresolved issues via the `bug` label](https://github.com/JordanMartinez/purescript-jordans-reference/issues?q=is%3Aissue+is%3Aopen+label%3Abug).
 
@@ -69,18 +66,11 @@ There are currently 8 parts to this book. I summarize what is in each section be
     - How do I debug a program?
     - How do I write a complex program using modern FP architecture?
     - How do I test a program?
-    - How do I benchmark a program or function within a prograhttps://github.com/jordanmartinez/purescript-jordans-reference/issuesm?
-- **22-Projects**:
-    - If you walked me through a complete but simple program from initial design to complete testing, what would that process look like?
-        - Random Number Game - a game that runs on the console and in the browser using the same "business logic"
-        - Table of Contents Generator - a program that generates a table of contents for a GitHub repository.
+    - How do I benchmark a program or function within a program?
+    - What are some examples of simple and complex real-world projects?
 - **31-Design Patterns**:
     - What are commonly-used patterns or idioms to solve problems in FP languages?
     - What are other FP principles or concepts not explained in the "Hello World" part of this work?
-- **41-Ecosystem**:
-    - What are all of the data types that PureScript currently has?
-    - What is a broad overview of the libraries in Purescript (categorized by tags)?
-    - What are all of the type classes and their relationship to one another?
 
 ## Contributing
 
