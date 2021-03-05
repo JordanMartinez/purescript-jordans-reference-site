@@ -241,6 +241,21 @@ evaluate x y | x &lt; y = show x &lt;&gt; &quot; is less than &quot; &lt;&gt; sh
         </div>
 
         
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+        
 
         
 

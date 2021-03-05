@@ -339,6 +339,21 @@ data Type_with_2_HKT hkt1 hkt2 a = Type_With_2_HKT_Constructor (hkt1 a) (hkt2 a)
         </div>
 
         
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+        
 
         
 

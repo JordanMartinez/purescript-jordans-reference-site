@@ -172,7 +172,7 @@
 <p>Feynman used simple language, storytelling, comprehensively wrote down everything he knew about the topic, then attempted to teach it such that a child could understand it. Without jargon but with brevity, he identified what he didn't know to the audience and had his content organized.</p>
 <h2><a class="header" href="#intended-audience" id="intended-audience">Intended Audience</a></h2>
 <p>The intended reader is one who has some background in programming, but no background in the Functional Programming paradigm. A reader should consult the summarized version of the Table of Contents below before determining what and how much to read.</p>
-<p>If you want to understand why you should care about PureScript, read through the <code>Getting Started/Why Learn PureScript</code> page, and the <strong>Philosophical Foundations</strong> section, starting with <code>FP-Philosophical-Foundations/Composition-Everywhere</code> page.</p>
+<p>If you want to understand why you should care about PureScript, read through the <a href="./content/01-Getting-Started/01-Why-Learn-PureScript.html">Why Learn PureScript</a> page and <strong>Philosophical Foundations</strong> section, starting with <a href="./content/02-FP-Philosophical-Foundations/01-Composition-Everywhere.html">Composition Everywhere</a>.</p>
 <p>If you want to learn PureScript, read the entire work from start to finish.</p>
 <h2><a class="header" href="#overview-and-scope-of-the-work" id="overview-and-scope-of-the-work">Overview and Scope of the Work</a></h2>
 <p>All code in this work uses PureScript <code>0.14.0</code></p>
@@ -285,6 +285,21 @@
 
         </div>
 
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
         
 
         
