@@ -368,11 +368,12 @@ instance (
                                                                               {-
 Below are a few examples to prove that this works.
 Run the following to confirm it for yourself:
-</code></pre>
-<p>spago repl
+---
+spago repl
 example1
-example2</p>
-<pre><code class="language--}">example1 :: ShowKeysOnly ( a :: String, b :: Int, c :: Boolean )
+example2
+---                                                                           -}
+example1 :: ShowKeysOnly ( a :: String, b :: Int, c :: Boolean )
 example1 = ShowKeysOnly { a: &quot;&quot;, b: 0, c: false }
 
 example2 :: ShowKeysOnly ( rowlists :: String, are :: Int, cool :: Boolean )
