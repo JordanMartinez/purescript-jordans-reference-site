@@ -187,13 +187,12 @@ a newtype and its `Show` instance to achieve this desired behavior.             
 newtype ShowKeysOnly :: Row Type -&gt; Type
 newtype ShowKeysOnly r = ShowKeysOnly (Record r)
                                                                               {-
-Once implemented, our code should work like this:
-</code></pre>
-<blockquote>
-<p>show $ ShowKeysOnly { a: 4, b: 6, c: &quot;apple&quot;, z: false }
-[&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;z&quot;]</p>
-</blockquote>
-<pre><code>
+Once implemented, our code should work like this in the REPL:
+---
+&gt; show $ ShowKeysOnly { a: 4, b: 6, c: &quot;apple&quot;, z: false }
+[&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;z&quot;]
+---
+
 How would we implement the `Show` instance for `ShowKeysOnly`?
 
 We implement it by defining another type class called `ShowKeysInRecord`
@@ -216,11 +215,12 @@ computation on a record where the &quot;next&quot; element is the next key/field
 that record.
 
 Let's remember what a fold-left looks like by using List.
-</code></pre>
-<p>data List a
-= Nil
-| Cons a (List a)</p>
-<pre><code>
+---
+data List a
+  = Nil
+  | Cons a (List a)
+---
+
 Read the below function as
   Given
     1. a function that takes the previous accumulated value and the next
