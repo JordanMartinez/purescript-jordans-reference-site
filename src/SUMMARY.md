@@ -3,7 +3,6 @@
 [Preface](./Preface.md)
 [License](./License.md)
 [Versioning Policy](./Versioning-Policy.md)
-- [.ci]()
 - [Getting Started](./content/01-Getting-Started/Readme.md)
     - [Why Learn PureScript](./content/01-Getting-Started/01-Why-Learn-PureScript.md)
     - [The Strengths of PureScript](./content/01-Getting-Started/02-The-Strengths-of-PureScript.md)
