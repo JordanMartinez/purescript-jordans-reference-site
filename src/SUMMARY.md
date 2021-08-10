@@ -27,6 +27,7 @@
     - [Spago: Project Workflow](./content/03-Build-Tools/02-Spago--Project-Workflow.md)
     - [Bower: Project Workflow](./content/03-Build-Tools/03-Bower--Project-Workflow.md)
     - [Continuous Integration](./content/03-Build-Tools/04-Continuous-Integration.md)
+    - [Formatters](./content/03-Build-Tools/05-Formatters.md)
 - [Syntax](./content/11-Syntax/Readme.md)
     - [Basic Syntax](./content/11-Syntax/01-Basic-Syntax/Readme.md)
         - [src]()
