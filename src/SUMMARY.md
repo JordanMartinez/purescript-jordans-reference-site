@@ -362,6 +362,7 @@
     - [Stack Safety]()
         - [Explicit TCO](./content/31-Design-Patterns/23-Stack-Safety/01-Explicit-TCO.md)
         - [Defunctionalization](./content/31-Design-Patterns/23-Stack-Safety/02-Defunctionalization.md)
+    - [Voidable Sum Type.purs](./content/31-Design-Patterns/23-Voidable-Sum-Type-ps.md)
     - [Data Validation via Applicative](./content/31-Design-Patterns/24-Data-Validation-via-Applicative.md)
     - [Parsing](./content/31-Design-Patterns/25-Parsing.md)
     - [Serialization via Codecs](./content/31-Design-Patterns/26-Serialization-via-Codecs.md)
