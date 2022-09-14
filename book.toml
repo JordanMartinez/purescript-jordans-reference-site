@@ -13,7 +13,11 @@ create-missing = false
 
 [preprocessor.links]
 
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
 [output.html]
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
 no-section-label = false
 git-repository-url = "https://github.com/jordanmartinez/purescript-jordans-reference"
 site-url = "https://jordanmartinez.github.io/purescript-jordans-reference-site/"
