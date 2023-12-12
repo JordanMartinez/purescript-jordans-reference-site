@@ -8,13 +8,13 @@ Feynman used simple language, storytelling, comprehensively wrote down everythin
 
 The intended reader is one who has some background in programming, but no background in the Functional Programming paradigm. A reader should consult the summarized version of the Table of Contents below before determining what and how much to read.
 
-If you want to understand why you should care about PureScript, read through the [Why Learn PureScript](./content/01-Getting-Started/01-Why-Learn-PureScript.md) page and **Philosophical Foundations** section, starting with [Composition Everywhere](./content/02-FP-Philosophical-Foundations/01-Composition-Everywhere.md).
+If you want to understand why you should care about PureScript, read through the [Why Learn PureScript](./10-Getting-Started/01-Why-Learn-PureScript.md) page and **Philosophical Foundations** section, starting with [Composition Everywhere](./02-FP-Philosophical-Foundations/01-Composition-Everywhere.md).
 
 If you want to learn PureScript, read the entire work from start to finish.
 
 ## Overview and Scope of the Work
 
-All code in this work uses PureScript `0.15.7`
+All code in this work uses PureScript `0.15.13`
 
 This work was created so a reader can understand PureScript and how to use it properly from a deep foundational understanding. Most other resources will get you started quickly, but then you will get confused at some point along the way. This resource takes longer to get started, but you will either not be confused or be less confused when we get to more advanced topics (e.g. monad transformers, type-level programming, etc.)
 
